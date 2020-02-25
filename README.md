@@ -8,7 +8,7 @@ Waylon Woo - Software developer - Dash controls and LED indicators<br/>
 Wayne Flores - Hardware & software developer - PCB design/fabrication and steering wheel integration<br/>
 Basan Patil - Hardware & software developer - CAN Bus communications and hardware stress testing<br/>
 <br/>
-***Schedule***
+***Schedule***<br/>
 CDR (2/16/20)<br/>
 DDR (tentative 3/15/20)<br/>
 PCB Design (Complete design by Monday 3/23/20)<br/>
