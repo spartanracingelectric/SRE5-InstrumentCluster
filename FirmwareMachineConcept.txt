@@ -1,0 +1,35 @@
+int stateNum = 1; //every time the car or instrument cluster turns on, start at STATE_WAKE
+
+switch (stateNum) {
+	case STATE_WAKE: //stateNum == 1, wake
+		/*
+		- Display LCD message to test if LCD works
+		- LED patterns and blinks to test they are working too
+		- Basically a bunch of statements to test hardware, preferably quick ones to allow for functionality ASAP
+		- break
+		*/
+	case STATE_MAIN: //stateNum == 2, main screen
+		/*
+		- whole thing in infinite loop?
+		- Full and intended RPM, SOC, error, and LCD functionality
+		- Poll for or allow interrupts for errors and if any errors detected, display on LED or LCD
+		- if(buttonPressed) break out of while loop
+		- stateNum = 3 or 4 to go into either debugging or settings
+		- break outside of loop
+		*/
+	
+	case STATE_SETTINGS: //stateNum == 3, settings menu
+		/*
+		- LCD controlled, change settings with buttons (if (buttonPressed) to toggle through and select in a menu)
+		- Timeout in case driver accidentally hits button, maybe like 15 seconds -> stateNum = 2 to go back to STATE_MAIN
+		- On settings exit, stateNum = 2 to go back to STATE_MAIN
+		- break
+		*/
+	
+	case STATE_DEBUG:  //stateNum == 4, debug menu
+		/*
+		- Debugging mode?
+		- On debugging exit, stateNum = 2 to go back to STATE_MAIN
+		- break
+		*/
+}
