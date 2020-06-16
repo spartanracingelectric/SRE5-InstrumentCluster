@@ -74,11 +74,26 @@ ISR(TIMER0_COMPA_vect)
 //Timer initialization
 void timer_Init()
 {
+<<<<<<< HEAD
 	TCCR0A = (1<<WGM01);
 	OCR0A = 6;
 	TIMSK0 = (1<<OCIE0A);
 	sei();
 	TCCR0B = (1<<CS02);
+=======
+	TCCR0A = 0; // set entire TCCR0A register to 0
+	TCCR0B = 0; // same for TCCR0B
+	TCNT0  = 0; // initialize counter value to 0
+	// set compare match register for 100000 Hz increments
+	OCR0A = 159; // = 16000000 / (1 * 100000) - 1 (must be <256)
+	// turn on CTC mode
+	TCCR0B |= (1 << WGM01);
+	// Set CS02, CS01 and CS00 bits for 1 prescaler
+	TCCR0B |= (0 << CS02) | (0 << CS01) | (1 << CS00);
+	// enable timer compare interrupt
+	TIMSK0 |= (1 << OCIE0A);
+	sei(); // allow interrupts
+>>>>>>> b9cac8ece73d55e93f112cdffe9fb454686442e4
 }
 
 //SETS LED COLOR via THE DUTY CYCLE
