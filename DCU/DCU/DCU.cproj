@@ -120,6 +120,12 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+<<<<<<< HEAD
+=======
+    <Compile Include="buttons.h">
+      <SubType>compile</SubType>
+    </Compile>
+>>>>>>> b9cac8ece73d55e93f112cdffe9fb454686442e4
     <Compile Include="i2c.h">
       <SubType>compile</SubType>
     </Compile>
