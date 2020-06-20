@@ -2,9 +2,9 @@
 Formerly the DCU.<br/>
 <br/>
 ## **SRE-5 Instrument Cluster Team**<br/>
-_Nicholas Frangos_ - Software and PCB lead<br/>
+_Nicholas Frangos_ - Software and PCB mentor <br/>
+Waylon Woo - Project lead and software developer - Dash controls and LED indicators<br/>
 Vincent Saw - Software developer - LCD firmware and RPM LED bar graph<br/>
-Waylon Woo - Software developer - Dash controls and LED indicators<br/>
 Wayne Flores - Hardware & software developer - PCB design/fabrication and steering wheel integration<br/>
 Basan Patil - Hardware & software developer - CAN Bus communications and hardware stress testing<br/>
 <br/>
