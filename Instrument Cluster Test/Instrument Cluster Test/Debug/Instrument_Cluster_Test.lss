@@ -23,11 +23,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_frame  00000214  00000000  00000000  00002f70  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    0000059d  00000000  00000000  00003184  2**0
+ 10 .debug_str    000005b0  00000000  00000000  00003184  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00001007  00000000  00000000  00003721  2**0
+ 11 .debug_loc    00001007  00000000  00000000  00003734  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000c8  00000000  00000000  00004728  2**0
+ 12 .debug_ranges 000000c8  00000000  00000000  0000473b  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -203,7 +203,7 @@ Disassembly of section .text:
  174:	10 92 1d 01 	sts	0x011D, r1	; 0x80011d <timerTick>
  178:	10 92 0d 01 	sts	0x010D, r1	; 0x80010d <bitstate+0x1>
  17c:	10 92 0c 01 	sts	0x010C, r1	; 0x80010c <bitstate>
- 180:	80 e2       	ldi	r24, 0x20	; 32
+ 180:	86 e7       	ldi	r24, 0x76	; 118
  182:	0e 94 66 00 	call	0xcc	; 0xcc <twi_start>
  186:	80 91 0c 01 	lds	r24, 0x010C	; 0x80010c <bitstate>
  18a:	90 91 0d 01 	lds	r25, 0x010D	; 0x80010d <bitstate+0x1>
@@ -233,7 +233,7 @@ Disassembly of section .text:
  1c8:	93 2b       	or	r25, r19
  1ca:	90 93 0d 01 	sts	0x010D, r25	; 0x80010d <bitstate+0x1>
  1ce:	80 93 0c 01 	sts	0x010C, r24	; 0x80010c <bitstate>
- 1d2:	80 e2       	ldi	r24, 0x20	; 32
+ 1d2:	86 e7       	ldi	r24, 0x76	; 118
  1d4:	0e 94 66 00 	call	0xcc	; 0xcc <twi_start>
  1d8:	80 91 0c 01 	lds	r24, 0x010C	; 0x80010c <bitstate>
  1dc:	90 91 0d 01 	lds	r25, 0x010D	; 0x80010d <bitstate+0x1>
@@ -252,7 +252,7 @@ Disassembly of section .text:
  1fe:	80 91 0c 01 	lds	r24, 0x010C	; 0x80010c <bitstate>
  202:	90 91 0d 01 	lds	r25, 0x010D	; 0x80010d <bitstate+0x1>
  206:	9e 01       	movw	r18, r28
- 208:	2b 5f       	subi	r18, 0xFB	; 251
+ 208:	2a 5f       	subi	r18, 0xFA	; 250
  20a:	3f 4f       	sbci	r19, 0xFF	; 255
  20c:	a5 01       	movw	r20, r10
  20e:	02 c0       	rjmp	.+4      	; 0x214 <__vector_14+0xfe>
@@ -264,7 +264,7 @@ Disassembly of section .text:
  21a:	95 2b       	or	r25, r21
  21c:	90 93 0d 01 	sts	0x010D, r25	; 0x80010d <bitstate+0x1>
  220:	80 93 0c 01 	sts	0x010C, r24	; 0x80010c <bitstate>
- 224:	80 e2       	ldi	r24, 0x20	; 32
+ 224:	86 e7       	ldi	r24, 0x76	; 118
  226:	0e 94 66 00 	call	0xcc	; 0xcc <twi_start>
  22a:	80 91 0c 01 	lds	r24, 0x010C	; 0x80010c <bitstate>
  22e:	90 91 0d 01 	lds	r25, 0x010D	; 0x80010d <bitstate+0x1>

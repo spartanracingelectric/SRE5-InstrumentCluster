@@ -58,7 +58,7 @@ ISR(TIMER0_COMPA_vect)
 	{
 		timerTick = 0;
 		bitstate =0b00000000;
-		twi_start(0x20);
+		twi_start(LED_INDICATORS);
 		twi_write(bitstate); //TURN ON ALL COLORS
 		twi_stop();
 	}
@@ -67,14 +67,14 @@ ISR(TIMER0_COMPA_vect)
 		if (timerTick == Duty_Cyles1[i])
 		{
 			bitstate |= (1<<i);
-			twi_start(0x20);
+			twi_start(LED_INDICATORS);
 			twi_write(bitstate); //TURNS OFF SPECIFIED LED
 			twi_stop();
 		}
 		if (timerTick == Duty_Cyles2[i])
 		{
-			bitstate |= (1<<(i+5)); //IMPORTANT REPLACE 5 WITH THE DISPLACEMENT OF RGB2 BITS FROM THE LEAST SIGNIFICANT BIT
-			twi_start(0x20);
+			bitstate |= (1<<(i+6)); //IMPORTANT REPLACE 5 WITH THE DISPLACEMENT OF RGB2 BITS FROM THE LEAST SIGNIFICANT BIT
+			twi_start(LED_INDICATORS);
 			twi_write(bitstate); //TURNS OFF SPECIFIED LED
 			twi_stop();
 		}

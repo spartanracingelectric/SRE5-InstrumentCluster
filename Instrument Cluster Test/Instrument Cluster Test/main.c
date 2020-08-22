@@ -78,7 +78,7 @@ int main(void)
 
 	/*
 	//test LCD
-	LCD_init(I2C_ADDRESS, LCD_RS, LCD_E, LCD_BL, LCD_D4, LCD_D5, LCD_D6, LCD_D7);	//Initialization of LCD, twi_init() is called here. ptr to the lcd port array is passed
+	LCD_init(LCD_ADDRESS, LCD_RS, LCD_E, LCD_BL, LCD_D4, LCD_D5, LCD_D6, LCD_D7);	//Initialization of LCD, twi_init() is called here. ptr to the lcd port array is passed
 	LCD_wake();																		//Wake function to test LCD functionality
 	LCD_str("Hello");
 	LCD_cmd(0xC0);
