@@ -6,7 +6,7 @@
  */ 
 
  #ifndef F_CPU
- #define F_CPU 16000000UL
+ #define F_CPU 20000000UL
  #endif
 
 #include <avr/io.h>
@@ -35,12 +35,12 @@ LCD_D7 = (1<<D7); //(1<<7)
 
 int main(void)
 {
+	twi_init();
+	timer_Init();
     /* Replace with your application code */
     while (1) 
     {
 	//test RPM Bar
-	twi_init(); 
-	timer_Init();
 	rpm_write(0x0); //clear bar
 	_delay_ms(500);
 	rpm_write(0b1010101010101010); //turn on odd leds
@@ -49,6 +49,7 @@ int main(void)
 	_delay_ms(500);
 
 	//test RGB LED Indicator
+	/*
 	for (int i =0; i<2; i++)
 	{
 		rgb_set(i, BLACK);
@@ -65,16 +66,30 @@ int main(void)
 		_delay_ms(300);
 		rgb_set(i, BLACK);
 	}
+	*/
 
 	//test LED indicators
 	twi_start(LED_INDICATORS);
 	twi_write(0b00000001);
+	twi_stop();
+
 	_delay_ms(500);
+
+	twi_start(LED_INDICATORS);
 	twi_write(0b00000011);
+	twi_stop();
+
 	_delay_ms(500);
+
+	twi_start(LED_INDICATORS);
 	twi_write(0b00000010);
+	twi_stop();
+
 	_delay_ms(500);
+
+	twi_start(LED_INDICATORS);	
 	twi_write(0b00000000);
+	twi_stop();
 
 	/*
 	//test LCD

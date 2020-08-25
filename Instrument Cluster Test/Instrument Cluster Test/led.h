@@ -51,6 +51,7 @@ uint8_t PINK[] = {
 158, 4, 79};
 
 //Interrupt that pulses at 100khz; 100 pulses = 100hz period
+/*
 ISR(TIMER0_COMPA_vect)
 {
 	timerTick++; //Counts interrupt pulses
@@ -80,6 +81,7 @@ ISR(TIMER0_COMPA_vect)
 		}
 	}
 }
+*/
 
 //Timer initialization
 void timer_Init()
