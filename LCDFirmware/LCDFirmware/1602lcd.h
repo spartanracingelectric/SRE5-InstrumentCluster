@@ -1,6 +1,8 @@
 #ifndef LCD1602_H_
 #define LCD1602_H_
 
+// SRE Instrument Cluster 1602 LCD Driver
+
 #include <avr/io.h>
 #include <util/delay.h>
 #include "i2c.h"
