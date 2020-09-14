@@ -7,8 +7,7 @@
 #define LCD_ADDRESS		0x70
 #define LED_BAR_1		0x72
 #define LED_BAR_2		0x74
-#define LED_INDICATORS	0x76
-
+#define LED_INDICATORS	0x20//0x76
 void twi_init(void);
 void twi_start(uint8_t i2c_address);
 void twi_write(uint8_t data);

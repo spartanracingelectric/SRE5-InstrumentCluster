@@ -41,56 +41,51 @@ int main(void)
     while (1) 
     {
 	//test RPM Bar
+	/*
 	rpm_write(0x0); //clear bar
 	_delay_ms(500);
 	rpm_write(0b1010101010101010); //turn on odd leds
 	_delay_ms(500);
 	rpm_write(0b0101010101010101); //turn on even leds
 	_delay_ms(500);
-
-	//test RGB LED Indicator
-	/*
-	for (int i =0; i<2; i++)
-	{
-		rgb_set(i, BLACK);
-		_delay_ms(300);
-		rgb_set(i, WHITE);
-		_delay_ms(300);
-		rgb_set(i, BLACK);
-		_delay_ms(300);
-		rgb_set(i, RED);
-		_delay_ms(300);
-		rgb_set(i, GREEN);
-		_delay_ms(300);
-		rgb_set(i, BLUE);
-		_delay_ms(300);
-		rgb_set(i, BLACK);
-	}
 	*/
-
-	//test LED indicators
-	twi_start(LED_INDICATORS);
-	twi_write(0b00000001);
-	twi_stop();
-
-	_delay_ms(500);
-
-	twi_start(LED_INDICATORS);
-	twi_write(0b00000011);
-	twi_stop();
-
-	_delay_ms(500);
-
-	twi_start(LED_INDICATORS);
-	twi_write(0b00000010);
-	twi_stop();
-
-	_delay_ms(500);
-
-	twi_start(LED_INDICATORS);	
-	twi_write(0b00000000);
-	twi_stop();
-
+	
+	rgb_set(0, ORANGE);
+	rgb_set(1, BLACK);
+	_delay_ms(300);
+	rgb_set(0, PINK);
+	rgb_set(1, VIOLET);
+	_delay_ms(300);
+	rgb_set(0, WHITE);
+	rgb_set(1, ORANGE);
+	_delay_ms(300);
+	rgb_set(0, GREEN);
+	rgb_set(1, RED);
+	_delay_ms(300);
+	indicatorSet(LED1, 1); //TURN OFF BLUE LED #1 NOTE THAT 1 = OFF. 0 = ON
+	indicatorSet(LED2, 0); //TURN OFF BLUE LED #1 NOTE THAT 1 = OFF. 0 = ON
+	rgb_set(0, MAGENTA);
+	rgb_set(1, CYAN);
+	_delay_ms(300);
+	rgb_set(0, CYAN);
+	rgb_set(1, MAGENTA);
+	_delay_ms(300);
+	rgb_set(0, RED);
+	rgb_set(1, GREEN);
+	_delay_ms(300);
+	rgb_set(0, ORANGE);
+	rgb_set(1, VIOLET);
+	_delay_ms(300);
+	rgb_set(0, VIOLET);
+	rgb_set(1, WHITE);
+	_delay_ms(300);
+	rgb_set(0, BLACK);
+	rgb_set(1, ORANGE);
+	_delay_ms(300);
+	indicatorSet(LED1, 0);
+	indicatorSet(LED2, 1); //TURN OFF BLUE LED #1 NOTE THAT 1 = OFF. 0 = ON
+	_delay_ms(300);
+	
 	/*
 	//test LCD
 	LCD_init(LCD_ADDRESS, LCD_RS, LCD_E, LCD_BL, LCD_D4, LCD_D5, LCD_D6, LCD_D7);	//Initialization of LCD, twi_init() is called here. ptr to the lcd port array is passed
