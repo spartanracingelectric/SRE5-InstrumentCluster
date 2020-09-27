@@ -29,9 +29,6 @@ Discarded input sections
  .text.error    0x00000000        0x2 main.o
  .text.twi_stop
                 0x00000000        0x8 main.o
- .text.timer_Init
-                0x00000000       0x26 main.o
- .text.rgb_set  0x00000000       0x56 main.o
  .text.indicatorSet
                 0x00000000       0x1e main.o
  .text.LCD_str_xy
@@ -50,7 +47,6 @@ Discarded input sections
  .rodata.LCD_RS
                 0x00000000        0x1 main.o
  .data.PINK     0x00000000        0x3 main.o
- .bss.BLACK     0x00000000        0x3 main.o
  .data.WHITE    0x00000000        0x3 main.o
  .data.MAGENTA  0x00000000        0x3 main.o
  .data.CYAN     0x00000000        0x3 main.o
@@ -236,7 +232,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x68e
+.text           0x00000000      0x724
  *(.vectors)
  .vectors       0x00000000       0x68 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
                 0x00000000                __vector_default
@@ -334,34 +330,39 @@ END GROUP
  .text.__vector_14
                 0x00000116      0x26a main.o
                 0x00000116                __vector_14
+ .text.timer_Init
+                0x00000380       0x26 main.o
+                0x00000380                timer_Init
+ .text.rgb_set  0x000003a6       0x56 main.o
+                0x000003a6                rgb_set
  .text.rpm_write
-                0x00000380       0x38 main.o
-                0x00000380                rpm_write
+                0x000003fc       0x38 main.o
+                0x000003fc                rpm_write
  .text.LCD_write
-                0x000003b8       0xc2 main.o
-                0x000003b8                LCD_write
- .text.LCD_cmd  0x0000047a        0x8 main.o
-                0x0000047a                LCD_cmd
+                0x00000434       0xc2 main.o
+                0x00000434                LCD_write
+ .text.LCD_cmd  0x000004f6        0x8 main.o
+                0x000004f6                LCD_cmd
  .text.LCD_char
-                0x00000482        0x8 main.o
-                0x00000482                LCD_char
+                0x000004fe        0x8 main.o
+                0x000004fe                LCD_char
  .text.LCD_init
-                0x0000048a       0x96 main.o
-                0x0000048a                LCD_init
- .text.LCD_str  0x00000520       0x1e main.o
-                0x00000520                LCD_str
- .text.LCD_clr  0x0000053e       0x1a main.o
-                0x0000053e                LCD_clr
+                0x00000506       0x96 main.o
+                0x00000506                LCD_init
+ .text.LCD_str  0x0000059c       0x1e main.o
+                0x0000059c                LCD_str
+ .text.LCD_clr  0x000005ba       0x1a main.o
+                0x000005ba                LCD_clr
  .text.LCD_wake
-                0x00000558       0xc0 main.o
-                0x00000558                LCD_wake
- .text.main     0x00000618       0x72 main.o
-                0x00000618                main
-                0x0000068a                . = ALIGN (0x2)
+                0x000005d4       0xc0 main.o
+                0x000005d4                LCD_wake
+ .text.main     0x00000694       0x8c main.o
+                0x00000694                main
+                0x00000720                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000068a        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x0000068a                _exit
-                0x0000068a                exit
+ .fini9         0x00000720        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x00000720                _exit
+                0x00000720                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -380,11 +381,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000068a        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x00000720        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x0000068e                _etext = .
+                0x00000724                _etext = .
 
-.data           0x00800100       0x1c load address 0x0000068e
+.data           0x00800100       0x1c load address 0x00000724
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -408,36 +409,38 @@ END GROUP
                 0x0080011c                _edata = .
                 0x0080011c                PROVIDE (__data_end, .)
 
-.bss            0x0080011c        0xe
+.bss            0x0080011c       0x11
                 0x0080011c                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
+ .bss.BLACK     0x0080011c        0x3 main.o
+                0x0080011c                BLACK
  .bss.timerTick
-                0x0080011c        0x2 main.o
-                0x0080011c                timerTick
- .bss.LED2Flag  0x0080011e        0x2 main.o
-                0x0080011e                LED2Flag
- .bss.LED1Flag  0x00800120        0x2 main.o
-                0x00800120                LED1Flag
+                0x0080011f        0x2 main.o
+                0x0080011f                timerTick
+ .bss.LED2Flag  0x00800121        0x2 main.o
+                0x00800121                LED2Flag
+ .bss.LED1Flag  0x00800123        0x2 main.o
+                0x00800123                LED1Flag
  *(COMMON)
- COMMON         0x00800122        0x8 main.o
-                0x00800122                I2C_ADDRESS
-                0x00800123                LCD_D6_PORT
-                0x00800124                LCD_D7_PORT
-                0x00800125                LCD_D5_PORT
-                0x00800126                LCD_RS_PORT
-                0x00800127                LCD_E_PORT
-                0x00800128                LCD_BL_PORT
-                0x00800129                LCD_D4_PORT
-                0x0080012a                PROVIDE (__bss_end, .)
-                0x0000068e                __data_load_start = LOADADDR (.data)
-                0x000006aa                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800125        0x8 main.o
+                0x00800125                I2C_ADDRESS
+                0x00800126                LCD_D6_PORT
+                0x00800127                LCD_D7_PORT
+                0x00800128                LCD_D5_PORT
+                0x00800129                LCD_RS_PORT
+                0x0080012a                LCD_E_PORT
+                0x0080012b                LCD_BL_PORT
+                0x0080012c                LCD_D4_PORT
+                0x0080012d                PROVIDE (__bss_end, .)
+                0x00000724                __data_load_start = LOADADDR (.data)
+                0x00000740                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x0080012a        0x0
+.noinit         0x0080012d        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x0080012a                _end = .
+                0x0080012d                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -510,20 +513,20 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x1538
+.debug_info     0x00000000     0x158e
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x5f4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
- .debug_info    0x000005f4      0xf44 main.o
+ .debug_info    0x000005f4      0xf9a main.o
 
 .debug_abbrev   0x00000000      0x83a
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x5a2 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_abbrev  0x000005a2      0x298 main.o
 
-.debug_line     0x00000000      0x898
+.debug_line     0x00000000      0x8b2
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x133 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
- .debug_line    0x00000133      0x765 main.o
+ .debug_line    0x00000133      0x77f main.o
 
 .debug_frame    0x00000000      0x224
  *(.debug_frame)
