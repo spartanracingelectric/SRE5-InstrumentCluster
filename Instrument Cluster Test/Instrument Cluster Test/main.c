@@ -36,7 +36,7 @@ LCD_D7 = (1<<D7); //(1<<7)
 int main(void)
 {
 	twi_init();
-	timer_Init();
+	//timer_Init();
 	
 	//test LCD	
 	LCD_init(LCD_ADDRESS, LCD_RS, LCD_E, LCD_BL, LCD_D4, LCD_D5, LCD_D6, LCD_D7);	//Initialization of LCD, twi_init() is called here. ptr to the lcd port array is passed
