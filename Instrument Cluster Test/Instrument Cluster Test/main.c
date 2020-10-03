@@ -36,38 +36,16 @@ LCD_D7 = (1<<D7); //(1<<7)
 int main(void)
 {
 	twi_init();
-	//timer_Init();
+	timer_Init();
 	
-	//test LCD	
-	LCD_init(LCD_ADDRESS, LCD_RS, LCD_E, LCD_BL, LCD_D4, LCD_D5, LCD_D6, LCD_D7);	//Initialization of LCD, twi_init() is called here. ptr to the lcd port array is passed
-	LCD_wake();																		//Wake function to test LCD functionality
-	LCD_str("Hello");
-	LCD_cmd(0xC0);
-	LCD_str("AHHHHH");
-	_delay_ms(500);
-	LCD_clr();
 
     while (1) 
     {
-	rpm_write(0b1111111111111111); //clear bar
-	indicatorSet(LED1, 1);
-	indicatorSet(LED2, 1); //TURN OFF BLUE LED #1 NOTE THAT 1 = OFF. 0 = ON
-	rgb_set(0, BLACK);
-	rgb_set(1, BLACK);
-
-	//test RPM Bar
-	/*
-	rpm_write(0b1111111111111111); //clear bar
-	_delay_ms(500);
-	rpm_write(0b1111111100000000); //turn on right
-	_delay_ms(500);
-	rpm_write(0b0000000011111111); //turn on left
-	_delay_ms(500);
-	rpm_write(0b0000000000000000); //turn on all
-	_delay_ms(500);
-	rpm_write(0b1111111111111111); //clear bar
-	_delay_ms(500);
-	
+	_delay_ms(300);
+	rpm_write(0b0000000011111111);
+	_delay_ms(300);
+	rpm_write(0b1111111100000000);
+	_delay_ms(300);
 	//test RGB and blue indicators 
 	rgb_set(0, ORANGE);
 	rgb_set(1, BLACK);
@@ -109,7 +87,7 @@ int main(void)
 	rgb_set(0, BLACK);
 	rgb_set(1, BLACK);
 	_delay_ms(300);
-	*/
+	
 	
 
     

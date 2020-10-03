@@ -59,8 +59,23 @@ uint8_t PINK[] = {
 
 //Interrupt that pulses at 100khz; 100 pulses = 100hz period
 
+int rpm_update =0;
+uint16_t LED_status;
 ISR(TIMER0_COMPA_vect)
 {
+	//1 = off; 0 = on
+	if (rpm_update == 1)
+	{
+		uint8_t byte1 = (LED_status & 0xff), byte2 = (LED_status >>8);
+		twi_start(LED_BAR_1);
+		twi_write(byte1);
+		twi_stop();
+		
+		twi_start(LED_BAR_2);
+		twi_write(byte2);
+		twi_stop();	
+		rpm_update = 0;
+	}
 	timerTick++; //Counts interrupt pulses
 	if (timerTick >= 100) 
 	{	
@@ -159,14 +174,8 @@ void rgb_set(int LED_ID, uint8_t color[])
 void rpm_write(uint16_t LED_PATTERN)
 {
 	//1 = off; 0 = on
-	uint8_t byte1 = (LED_PATTERN & 0xff), byte2 = (LED_PATTERN >>8);
-	twi_start(LED_BAR_1);
-	twi_write(byte1);
-	twi_stop();
-	
-	twi_start(LED_BAR_2);
-	twi_write(byte2);
-	twi_stop();
+	 LED_status = LED_PATTERN;
+	 rpm_update =1;
 }
 
 void indicatorSet(int LED_ID, int status)
