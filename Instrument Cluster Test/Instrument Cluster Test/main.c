@@ -37,7 +37,6 @@ int main(void)
 {
 	twi_init();
 	timer_Init();
-	
 
     while (1) 
     {
@@ -46,6 +45,23 @@ int main(void)
 	_delay_ms(300);
 	rpm_write(0b1111111100000000);
 	_delay_ms(300);
+
+	uint16_t status = 0b1111111111111111;
+	
+	for(int i = 0; i < 16; i++) {
+		status &= ~(1<<i);
+		rpm_write(status);
+		_delay_ms(100);
+
+	}
+	
+	for(int i = 16; i >= 0; i--) {
+		status |= (1<<i);
+		rpm_write(status);
+		_delay_ms(100);
+
+	}
+
 	//test RGB and blue indicators 
 	rgb_set(0, ORANGE);
 	rgb_set(1, BLACK);
@@ -86,11 +102,7 @@ int main(void)
 	indicatorSet(LED2, 1);
 	rgb_set(0, BLACK);
 	rgb_set(1, BLACK);
-	_delay_ms(300);
-	
-	
-
-    
+	_delay_ms(300);  
 	}
 }
 

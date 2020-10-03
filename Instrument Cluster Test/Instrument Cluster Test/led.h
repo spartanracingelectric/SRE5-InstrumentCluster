@@ -68,11 +68,11 @@ ISR(TIMER0_COMPA_vect)
 	{
 		uint8_t byte1 = (LED_status & 0xff), byte2 = (LED_status >>8);
 		twi_start(LED_BAR_1);
-		twi_write(byte1);
+		twi_write(byte2);
 		twi_stop();
 		
 		twi_start(LED_BAR_2);
-		twi_write(byte2);
+		twi_write(byte1);
 		twi_stop();	
 		rpm_update = 0;
 	}
@@ -173,13 +173,14 @@ void rgb_set(int LED_ID, uint8_t color[])
 
 void rpm_write(uint16_t LED_PATTERN)
 {
-	//1 = off; 0 = on
+	//0 = off; 1 = on
 	 LED_status = LED_PATTERN;
 	 rpm_update =1;
 }
 
 void indicatorSet(int LED_ID, int status)
 {
+	//1 = off; 0 = on
 	switch (LED_ID)
 	{
 		case LED1:
@@ -190,7 +191,6 @@ void indicatorSet(int LED_ID, int status)
 		LED2Flag = status;
 		break;
 	}
-	
 }
 
 #endif /* INDLED_H_ */
