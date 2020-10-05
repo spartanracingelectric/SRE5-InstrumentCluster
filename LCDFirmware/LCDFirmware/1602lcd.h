@@ -1,33 +1,55 @@
 #ifndef LCD1602_H_
 #define LCD1602_H_
 
-// SRE Instrument Cluster 1602 LCD Driver
+/* 
+ * SRE Instrument Cluster 1602 LCD Driver
+ *
+ * LCD COMMANDS http://www.dinceraydin.com/lcd/commands.htm
+ * HD44780 DATASHEET https://www.makerguides.com/wp-content/uploads/2019/02/HD44780-Datasheet.pdf
+ * PCF8574 DATASHEET https://www.makerguides.com/wp-content/uploads/2019/02/PCF8574-Datasheet.pdf
+ * PCF8574T to HD44780 PINOUT https://www.playembedded.org/blog/hd44780-backpack-stm32/
+ */
 
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include <util/delay.h>
 #include "i2c.h"
+
+#define TIMEOUT 6 //6s
 
 #define INIT_MODE 0x80
 #define CMD_MODE 0x00
 #define DATA_MODE 0x01
 
-uint8_t I2C_ADDRESS,
-		LCD_RS_PORT,
-		LCD_E_PORT,
-		LCD_BL_PORT, 
-		LCD_D4_PORT, 
-		LCD_D5_PORT, 
-		LCD_D6_PORT, 
-		LCD_D7_PORT;
+
+#define LCD_RS (1<<0) //PCF P0
+#define LCD_E (1<<2) //P2
+#define LCD_BL (1<<3) //P3 goes to backlight A/K on LCD
+#define LCD_D4 (1<<4) //P4
+#define LCD_D5 (1<<5) //P5
+#define LCD_D6 (1<<6) //P6
+#define LCD_D7 (1<<7) //P7
+//#define I2C_ADDRESS 0x27 //PCF8574T LCD Backpack
+//#define I2C_ADDRESS 0x20 //PCF8574T 9 Pin Board and PCF8574P
+#define I2C_ADDRESS 0x38 //PCF8574AN
+
+int extraTime = 0;
+extern uint8_t state = 1;
 
 void LCD_write(unsigned char data, uint8_t mode);
 void LCD_cmd(unsigned char cmd);
 void LCD_char(unsigned char data);
-void LCD_init(uint8_t i2cAddress, uint8_t RS, uint8_t E, uint8_t BL, uint8_t D4, uint8_t D5, uint8_t D6, uint8_t D7);
+void LCD_init();
 void LCD_str(char *str);
 void LCD_str_xy (char row, char pos, char *str);
 void LCD_clr();
 void LCD_wake();
+void LCD_update();
+void LCD_default();
+void LCD_menu();
+void LCD_settings();
+void LCD_optionx();
+void LCD_optiony();
 
 void LCD_write(unsigned char data, uint8_t mode) {
 	
@@ -36,34 +58,34 @@ void LCD_write(unsigned char data, uint8_t mode) {
 	twi_start(I2C_ADDRESS);
     
     // Send upper nibble
-	dataTemp = (data & 0xF0) | LCD_BL_PORT | LCD_E_PORT; //Loads upper nibble onto last four bits P4-P7
+	dataTemp = (data & 0xF0) | LCD_BL | LCD_E; //Loads upper nibble onto last four bits P4-P7
 	if (mode == CMD_MODE)
     {
-		dataTemp = (dataTemp & ~LCD_RS_PORT); //Set RS to 0 to signify command mode and Toggle E on -> When enable is toggled on, LCD knows to execute instructions given
+		dataTemp = (dataTemp & ~LCD_RS); //Set RS to 0 to signify command mode and Toggle E on -> When enable is toggled on, LCD knows to execute instructions given
     }        
 	else
     {	
-		dataTemp |= LCD_RS_PORT; //Set RS to 1 to signify character mode
+		dataTemp |= LCD_RS; //Set RS to 1 to signify character mode
     }  
 	twi_write(dataTemp); //Send upper nibble while toggling E ON
     _delay_ms(1);
-    dataTemp &= ~LCD_E_PORT; //Toggle E off
+    dataTemp &= ~LCD_E; //Toggle E off
 	twi_write(dataTemp); //Send "toggle E OFF"
     _delay_ms(1);
     
     // Send lower nibble 
-	dataTemp = (data << 4) | LCD_BL_PORT | LCD_E_PORT; //Loads lower nibble onto last four bits P4-P7 and Toggle E on
+	dataTemp = (data << 4) | LCD_BL | LCD_E; //Loads lower nibble onto last four bits P4-P7 and Toggle E on
 	if (mode == CMD_MODE)
 	{
-    	dataTemp = (dataTemp & ~LCD_RS_PORT); //Set RS to 0 to signify command mode and Toggle E on -> When enable is toggled on, LCD knows to execute instructions given
+    	dataTemp = (dataTemp & ~LCD_RS); //Set RS to 0 to signify command mode and Toggle E on -> When enable is toggled on, LCD knows to execute instructions given
 	}
 	else
 	{
-    	dataTemp |= LCD_RS_PORT; //Set RS to 1 to signify character mode
+    	dataTemp |= LCD_RS; //Set RS to 1 to signify character mode
 	}
     twi_write(dataTemp); //Lower nibble
     _delay_ms(1);
-	dataTemp &= ~LCD_E_PORT; //Toggle E off
+	dataTemp &= ~LCD_E; //Toggle E off
 	twi_write(dataTemp); //Send "toggle E off"
     _delay_ms(1);
     
@@ -81,16 +103,13 @@ void LCD_char(unsigned char data)
 }
 
 /* LCD Initialize function, INITIALIZE LCD PORTS HERE! */
-void LCD_init(uint8_t i2cAddress, uint8_t RS, uint8_t E, uint8_t BL, uint8_t D4, uint8_t D5, uint8_t D6, uint8_t D7)
-{
-	LCD_RS_PORT = RS;
-	LCD_E_PORT = E;
-	LCD_BL_PORT = BL;
-	LCD_D4_PORT = D4;
-	LCD_D5_PORT = D5;
-	LCD_D6_PORT = D6;
-	LCD_D7_PORT = D7;
-	I2C_ADDRESS = i2cAddress;
+void LCD_init()
+{	
+	
+	TCCR0A = (1<<WGM01); //Set CTC bit
+	OCR0A = 156; //Timer ticks per .01s, 16MHz Clk/1024
+	TIMSK0 = (1 << OCIE0A);
+	TCCR0B = (1<<CS02) | (1<<CS00); //Set Clk/1024
 	
 	//LCD_DDR = 0xFF;			/* Make LCD port direction as o/p */ //4 bit mode, sets PORTD on MCU as output. Perhaps unnecessary in I2C since it's through SCL/SDA
 	twi_init();
@@ -128,11 +147,26 @@ void LCD_str_xy (char row, char pos, char *str)	/* Send string to LCD with xy po
 	LCD_str(str);		/* Call LCD string function */
 }
 
+void LCD_int(int num) {
+	char buff[3];
+	itoa(num, buff, 10);
+	LCD_str(buff);
+}
+
 void LCD_clr()
 {
 	LCD_cmd (0x01);		/* Clear display */
 	_delay_ms(2);
 	LCD_cmd (0x80);		/* Cursor at home position */
+}
+
+void LCD_clr_ln(int lineNo){ //1st line = 0, 2nd line = 1
+	if (lineNo == 0)
+		LCD_cmd(0x80);
+	else
+		LCD_cmd(0xC0);
+	LCD_str("                ");
+	LCD_cmd(0x80);
 }
 
 void LCD_wake() {
@@ -151,20 +185,120 @@ void LCD_wake() {
 			LCD_char(k);
 			//_delay_ms(5);
 		}
-		_delay_ms(350); //Wait 350ms per character change
+		_delay_ms(250); //Wait 350ms per character change
 	}
 	LCD_cmd(0x80); //1st line
 	for (int i = 0; i < 16; i++) { //print black bars on first line
 		LCD_char(0xFF);
-		_delay_ms(30);
+		_delay_ms(10);
 	}
 	LCD_cmd(0xC0); //2nd line
 	for (int j = 0; j < 16; j++) { //print black bars on second line
 		LCD_char(0xFF);
-		_delay_ms(30);
+		_delay_ms(10);
 	}
-	_delay_ms(1000); //Wait a sec before clearing
+	_delay_ms(500); //Wait a 500ms before clearing
 	LCD_clr();
+	LCD_cmd(0x83);
+	LCD_str("LCD Ready!");
+	_delay_ms(400);
+	LCD_clr();
+
+}
+
+void LCD_update() {
+	//Called by CAN interrupt
+
+	LCD_cmd(0x84);
+	LCD_str("    ");
+	LCD_cmd(0x8D);
+	LCD_str("  ");
+}
+
+void LCD_timestamp() {
+	LCD_cmd(0xC2);
+	LCD_str("TMSTMP REC!");
+	_delay_ms(400);
+	LCD_clr_ln(1); //clear 2nd line	
+}
+
+void LCD_default() {
+	state = 1;
+	LCD_clr();
+	LCD_str("SOC:");
+	LCD_cmd(0x89);
+	LCD_str("Bat:");
+	LCD_cmd(0x8F);
+	LCD_char(0b11011111); //Degree
+}
+
+void LCD_menu() {
+	state = 2;
+	extraTime = 0;
+	LCD_clr();
+	LCD_str("Stgs.      Op. X");
+	LCD_cmd(0xC0);
+	LCD_str("Back       Op. Y");
+}
+
+void LCD_back() {
+	if (state >= 3)
+		LCD_menu();
+	else
+		LCD_default();
+}
+
+void LCD_settings() {
+	state = 3;
+	extraTime = 0;
+	LCD_clr();
+	LCD_str("Settings");
+	LCD_cmd(0xC0);
+	LCD_str("Back");
+}
+
+void LCD_optionx() {
+	state = 4;
+	extraTime = 0;
+	LCD_clr();
+	LCD_str("Option X");
+	LCD_cmd(0xC0);
+	LCD_str("Back");
+}
+
+void LCD_optiony() {
+	state = 5;
+	extraTime = 0;
+	LCD_clr();
+	LCD_str("Option Y");
+	LCD_cmd(0xC0);
+	LCD_str("Back");
+}
+
+/**
+void checkTime() {
+	if (state >= 2) {
+		LCD_cmd(0x87);
+		LCD_int(TIMEOUT-(extraTime/100));
+		if (extraTime > TIMEOUT*100) //600*.01s = 6s
+			LCD_default();
+	}
+}
+**/
+
+ISR(TIMER0_COMPA_vect) { //Interrupt for button
+	
+	if (state >= 2) {
+		extraTime++;
+		/**	//Too slow, conflicts with other interrupt causing button glitches
+		if (extraTime/100.0 == extraTime/100) {
+			LCD_cmd(0x87);
+			LCD_int(TIMEOUT-(extraTime/100));
+		}
+		**/
+		if (extraTime > TIMEOUT*100) //600*.01s = 6s
+			LCD_default(); //Return to default
+	}
 }
 
 #endif /* 1602LCD_H_ */
