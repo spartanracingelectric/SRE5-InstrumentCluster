@@ -13,7 +13,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include "i2c.h"
-#include "led.h"
+#include "indicators.h"
 #include "1602lcd.h"
 
 //LCD ports
@@ -35,7 +35,7 @@ LCD_D7 = (1<<D7); //(1<<7)
 
 int main(void)
 {
-	twi_init();
+	/*twi_init();
 	timer_Init();
 
     while (1) 
@@ -103,6 +103,6 @@ int main(void)
 	rgb_set(0, BLACK);
 	rgb_set(1, BLACK);
 	_delay_ms(300);  
-	}
+	}*/
 }
 
