@@ -37,6 +37,21 @@ int main(void)
 {
 	twi_init();
 	timer_Init();
+	rpm_write(0b1111111111111111);
+	_delay_ms(300);
+	rgb_set(0, BLACK);
+	_delay_ms(300);
+	rgb_set(1, BLACK);
+	_delay_ms(300);
+	indicatorSet(LED1, 1); 
+	_delay_ms(300);
+	indicatorSet(LED2, 1);
+	_delay_ms(300);
+	twi_stop();
+
+	//twi_start(LCD_ADDRESS);
+	//twi_write(0b01010101);
+	twi_stop();
 
     while (1) 
     {
@@ -102,7 +117,11 @@ int main(void)
 	indicatorSet(LED2, 1);
 	rgb_set(0, BLACK);
 	rgb_set(1, BLACK);
-	_delay_ms(300);  
+	_delay_ms(300); 
+
+	LCD_init(LCD_ADDRESS, LCD_RS, LCD_E, LCD_BL, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
+	LCD_wake();
+	LCD_clr();
 	}
 }
 
