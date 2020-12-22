@@ -27,7 +27,6 @@ extern "C" {
 #error Wrong configuration file (pffconf.h).
 #endif
 
-
 /* Integer types used for FatFs API */
 
 #if defined(_WIN32)	/* Main development platform */
@@ -125,8 +124,6 @@ FRESULT pf_write (const void* buff, UINT btw, UINT* bw);	/* Write data to the op
 FRESULT pf_lseek (DWORD ofs);								/* Move file pointer of the open file */
 FRESULT pf_opendir (DIR* dj, const char* path);				/* Open a directory */
 FRESULT pf_readdir (DIR* dj, FILINFO* fno);					/* Read a directory item from the open directory */
-
-
 
 /*--------------------------------------------------------------*/
 /* Flags and offset address                                     */

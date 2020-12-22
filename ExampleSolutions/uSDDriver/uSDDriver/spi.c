@@ -8,26 +8,19 @@
  */
 
 void spi_init(void) {
-	//PORTD=0x00; //Set port D to LOW
-	//DDRD=0xFF; //Set port D to OUTPUT
 	
-	//MOSI, SCK, CS all high, output in master mode
-	//DDRB = (1<<MOSI) | (1<<CS) | (1<<SCK);
-	//PORTB = (1<<MOSI) | (1<<CS) | (1<<SCK);
+	/* MOSI, SCK, CS output in master mode */
 	DDRB = (1<<MOSI) | (1<<CS) | (1<<SCK);
-	//PORTB = (1<<MOSI) | (1<<SCK);
 	//Definitions defined in main.c
 	
-	//Set SPI Control Register bits, further explained below
-	//SPCR = (1<<MSTR) | (1<<SPR0);
-	SPCR = (1<<SPE) | (1<<MSTR) | (1<<SPR0); //ENABLES SPI
-	/*
-		SPE: SPI Enable bit, 1 = SPI enabled
-		MSTR: Select Master bit, 1 = master mode
-		SPR0: SPI Clock Rate 0 Select bit, SPR1 0 & SPR0 1 = SCK freq of f_osc/16
-			- Sets SCK freq to f_osc/16 setting, which matches MCU clock of 16MHz
-		CPOL & CPHA default to 0 so SPI mode is 0, which SDC uses
-	*/
+	/* Set SPI Control Register bits, further explained below */
+	//SPCR = (1<<MSTR) | (1<<SPR0); //SPI DISABLED BY DEFAULT
+	SPCR = (1<<SPE) | (1<<MSTR) | (1<<SPR0); //SPI ENABLED BY DEFAULT
+	/*	SPE: SPI Enable bit, 1 = SPI enabled									  
+	 *	MSTR: Select Master bit, 1 = master mode								  
+	 *	SPR0: SPI Clock Rate 0 Select bit, SPR1 0 & SPR0 1 = SCK freq of f_osc/16 
+	 *		- Sets SCK freq to f_osc/16 setting, which matches MCU clock of 16MHz
+	 *	CPOL & CPHA default to 0 so SPI mode is 0, which SDC uses				  */
 	
 }
 

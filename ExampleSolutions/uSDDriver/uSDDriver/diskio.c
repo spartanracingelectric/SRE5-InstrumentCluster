@@ -3,10 +3,16 @@
 /*-----------------------------------------------------------------------*/
 
 #include "diskio.h"
+#include "uart.h"
+#include "uart_printf.h"
+#include "1602lcd.h"
 
 #define CS_LOW()	PORTB &= ~(1<<CS)	/* Set CS low */
 #define	CS_HIGH()	PORTB |=  (1<<CS)	/* Set CS high */
 #define	IS_CS_LOW	!(PINB & (1<<CS))	/* Test if CS is low */
+#define FORWARD(d)	LCD_char(d)
+//#define	FORWARD(d)	uart___polled_put(d)		/* Data streaming function (console out) */
+//#define	FORWARD_STR(d)	uart__printf(d)		/* Data streaming function (console out) */
 
 /* Definitions for MMC/SDC command */
 #define CMD0	(0x40+0)	/* GO_IDLE_STATE */
@@ -77,32 +83,40 @@ static BYTE send_cmd (
 	return res;			/* Return with the response value */
 }
 
-/*-----------------------------------------------------------------------*/
-/* Initialize Disk Drive                                                 */
-/*-----------------------------------------------------------------------*/
-
+/*--------------------------------------------------------------------------*/
+/* INITIALIZE DISK DRIVE                                                    */
+/*																			*/
+/* Initialization Flowchart: http://elm-chan.org/docs/mmc/i/sdinit.png      */
+/* DSTATUS: byte for error status -> 0 (pass) or 1 (STA_NOINIT, fail)       */
+/* BYTE n: For ocr[4], represents counter for # of nibbles in OCR width     */
+/* BYTE cmd: SD CMDs are assigned to it, used to differentiate SDv1 & MMCv3 */
+/* BYTE ty: Represents SD card type. 0 end val = missing SD ver., init fail */
+/* BYTE ocr[4]: Stores OCR of R3 & R7 responses, 32 bits wide				*/
+/* UINT tmr: Timer var														*/
+/*--------------------------------------------------------------------------*/
 DSTATUS disk_initialize (void)
 {
-	BYTE n, cmd, ty, ocr[4]; //OCR bit width is 32
+	BYTE n, cmd, ty, ocr[4];
 	UINT tmr;
 
 #if PF_USE_WRITE
-	//if (CardType != 0 && IS_CS_LOW) disk_writep(0, 0);	/* Finalize write process if it is in progress */
+	if (CardType != 0 && IS_CS_LOW) disk_writep(0, 0);	/* Finalize write process if it is in progress */
 #endif
 
 	spi_init();		/* Initialize ports to control MMC */
 	CS_HIGH();
+	//for (n = 100; n; n--) _delay_us(100);	/* 10ms delay */
 	for (n = 10; n; n--) rcv_spi();	/* 80 dummy clocks with CS=H */
 
 	ty = 0;
 	if (send_cmd(CMD0, 0) == 1) {							// If R1 idle state bit true, GO_IDLE_STATE
 		if (send_cmd(CMD8, 0x1AA) == 1) {					// for SDv2/SDHC/SDXC
-			for (n = 0; n < 4; n++) ocr[n] = rcv_spi();		// Receive and store trailing R7 response data, store to ocr[] array
+			for (n = 0; n < 4; n++) ocr[n] = rcv_spi();		// Receive and store trailing R7 response data, store to ocr[] array. R7 is 32 bits long
 			if (ocr[2] == 0x01 && ocr[3] == 0xAA) {			/* The card can work at vdd range of 2.7-3.6V */
 				for (tmr = 10000; tmr && send_cmd(ACMD41, 1UL << 30); tmr--) _delay_us(100);	/* Wait for leaving idle state (ACMD41 with HCS bit) */
 				if (tmr && send_cmd(CMD58, 0) == 0) {		/* Check CCS bit in the OCR */
-					for (n = 0; n < 4; n++) ocr[n] = rcv_spi();
-					ty = (ocr[0] & 0x40) ? CT_SD2 | CT_BLOCK : CT_SD2;	/* SDv2 (HC or SC) */
+					for (n = 0; n < 4; n++) ocr[n] = rcv_spi(); // Receive and store trailing R3 response data, store to ocr[] array. R3 is 32 bits long
+					ty = (ocr[0] & 0x40) ? CT_SD2 | CT_BLOCK : CT_SD2;	/* SDv2 (HC+) */
 				}
 			}
 		}
@@ -113,7 +127,7 @@ DSTATUS disk_initialize (void)
 			else {
 				ty = CT_MMC; cmd = CMD1;	/* MMCv3 */
 			}
-			for (tmr = 10000; tmr && send_cmd(cmd, 0); tmr--) _delay_us(100);	/* Wait for leaving idle state */
+			for (tmr = 10000; tmr && send_cmd(cmd, 0); tmr--) _delay_us(100);	/* Wait for leaving idle state, min. timeout of 1s. Ping every 100us. */
 			if (!tmr || send_cmd(CMD16, 512) != 0) {	/* Set R/W block length to 512 */
 				ty = 0;
 			}
@@ -123,14 +137,14 @@ DSTATUS disk_initialize (void)
 	CS_HIGH();
 	rcv_spi();
 
-	return ty ? 0 : STA_NOINIT; //If 
-}
-
+	/* If any non-zero, card has initialized to some config */
+	/*  already and return 0. Otherwise, return STA_NOINIT  */
+	return ty ? 0 : STA_NOINIT; }
 
 /*-----------------------------------------------------------------------*/
 /* Read Partial Sector                                                   */
 /*-----------------------------------------------------------------------*/
-/*
+
 DRESULT disk_readp (
 	BYTE* buff,		// Pointer to the destination object
 	DWORD sector,	// Sector number (LBA)
@@ -139,43 +153,149 @@ DRESULT disk_readp (
 )
 {
 	DRESULT res;
+	BYTE rc;
+	UINT bc;
+	
+	if (!(CardType & CT_BLOCK)) sector *= 512;	/* If not SDHC+ BLOCK, convert to byte address */
 
-	// Put your code here
+	res = RES_ERROR; //Default state, hard err occurred during read and couldn't recover, return RES_ERROR (1). Cleared with successful read.
+	if (send_cmd(CMD17, sector) == 0) {	/* READ_SINGLE_BLOCK */
+
+		bc = 40000;	/* Time counter */
+		do {				/* Wait for data block */
+			rc = rcv_spi();
+		} while (rc == 0xFF && --bc);
+
+		if (rc == 0xFE) {	/* A data block arrived */
+
+			bc = 514 - offset - count;	/* Number of trailing bytes to skip */
+
+			/* Skip leading bytes in the sector */
+			while (offset--) rcv_spi();
+
+			/* Receive a part of the sector */
+			if (buff) {	/* Store data to the memory */
+				do {
+					*buff++ = rcv_spi();
+				} while (--count);
+			}
+			else {	/* Forward data to the outgoing stream */
+				do {
+					FORWARD(rcv_spi());
+				} while (--count);
+			}
+
+			/* Skip trailing bytes in the sector and block CRC */
+			do rcv_spi(); while (--bc);
+
+			res = RES_OK; //Function succeeded, return RES_OK (0)
+		}
+	}
+
+	CS_HIGH();
+	rcv_spi();
+	//LCD_cmd(0x80);
+	//LCD_hex(rc);
+
 
 	return res;
 }
-*/
+
 
 
 /*-----------------------------------------------------------------------*/
 /* Write Partial Sector                                                  */
 /*-----------------------------------------------------------------------*/
-/*
+
+#if PF_USE_WRITE
 DRESULT disk_writep (
-	BYTE* buff,		// Pointer to the data to be written, NULL:Initiate/Finalize write operation
+	const BYTE* buff,		// Pointer to the data to be written, NULL:Initiate/Finalize write operation
 	DWORD sc		// Sector number (LBA) or Number of bytes to send
 )
 {
 	DRESULT res;
+	UINT bc;
+	static UINT wc;	/* Sector write counter */
 
+	res = RES_ERROR;
 
-	if (!buff) {
-		if (sc) {
-
-			// Initiate write process
-
-		} else {
-
-			// Finalize write process
-
+	if (buff) {		/* Send data bytes */
+		bc = sc;
+		while (bc && wc) {		/* Send data bytes to the card */
+			spi_tranceiver(*buff++);
+			wc--; bc--;
 		}
-	} else {
-
-		// Send data to the disk
-
+		res = RES_OK;
+	}
+	else {
+		if (sc) {	/* Initiate sector write process */
+			if (!(CardType & CT_BLOCK)) sc *= 512;	/* Convert to byte address if needed */
+			if (send_cmd(CMD24, sc) == 0) {			/* WRITE_SINGLE_BLOCK */
+				spi_tranceiver(0xFF); spi_tranceiver(0xFE);		/* Data block header */
+				wc = 512;							/* Set byte counter */
+				res = RES_OK;
+			}
+		}
+		else {	/* Finalize sector write process */
+			bc = wc + 2;
+			while (bc--) spi_tranceiver(0);	/* Fill left bytes and CRC with zeros */
+			if ((rcv_spi() & 0x1F) == 0x05) {	/* Receive data resp and wait for end of write process in timeout of 500ms */
+				for (bc = 5000; rcv_spi() != 0xFF && bc; bc--) {	/* Wait for ready */
+					_delay_us(100);
+				}
+				if (bc) res = RES_OK;
+			}
+			CS_HIGH();
+			rcv_spi();
+		}
 	}
 
 	return res;
 }
-*/
+#endif /* PF_USE_WRITE */
 
+/*-----------------------------------------------------------------------*/
+/* Display Disk Drive Initialization Info on LCD                         */
+/*-----------------------------------------------------------------------*/
+
+/* For disk_display_init_info() */
+DSTATUS stat, prev_stat;
+uint8_t change = 1;
+
+void disk_display_init_info(void) { //Include in loops for continuous checking. Displays to LCD
+	prev_stat = stat;
+	stat = disk_initialize();
+	if (stat != prev_stat) { //If previous stat value equal to current, change has happened so mark change flag
+		change = 1;
+	}
+	if (!stat && change) { //There is no error and flag indicating change needed
+		LCD_clr();
+		LCD_str("SD init success!");
+		LCD_cmd(0xC0);
+		LCD_str("DSK");
+		if (CardType == CT_MMC) {
+			LCD_str(":MMCv3");
+		}
+		else if (CardType == CT_SD1) {
+			LCD_str(":SDSC");
+		}
+		else if (CardType == CT_SD2) {
+			LCD_str(":SDHC+(BYTE)");
+		}
+		else if (CardType == (CT_SD2 | CT_BLOCK)) {
+			LCD_str(":SDHC+(BLOCK)");
+		}
+		else {
+			LCD_str(" CODE: 0x");
+			LCD_hex(CardType);
+		}
+		change = 0;
+	}
+	else if (change) { //There is an error and flag indicating change needed
+		LCD_clr();
+		LCD_str("SD init fail!");
+		LCD_cmd(0xC0);
+		LCD_str("Err. or no disk!");
+		change = 0;
+	}
+}

@@ -13,6 +13,7 @@ extern "C" {
 
 #include "pff.h"
 #include "spi.h"
+#include "1602lcd.h"
 
 /* Status of Disk Functions */
 typedef BYTE	DSTATUS;
@@ -26,13 +27,12 @@ typedef enum {
 	RES_PARERR		/* 3: Invalid parameter */
 } DRESULT;
 
-
-/*---------------------------------------*/
-/* Prototypes for disk control functions */
-
+/*------------------------*/
+/* Disk control functions */
 DSTATUS disk_initialize (void);
 DRESULT disk_readp (BYTE* buff, DWORD sector, UINT offset, UINT count);
 DRESULT disk_writep (const BYTE* buff, DWORD sc);
+void disk_display_init_info(void); //Include in loops for continuous checking. Displays to LCD
 
 #define STA_NOINIT		0x01	/* Drive not initialized */
 #define STA_NODISK		0x02	/* No medium in the drive */

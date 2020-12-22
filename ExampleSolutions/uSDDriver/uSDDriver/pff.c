@@ -35,6 +35,7 @@
 /                     Removed some code pages actually not valid.
 /----------------------------------------------------------------------------*/
 
+#include <string.h>
 #include "pff.h"		/* Petit FatFs configurations and declarations */
 #include "diskio.h"		/* Declarations of low level disk I/O functions */
 
@@ -550,6 +551,7 @@ static FRESULT dir_next (	/* FR_OK:Succeeded, FR_NO_FILE:End of table */
 
 
 	i = dj->index + 1;
+
 	if (!i || !dj->sect) return FR_NO_FILE;	/* Report EOT when index has reached 65535 */
 
 	if (!(i % 16)) {		/* Sector changed? */
@@ -798,6 +800,8 @@ static BYTE check_fs (	/* 0:The FAT boot record, 1:Valid boot record but not an 
 	if (PF_FS_FAT32 && !disk_readp(buf, sect, BS_FilSysType32, 2) && ld_word(buf) == 0x4146) {	/* Check FAT32 */
 		return 0;
 	}
+	//LCD_cmd(0x80);
+	//LCD_hex(disk_readp(buf, sect, BS_FilSysType32, 2));
 	return 1;
 }
 
@@ -813,7 +817,7 @@ static BYTE check_fs (	/* 0:The FAT boot record, 1:Valid boot record but not an 
 
 
 /*-----------------------------------------------------------------------*/
-/* Mount/Unmount a Locical Drive                                         */
+/* Mount/Unmount a Logical Drive                                         */
 /*-----------------------------------------------------------------------*/
 
 FRESULT pf_mount (
@@ -908,7 +912,6 @@ FRESULT pf_open (
 	res = follow_path(&dj, dir, path);	/* Follow the file path */
 	if (res != FR_OK) return res;		/* Follow failed */
 	if (!dir[0] || (dir[DIR_Attr] & AM_DIR)) return FR_NO_FILE;	/* It is a directory */
-
 	fs->org_clust = get_clust(dir);		/* File start cluster */
 	fs->fsize = ld_dword(dir+DIR_FileSize);	/* File size */
 	fs->fptr = 0;						/* File pointer */
@@ -1098,7 +1101,7 @@ FRESULT pf_lseek (
 
 
 /*-----------------------------------------------------------------------*/
-/* Create a Directroy Object                                             */
+/* Create a Directory Object                                             */
 /*-----------------------------------------------------------------------*/
 #if PF_USE_DIR
 
@@ -1172,4 +1175,3 @@ FRESULT pf_readdir (
 }
 
 #endif /* PF_USE_DIR */
-

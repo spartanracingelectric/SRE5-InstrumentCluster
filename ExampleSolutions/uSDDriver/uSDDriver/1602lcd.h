@@ -42,6 +42,7 @@ void LCD_hex(unsigned char data);
 void LCD_init();
 void LCD_str(char *str);
 void LCD_str_xy (char row, char pos, char *str);
+void LCD_int(int num);
 void LCD_clr();
 void LCD_wake();
 void LCD_update();

@@ -135,7 +135,7 @@ void LCD_str_xy (char row, char pos, char *str)	/* Send string to LCD with xy po
 }
 
 void LCD_int(int num) {
-	char buff[3];
+	char buff[4];
 	itoa(num, buff, 10);
 	LCD_str(buff);
 }
