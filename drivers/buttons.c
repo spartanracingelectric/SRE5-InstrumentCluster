@@ -47,7 +47,7 @@ ISR(PCINT1_vect) {
 		_delay_ms(1);
 	}
 	if (timer > DEBOUNCE_TIME) {
-		if (state != 1)
+		if (LCD_get_state() != 1)
 		button_flag[2] = 1;
 		else if (timer >= HOLD_TIME)
 		button_flag[2] = 1;
@@ -59,14 +59,14 @@ ISR(PCINT1_vect) {
 		_delay_ms(1);
 	}
 	if (timer > DEBOUNCE_TIME) {
-		if (state != 1)
+		if (LCD_get_state() != 1)
 		button_flag[3] = 1;
 		else if (timer >= HOLD_TIME)
 		button_flag[3] = 1;
 	}
 	
-	switch(state) {
-		case DEFAULT_SCREEN: { //state = 1
+	switch(LCD_get_state()) {
+		case DEFAULT_SCREEN: { //LCD_get_state() = 1
 			if (button_flag[0])
 			LCD_timestamp();
 			else if (button_flag[1])
@@ -78,7 +78,7 @@ ISR(PCINT1_vect) {
 			button_flag_reset();
 			
 		}
-		case MENU_SCREEN: { //state = 2
+		case MENU_SCREEN: { //LCD_get_state() = 2
 			if (button_flag[0])
 			LCD_settings();
 			else if (button_flag[1])
@@ -89,17 +89,17 @@ ISR(PCINT1_vect) {
 			LCD_optiony();
 			button_flag_reset();
 		}
-		case SETTINGS_SCREEN: { //state = 3
+		case SETTINGS_SCREEN: { //LCD_get_state() = 3
 			if (button_flag[2])
 			LCD_back();
 			button_flag_reset();
 		}
-		case OPTIONX_SCREEN: { //state = 4
+		case OPTIONX_SCREEN: { //LCD_get_state() = 4
 			if (button_flag[2])
 			LCD_back();
 			button_flag_reset();
 		}
-		case OPTIONY_SCREEN: { //state = 5
+		case OPTIONY_SCREEN: { //LCD_get_state() = 5
 			if (button_flag[2])
 			LCD_back();
 			button_flag_reset();
