@@ -13,6 +13,6 @@ void uart__printf(char *message)
 	const size_t message_length = strlen(message); 
 	for(size_t i = 0; i < message_length; i++)
 	{
-		uart___polled_put(message[i]); 
+		uart__polled_put(message[i]); 
 	}
 }
