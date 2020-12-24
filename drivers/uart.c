@@ -6,8 +6,6 @@
  */ 
 
 #include "uart.h"
-#include <stdbool.h>
-#define F_CPU 16000000UL
 
 void uart__init(uint32_t baud_rate)
 {
@@ -37,7 +35,7 @@ bool uart__is_ready(void)
 }
 
 
-bool uart___polled_put(uint8_t data)
+bool uart__polled_put(uint8_t data)
 {
 	// Interrupt is disabled, we need to poll data 
 	bool status = false;

@@ -6,8 +6,6 @@
  */ 
 
 #include "uart.h"
-#include <stdbool.h>
-#define F_CPU 16000000UL
 
 void uart__init(uint32_t baud_rate)
 {
