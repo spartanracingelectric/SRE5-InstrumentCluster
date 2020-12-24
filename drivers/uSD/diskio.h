@@ -5,15 +5,26 @@
 #ifndef _DISKIO_DEFINED
 #define _DISKIO_DEFINED
 
-#define F_CPU 16000000UL //Change MCU speed here, delay.h dependent
+//#define F_CPU 16000000UL //Defined in conf.h
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+
+#include "conf.h"
 #include "pff.h"
 #include "spi.h"
-#include "1602lcd.h"
+#include "uart_printf.h"
+
+#define STA_NOINIT		0x01	/* Drive not initialized */
+#define STA_NODISK		0x02	/* No medium in the drive */
+
+/* Card type flags (CardType) */
+#define CT_MMC				0x01	/* MMC version 3 */
+#define CT_SD1				0x02	/* SD version 1 */
+#define CT_SD2				0x04	/* SD version 2+ */
+#define CT_BLOCK			0x08	/* Block addressing */
 
 /* Status of Disk Functions */
 typedef BYTE	DSTATUS;
@@ -27,15 +38,15 @@ typedef enum {
 	RES_PARERR		/* 3: Invalid parameter */
 } DRESULT;
 
+/*---------------*/
+/* Misc. functions */
+BYTE disk_get_card_type();
+
 /*------------------------*/
 /* Disk control functions */
 DSTATUS disk_initialize (void);
 DRESULT disk_readp (BYTE* buff, DWORD sector, UINT offset, UINT count);
 DRESULT disk_writep (const BYTE* buff, DWORD sc);
-void disk_display_init_info(void); //Include in loops for continuous checking. Displays to LCD
-
-#define STA_NOINIT		0x01	/* Drive not initialized */
-#define STA_NODISK		0x02	/* No medium in the drive */
 
 #ifdef __cplusplus
 }
