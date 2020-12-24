@@ -1,74 +1,55 @@
-#define F_CPU 16000000UL
-
+#include "conf.h" //Has F_CPU defined
 #include <avr/io.h>
 #include <util/delay.h>
 #include <string.h>
+#include "uart.h"
+#include "uart_printf.h"
 #include "spi.h"
 #include "1602lcd.h"
+#include "buttons.h"
 #include "i2c.h"
 #include "diskio.h"
 #include "pff.h"
 
-//#define ACK 0x7E
-
-/* ARDUINO PRO MINI PINOUT:
- * CS:   PB2 (pin 10)
- * SCK:  PB5 (pin 13)
- * MOSI: PB3 (pin 11)
- * MISO: PB4 (pin 12)
- */
-
-
 int main(void)
 { 
-	char c[16];
+	char c[100];
 	
 	FATFS pfs;
 	UINT br;
 	FRESULT res;
 	
+	uart__init(9600);
 	spi_init();
 	//spi_start();
-	LCD_init();
-	//LCD_wake();
-
-	//disk_display_init_info();
-	//_delay_ms(500);
-	LCD_clr();
-	res = pf_mount(&pfs);
-	if (!res) //No error
-		LCD_str("Mount success!");
-	else {
-		//LCD_str("Mount fail!");
-		LCD_cmd(0xC0);
-		LCD_hex(res);
-	}
-	_delay_ms(250);
-	LCD_clr();
-
-	res = pf_open("TEST.TXT");
-	if (res == FR_OK) {
-		LCD_str("File opened!");
-		pf_read(c, 16, &br);
-	}
-	else {
-		LCD_str("File open fail!");
-		LCD_cmd(0xC0);
-		LCD_hex(res);
-	}
-	_delay_ms(500);
 	
-	LCD_cmd(0xC0);
-	LCD_str(c);
+	LCD_init();
+	buttons_init();
+	
+	uart__print_welcome();
+	
+	uart__print_disk_info();
+	
+	res = pf_mount(&pfs);
+	uart__print_disk_error(res, MOUNT);
+	
+	res = pf_open(FILE_NAME); //File name found in conf.h
+	uart__print_disk_error(res, OPEN);
+
+	LCD_wake();
+
+	LCD_default();
+	
+	sei(); //Enable interrupts
+	
+	res = pf_read(c, sizeof(c), &br);
+	uart__print_disk_error(res, READ);
 	
     while (1) 
     {
-		
-		
-		//_delay_ms(250);
-	
-		//LCD_cmd(0xC0);
-		//LCD_cmd(0x80);
+		uart__printf(c);
+		uart__print_new_line();
+		_delay_ms(2000);
     }
 }
 

@@ -1,10 +1,12 @@
-uart_printf.d uart_printf.o: .././uart_printf.c .././uart_printf.h \
+uart_printf.d uart_printf.o: .././uart_printf.c \
+ f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\string.h \
+ f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h \
+ .././uart_printf.h .././conf.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdio.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\inttypes.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdint.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdint.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdarg.h \
- f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h \
  .././uart.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
@@ -15,9 +17,18 @@ uart_printf.d uart_printf.o: .././uart_printf.c .././uart_printf.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\fuse.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\lock.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdbool.h \
- f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\string.h
+ .././diskio.h .././pff.h .././pffconf.h .././spi.h \
+ f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h \
+ f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h \
+ f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h
+
+f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\string.h:
+
+f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h:
 
 .././uart_printf.h:
+
+.././conf.h:
 
 f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdio.h:
 
@@ -28,8 +39,6 @@ f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\
 f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdint.h:
 
 f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdarg.h:
-
-f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h:
 
 .././uart.h:
 
@@ -51,4 +60,16 @@ f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\lock.h:
 
 f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdbool.h:
 
-f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\string.h:
+.././diskio.h:
+
+.././pff.h:
+
+.././pffconf.h:
+
+.././spi.h:
+
+f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h:
+
+f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h:
+
+f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h:

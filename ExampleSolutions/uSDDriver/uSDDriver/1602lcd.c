@@ -15,7 +15,7 @@
 
 int extraTime = 0;
 
-extern uint8_t state = 1;
+static uint8_t state = 1;
 
 void LCD_write(unsigned char data, uint8_t mode) {
 	
@@ -262,12 +262,16 @@ void LCD_optiony() {
 	LCD_str("Back");
 }
 
+uint8_t LCD_get_state() {
+	return state;
+}
+
 /**
-void checkTime() {
+void checkTime() { //Displays timeout, seconds remaining
 	if (state >= 2) {
 		LCD_cmd(0x87);
-		LCD_int(TIMEOUT-(extraTime/100));
-		if (extraTime > TIMEOUT*100) //600*.01s = 6s
+		LCD_int(LCD_TIMEOUT-(extraTime/100));
+		if (extraTime > LCD_TIMEOUT*100) //600*.01s = 6s
 			LCD_default();
 	}
 }
@@ -280,10 +284,10 @@ ISR(TIMER0_COMPA_vect) { //Interrupt for button
 		/**	//Too slow, conflicts with other interrupt causing button glitches
 		if (extraTime/100.0 == extraTime/100) {
 			LCD_cmd(0x87);
-			LCD_int(TIMEOUT-(extraTime/100));
+			LCD_int(LCD_TIMEOUT-(extraTime/100));
 		}
 		**/
-		if (extraTime > TIMEOUT*100) //600*.01s = 6s
+		if (extraTime > LCD_TIMEOUT*100) //600*.01s = 6s
 			LCD_default(); //Return to default
 	}
 }

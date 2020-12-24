@@ -1,4 +1,5 @@
-diskio.d diskio.o: .././diskio.c .././diskio.h .././pff.h .././pffconf.h \
+diskio.d diskio.o: .././diskio.c .././diskio.h .././conf.h .././pff.h \
+ .././pffconf.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdint.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdint.h \
  .././spi.h \
@@ -14,19 +15,16 @@ diskio.d diskio.o: .././diskio.c .././diskio.h .././pff.h .././pffconf.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h \
- .././1602lcd.h \
- f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdlib.h \
- f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h \
- f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\interrupt.h \
- .././i2c.h \
- f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\twi.h \
- .././uart.h \
- f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdbool.h \
  .././uart_printf.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdio.h \
- f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdarg.h
+ f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdarg.h \
+ f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h \
+ .././uart.h \
+ f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdbool.h
 
 .././diskio.h:
+
+.././conf.h:
 
 .././pff.h:
 
@@ -62,24 +60,14 @@ f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_bas
 
 f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h:
 
-.././1602lcd.h:
-
-f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdlib.h:
-
-f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h:
-
-f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\interrupt.h:
-
-.././i2c.h:
-
-f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\twi.h:
-
-.././uart.h:
-
-f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdbool.h:
-
 .././uart_printf.h:
 
 f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdio.h:
 
 f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdarg.h:
+
+f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h:
+
+.././uart.h:
+
+f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdbool.h:

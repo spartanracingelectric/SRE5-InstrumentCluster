@@ -1,12 +1,5 @@
 #include "spi.h"
 
-/* ARDUINO PRO MINI PINOUT:
- * CS:   PB2 (pin 10)
- * SCK:  PB5 (pin 13)
- * MOSI: PB3 (pin 11)
- * MISO: PB4 (pin 12)
- */
-
 void spi_init(void) {
 	
 	/* MOSI, SCK, CS output in master mode */
@@ -44,12 +37,12 @@ void spi_write(unsigned char data) {
 unsigned char spi_receive(void) {
 	//Wait for data transmission to finish
 	while (!(SPSR & (1<<SPIF)));
-	
+	//Return received data, stored in SPDR register
 	return SPDR;
 }
 
 unsigned char spi_tranceiver (unsigned char data)
-{
+{	
 	SPDR = data;                                  //Load data into buffer
 	while(!(SPSR & (1<<SPIF) ));                  //Wait until transmission complete
 	return(SPDR);                                 //Return received data

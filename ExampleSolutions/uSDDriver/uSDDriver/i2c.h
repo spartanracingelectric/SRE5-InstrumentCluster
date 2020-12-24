@@ -3,10 +3,10 @@
 
 #include <util/twi.h>
 
-void error();
-void twi_init(void);
-void twi_start(uint8_t i2c_address);
-void twi_write(uint8_t data);
-void twi_stop(void);
+void error(); /* Error handling. Currently undefined */
+void twi_init(void); /* Initialize I2C and its bitrate */
+void twi_start(uint8_t i2c_address); /* Start I2C transmission */
+void twi_write(uint8_t data); /* Write a byte of data through I2C */
+void twi_stop(void); /* Stop I2C transmission */
 
 #endif /* I2C_H_ */

@@ -1,4 +1,4 @@
-buttons.d buttons.o: .././buttons.c .././buttons.h \
+buttons.d buttons.o: .././buttons.c .././buttons.h .././conf.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\inttypes.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdint.h \
@@ -21,6 +21,8 @@ buttons.d buttons.o: .././buttons.c .././buttons.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\twi.h
 
 .././buttons.h:
+
+.././conf.h:
 
 f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h:
 

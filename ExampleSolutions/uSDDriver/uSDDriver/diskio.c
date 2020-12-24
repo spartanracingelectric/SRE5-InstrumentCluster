@@ -3,15 +3,11 @@
 /*-----------------------------------------------------------------------*/
 
 #include "diskio.h"
-#include "uart.h"
-#include "uart_printf.h"
-#include "1602lcd.h"
 
 #define CS_LOW()	PORTB &= ~(1<<CS)	/* Set CS low */
 #define	CS_HIGH()	PORTB |=  (1<<CS)	/* Set CS high */
 #define	IS_CS_LOW	!(PINB & (1<<CS))	/* Test if CS is low */
-#define FORWARD(d)	LCD_char(d)
-//#define	FORWARD(d)	uart___polled_put(d)		/* Data streaming function (console out) */
+#define	FORWARD(d)	uart__polled_put(d)		/* Data streaming function (console out) */
 //#define	FORWARD_STR(d)	uart__printf(d)		/* Data streaming function (console out) */
 
 /* Definitions for MMC/SDC command */
@@ -24,12 +20,6 @@
 #define CMD24	(0x40+24)	/* WRITE_BLOCK */
 #define CMD55	(0x40+55)	/* APP_CMD */
 #define CMD58	(0x40+58)	/* READ_OCR */
-
-/* Card type flags (CardType) */
-#define CT_MMC				0x01	/* MMC version 3 */
-#define CT_SD1				0x02	/* SD version 1 */
-#define CT_SD2				0x04	/* SD version 2+ */
-#define CT_BLOCK			0x08	/* Block addressing */
 
 static BYTE CardType;
 
@@ -194,8 +184,6 @@ DRESULT disk_readp (
 
 	CS_HIGH();
 	rcv_spi();
-	//LCD_cmd(0x80);
-	//LCD_hex(rc);
 
 
 	return res;
@@ -254,48 +242,11 @@ DRESULT disk_writep (
 }
 #endif /* PF_USE_WRITE */
 
+
 /*-----------------------------------------------------------------------*/
-/* Display Disk Drive Initialization Info on LCD                         */
+/* Get MMC/SD Card Type			                                         */
 /*-----------------------------------------------------------------------*/
 
-/* For disk_display_init_info() */
-DSTATUS stat, prev_stat;
-uint8_t change = 1;
-
-void disk_display_init_info(void) { //Include in loops for continuous checking. Displays to LCD
-	prev_stat = stat;
-	stat = disk_initialize();
-	if (stat != prev_stat) { //If previous stat value equal to current, change has happened so mark change flag
-		change = 1;
-	}
-	if (!stat && change) { //There is no error and flag indicating change needed
-		LCD_clr();
-		LCD_str("SD init success!");
-		LCD_cmd(0xC0);
-		LCD_str("DSK");
-		if (CardType == CT_MMC) {
-			LCD_str(":MMCv3");
-		}
-		else if (CardType == CT_SD1) {
-			LCD_str(":SDSC");
-		}
-		else if (CardType == CT_SD2) {
-			LCD_str(":SDHC+(BYTE)");
-		}
-		else if (CardType == (CT_SD2 | CT_BLOCK)) {
-			LCD_str(":SDHC+(BLOCK)");
-		}
-		else {
-			LCD_str(" CODE: 0x");
-			LCD_hex(CardType);
-		}
-		change = 0;
-	}
-	else if (change) { //There is an error and flag indicating change needed
-		LCD_clr();
-		LCD_str("SD init fail!");
-		LCD_cmd(0xC0);
-		LCD_str("Err. or no disk!");
-		change = 0;
-	}
+BYTE disk_get_card_type() {
+	return CardType; //Returns defined values
 }

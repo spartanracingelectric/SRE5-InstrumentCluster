@@ -10,26 +10,14 @@ sei(); //Enables interrupts by setting the global interrupt mask
 #ifndef BUTTONS_H_
 #define BUTTONS_H_
 
-#define F_CPU 16000000UL
+//#define F_CPU 16000000UL
 
+#include "conf.h"
 #include <util/delay.h>
 #include "1602lcd.h"
 
+#define HOLD_TIME 1000 //Button hold time for bottom buttons on default screen. In ms
 
-/* @WAYNE edit accordingly to whatever the buttons are connected to */
-#define BUT1 PINC0
-#define BUT2 PINC1
-#define BUT3 PINC2
-#define BUT4 PINC3
-
-#define PCINT_BUT1 (1<<PCINT8)
-#define PCINT_BUT2 (1<<PCINT9)
-#define PCINT_BUT3 (1<<PCINT10)
-#define PCINT_BUT4 (1<<PCINT11)
-/********************************************************************/
-
-#define HOLD_TIME 1000 //Button hold time for bottom buttons on default screen
-
-void buttons_init();
+void buttons_init(); //Initialize buttons. Pinout found on conf.h
 
 #endif /* BUTTONS_H_ */

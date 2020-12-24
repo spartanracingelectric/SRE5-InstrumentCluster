@@ -1,4 +1,4 @@
-1602lcd.d 1602lcd.o: .././1602lcd.c .././1602lcd.h \
+1602lcd.d 1602lcd.o: .././1602lcd.c .././1602lcd.h .././conf.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdlib.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h \
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h \
@@ -20,6 +20,8 @@
  f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\twi.h
 
 .././1602lcd.h:
+
+.././conf.h:
 
 f:\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdlib.h:
 
