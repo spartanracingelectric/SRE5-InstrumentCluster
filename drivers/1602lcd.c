@@ -9,13 +9,12 @@
 
 #include "1602lcd.h"
 
-#define INIT_MODE 0x80
-#define CMD_MODE 0x00
-#define DATA_MODE 0x01
+#define LCD_CMD_MODE 0x00
+#define LCD_DATA_MODE 0x01
 
 int extraTime = 0;
 
-extern uint8_t state = 1;
+static uint8_t state = 1;
 
 void LCD_write(unsigned char data, uint8_t mode) {
 	
@@ -25,7 +24,7 @@ void LCD_write(unsigned char data, uint8_t mode) {
     
     // Send upper nibble
 	dataTemp = (data & 0xF0) | LCD_BL | LCD_E; //Loads upper nibble onto last four bits P4-P7
-	if (mode == CMD_MODE)
+	if (mode == LCD_CMD_MODE)
     {
 		dataTemp = (dataTemp & ~LCD_RS); //Set RS to 0 to signify command mode and Toggle E on -> When enable is toggled on, LCD knows to execute instructions given
     }        
@@ -41,7 +40,7 @@ void LCD_write(unsigned char data, uint8_t mode) {
     
     // Send lower nibble 
 	dataTemp = (data << 4) | LCD_BL | LCD_E; //Loads lower nibble onto last four bits P4-P7 and Toggle E on
-	if (mode == CMD_MODE)
+	if (mode == LCD_CMD_MODE)
 	{
     	dataTemp = (dataTemp & ~LCD_RS); //Set RS to 0 to signify command mode and Toggle E on -> When enable is toggled on, LCD knows to execute instructions given
 	}
@@ -60,12 +59,12 @@ void LCD_write(unsigned char data, uint8_t mode) {
 
 void LCD_cmd(unsigned char cmd)
 {
-	LCD_write(cmd, CMD_MODE);
+	LCD_write(cmd, LCD_CMD_MODE);
 }
 
 void LCD_char(unsigned char data)
 {
-	LCD_write(data, DATA_MODE);
+	LCD_write(data, LCD_DATA_MODE);
 }
 
 void LCD_hex(unsigned char data) //Displays byte in the form of two hex nibbles/digits
@@ -135,7 +134,7 @@ void LCD_str_xy (char row, char pos, char *str)	/* Send string to LCD with xy po
 }
 
 void LCD_int(int num) {
-	char buff[3];
+	char buff[4];
 	itoa(num, buff, 10);
 	LCD_str(buff);
 }
@@ -262,12 +261,16 @@ void LCD_optiony() {
 	LCD_str("Back");
 }
 
+uint8_t LCD_get_state() {
+	return state;
+}
+
 /**
-void checkTime() {
+void checkTime() { //Displays timeout, seconds remaining
 	if (state >= 2) {
 		LCD_cmd(0x87);
-		LCD_int(TIMEOUT-(extraTime/100));
-		if (extraTime > TIMEOUT*100) //600*.01s = 6s
+		LCD_int(LCD_TIMEOUT-(extraTime/100));
+		if (extraTime > LCD_TIMEOUT*100) //600*.01s = 6s
 			LCD_default();
 	}
 }
@@ -280,10 +283,10 @@ ISR(TIMER0_COMPA_vect) { //Interrupt for button
 		/**	//Too slow, conflicts with other interrupt causing button glitches
 		if (extraTime/100.0 == extraTime/100) {
 			LCD_cmd(0x87);
-			LCD_int(TIMEOUT-(extraTime/100));
+			LCD_int(LCD_TIMEOUT-(extraTime/100));
 		}
 		**/
-		if (extraTime > TIMEOUT*100) //600*.01s = 6s
+		if (extraTime > LCD_TIMEOUT*100) //600*.01s = 6s
 			LCD_default(); //Return to default
 	}
 }

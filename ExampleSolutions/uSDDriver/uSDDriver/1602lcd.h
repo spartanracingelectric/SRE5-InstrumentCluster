@@ -23,24 +23,25 @@
 
 #define LCD_TIMEOUT 6 //In seconds
 
-void LCD_write(unsigned char data, uint8_t mode); /* Writes byte via I2C.  */
-void LCD_cmd(unsigned char cmd);
-void LCD_char(unsigned char data);
-void LCD_hex(unsigned char data);
-void LCD_init();
-void LCD_str(char *str);
-void LCD_str_xy (char row, char pos, char *str);
-void LCD_int(int num);
-void LCD_clr();
-void LCD_wake();
-void LCD_update();
-void LCD_timestamp();
-void LCD_default();
-void LCD_menu();
-void LCD_back();
-void LCD_settings();
-void LCD_optionx();
-void LCD_optiony();
-uint8_t LCD_get_state();
+void LCD_write(unsigned char data, uint8_t mode); /* Writes byte via I2C. Mode is for LCD data transmission */
+void LCD_cmd(unsigned char cmd); /* Sends byte to LCD in LCD_CMD_MODE mode */
+void LCD_char(unsigned char data); /* Sends byte to LCD in LCD_DATA_MODE mode. Displays char */
+void LCD_hex(unsigned char data); /* Displays two hex characters representing a byte */
+void LCD_init(); /* Initializes LCD. Essential. */
+void LCD_str(char *str); /* Uses LCD_char. Displays string. */
+void LCD_str_xy (char row, char pos, char *str); /* Displays string at a certain row/col position */ 
+void LCD_int(int num); /* Displays an integer given an integer as an argument */
+void LCD_clr(); /* Clears LCD screen, resets cursor to start */
+void LCD_wake(); /* Testing functionality for LCD */
+void LCD_update(); /* Called by CAN interrupt, needs implementation */
+void LCD_timestamp(); /* Activated by button, records timestamp. Needs implementation */
+void LCD_default(); /* Default Instrument Cluster screen. Shows SOC & Battery Temp */
+void LCD_menu(); /* Main menu to enter sub menus */
+void LCD_back(); /* Back out one menu level */
+void LCD_settings(); /* Submenu, needs implementation */
+void LCD_optionx(); /* Submenu, needs implementation */
+void LCD_optiony(); /* Submenu, needs implementation */
+
+uint8_t LCD_get_state(); /* Get function for LCD menu state. buttons.h needs it */
 
 #endif /* 1602LCD_H_ */
