@@ -9,9 +9,8 @@
 
 #include "1602lcd.h"
 
-#define INIT_MODE 0x80
-#define CMD_MODE 0x00
-#define DATA_MODE 0x01
+#define LCD_CMD_MODE 0x00
+#define LCD_DATA_MODE 0x01
 
 int extraTime = 0;
 
@@ -25,7 +24,7 @@ void LCD_write(unsigned char data, uint8_t mode) {
     
     // Send upper nibble
 	dataTemp = (data & 0xF0) | LCD_BL | LCD_E; //Loads upper nibble onto last four bits P4-P7
-	if (mode == CMD_MODE)
+	if (mode == LCD_CMD_MODE)
     {
 		dataTemp = (dataTemp & ~LCD_RS); //Set RS to 0 to signify command mode and Toggle E on -> When enable is toggled on, LCD knows to execute instructions given
     }        
@@ -41,7 +40,7 @@ void LCD_write(unsigned char data, uint8_t mode) {
     
     // Send lower nibble 
 	dataTemp = (data << 4) | LCD_BL | LCD_E; //Loads lower nibble onto last four bits P4-P7 and Toggle E on
-	if (mode == CMD_MODE)
+	if (mode == LCD_CMD_MODE)
 	{
     	dataTemp = (dataTemp & ~LCD_RS); //Set RS to 0 to signify command mode and Toggle E on -> When enable is toggled on, LCD knows to execute instructions given
 	}
@@ -60,12 +59,12 @@ void LCD_write(unsigned char data, uint8_t mode) {
 
 void LCD_cmd(unsigned char cmd)
 {
-	LCD_write(cmd, CMD_MODE);
+	LCD_write(cmd, LCD_CMD_MODE);
 }
 
 void LCD_char(unsigned char data)
 {
-	LCD_write(data, DATA_MODE);
+	LCD_write(data, LCD_DATA_MODE);
 }
 
 void LCD_hex(unsigned char data) //Displays byte in the form of two hex nibbles/digits

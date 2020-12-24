@@ -15,19 +15,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   5 .debug_aranges 000002f0  00000000  00000000  0000202c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   000044a2  00000000  00000000  0000231c  2**0
+  6 .debug_info   000044a1  00000000  00000000  0000231c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000012c8  00000000  00000000  000067be  2**0
+  7 .debug_abbrev 000012b0  00000000  00000000  000067bd  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   0000227f  00000000  00000000  00007a86  2**0
+  8 .debug_line   0000227f  00000000  00000000  00007a6d  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  000009b4  00000000  00000000  00009d08  2**2
+  9 .debug_frame  000009b4  00000000  00000000  00009cec  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000009ab  00000000  00000000  0000a6bc  2**0
+ 10 .debug_str    000009ab  00000000  00000000  0000a6a0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00003fad  00000000  00000000  0000b067  2**0
+ 11 .debug_loc    00003fad  00000000  00000000  0000b04b  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000320  00000000  00000000  0000f014  2**0
+ 12 .debug_ranges 00000320  00000000  00000000  0000eff8  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -4539,17 +4539,17 @@ bool uart__polled_put(uint8_t data)
     192c:	08 95       	ret
 
 0000192e <uart__printf>:
-
-/* For disk_display_init_info() */
-DSTATUS stat;
-
-void uart__printf(char *message)
-{
+	const size_t message_length = strlen(message); 
+	for(size_t i = 0; i < message_length; i++)
+	{
+		uart__polled_put(message[i]); 
+	}
+}
     192e:	0f 93       	push	r16
     1930:	1f 93       	push	r17
     1932:	cf 93       	push	r28
     1934:	df 93       	push	r29
-	const size_t message_length = strlen(message); 
+
     1936:	fc 01       	movw	r30, r24
     1938:	01 90       	ld	r0, Z+
     193a:	00 20       	and	r0, r0
@@ -4557,28 +4557,28 @@ void uart__printf(char *message)
     193e:	31 97       	sbiw	r30, 0x01	; 1
     1940:	e8 1b       	sub	r30, r24
     1942:	f9 0b       	sbc	r31, r25
-	for(size_t i = 0; i < message_length; i++)
+
     1944:	51 f0       	breq	.+20     	; 0x195a <uart__printf+0x2c>
     1946:	ec 01       	movw	r28, r24
     1948:	8c 01       	movw	r16, r24
     194a:	0e 0f       	add	r16, r30
     194c:	1f 1f       	adc	r17, r31
-	{
-		uart__polled_put(message[i]); 
+void uart__print_new_line() {
+	uart__polled_put('\r');
     194e:	89 91       	ld	r24, Y+
     1950:	0e 94 8c 0c 	call	0x1918	; 0x1918 <uart__polled_put>
-DSTATUS stat;
-
-void uart__printf(char *message)
-{
-	const size_t message_length = strlen(message); 
-	for(size_t i = 0; i < message_length; i++)
-    1954:	c0 17       	cp	r28, r16
-    1956:	d1 07       	cpc	r29, r17
-    1958:	d1 f7       	brne	.-12     	; 0x194e <uart__printf+0x20>
 	{
 		uart__polled_put(message[i]); 
 	}
+}
+
+
+    1954:	c0 17       	cp	r28, r16
+    1956:	d1 07       	cpc	r29, r17
+    1958:	d1 f7       	brne	.-12     	; 0x194e <uart__printf+0x20>
+void uart__print_new_line() {
+	uart__polled_put('\r');
+	uart__polled_put('\n');
 }
     195a:	df 91       	pop	r29
     195c:	cf 91       	pop	r28
@@ -4588,19 +4588,19 @@ void uart__printf(char *message)
 
 00001964 <uart__print_new_line>:
 
-void uart__print_new_line() {
-	uart__polled_put('\r');
+
+void uart__print_welcome() {
     1964:	8d e0       	ldi	r24, 0x0D	; 13
     1966:	0e 94 8c 0c 	call	0x1918	; 0x1918 <uart__polled_put>
-	uart__polled_put('\n');
+	char r1[39] = "___       __     _         __ ___ _  _";
     196a:	8a e0       	ldi	r24, 0x0A	; 10
     196c:	0e 94 8c 0c 	call	0x1918	; 0x1918 <uart__polled_put>
     1970:	08 95       	ret
 
 00001972 <uart__print_welcome>:
-}
+	char r2[40] = " |  |\\ | (_     /  |  | | (_   | |_ |_)";
+	char r3[40] = "_|_ | \\| __) o  \\_ |_ |_| __)  | |_ | \\";
 
-void uart__print_welcome() {
     1972:	0f 93       	push	r16
     1974:	1f 93       	push	r17
     1976:	cf 93       	push	r28
@@ -4614,7 +4614,7 @@ void uart__print_welcome() {
     1986:	de bf       	out	0x3e, r29	; 62
     1988:	0f be       	out	0x3f, r0	; 63
     198a:	cd bf       	out	0x3d, r28	; 61
-	char r1[39] = "___       __     _         __ ___ _  _";
+	for(int i = 0; i < 39; i++)
     198c:	87 e2       	ldi	r24, 0x27	; 39
     198e:	ee ef       	ldi	r30, 0xFE	; 254
     1990:	f1 e0       	ldi	r31, 0x01	; 1
@@ -4624,7 +4624,7 @@ void uart__print_welcome() {
     1998:	0d 92       	st	X+, r0
     199a:	8a 95       	dec	r24
     199c:	e1 f7       	brne	.-8      	; 0x1996 <uart__print_welcome+0x24>
-	char r2[40] = " |  |\\ | (_     /  |  | | (_   | |_ |_)";
+		uart__polled_put('#');
     199e:	88 e2       	ldi	r24, 0x28	; 40
     19a0:	e5 e2       	ldi	r30, 0x25	; 37
     19a2:	f2 e0       	ldi	r31, 0x02	; 2
@@ -4634,7 +4634,7 @@ void uart__print_welcome() {
     19aa:	0d 92       	st	X+, r0
     19ac:	8a 95       	dec	r24
     19ae:	e1 f7       	brne	.-8      	; 0x19a8 <uart__print_welcome+0x36>
-	char r3[40] = "_|_ | \\| __) o  \\_ |_ |_| __)  | |_ | \\";
+	uart__print_new_line();
     19b0:	88 e2       	ldi	r24, 0x28	; 40
     19b2:	ed e4       	ldi	r30, 0x4D	; 77
     19b4:	f2 e0       	ldi	r31, 0x02	; 2
@@ -4647,63 +4647,63 @@ void uart__print_welcome() {
     19c2:	e1 f7       	brne	.-8      	; 0x19bc <uart__print_welcome+0x4a>
     19c4:	07 e2       	ldi	r16, 0x27	; 39
     19c6:	10 e0       	ldi	r17, 0x00	; 0
-
-	for(int i = 0; i < 39; i++)
-		uart__polled_put('#');
+	uart__printf(r1);
+	uart__print_new_line();
+	uart__printf(r2);
     19c8:	83 e2       	ldi	r24, 0x23	; 35
     19ca:	0e 94 8c 0c 	call	0x1918	; 0x1918 <uart__polled_put>
     19ce:	01 50       	subi	r16, 0x01	; 1
     19d0:	11 09       	sbc	r17, r1
-void uart__print_welcome() {
-	char r1[39] = "___       __     _         __ ___ _  _";
-	char r2[40] = " |  |\\ | (_     /  |  | | (_   | |_ |_)";
-	char r3[40] = "_|_ | \\| __) o  \\_ |_ |_| __)  | |_ | \\";
 
 	for(int i = 0; i < 39; i++)
-    19d2:	d1 f7       	brne	.-12     	; 0x19c8 <uart__print_welcome+0x56>
 		uart__polled_put('#');
 	uart__print_new_line();
-    19d4:	0e 94 b2 0c 	call	0x1964	; 0x1964 <uart__print_new_line>
 	uart__printf(r1);
+	uart__print_new_line();
+    19d2:	d1 f7       	brne	.-12     	; 0x19c8 <uart__print_welcome+0x56>
+	uart__printf(r2);
+	uart__print_new_line();
+    19d4:	0e 94 b2 0c 	call	0x1964	; 0x1964 <uart__print_new_line>
+	uart__printf(r3);
     19d8:	ce 01       	movw	r24, r28
     19da:	01 96       	adiw	r24, 0x01	; 1
     19dc:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
 	uart__print_new_line();
     19e0:	0e 94 b2 0c 	call	0x1964	; 0x1964 <uart__print_new_line>
-	uart__printf(r2);
+	uart__print_new_line();
     19e4:	ce 01       	movw	r24, r28
     19e6:	88 96       	adiw	r24, 0x28	; 40
     19e8:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
-	uart__print_new_line();
+	for(int i = 0; i < 39; i++)
     19ec:	0e 94 b2 0c 	call	0x1964	; 0x1964 <uart__print_new_line>
-	uart__printf(r3);
+		uart__polled_put('#');
     19f0:	ce 01       	movw	r24, r28
     19f2:	80 5b       	subi	r24, 0xB0	; 176
     19f4:	9f 4f       	sbci	r25, 0xFF	; 255
     19f6:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
 	uart__print_new_line();
     19fa:	0e 94 b2 0c 	call	0x1964	; 0x1964 <uart__print_new_line>
-	uart__print_new_line();
+}
     19fe:	0e 94 b2 0c 	call	0x1964	; 0x1964 <uart__print_new_line>
     1a02:	07 e2       	ldi	r16, 0x27	; 39
     1a04:	10 e0       	ldi	r17, 0x00	; 0
-	for(int i = 0; i < 39; i++)
-		uart__polled_put('#');
+
+
     1a06:	83 e2       	ldi	r24, 0x23	; 35
     1a08:	0e 94 8c 0c 	call	0x1918	; 0x1918 <uart__polled_put>
     1a0c:	01 50       	subi	r16, 0x01	; 1
     1a0e:	11 09       	sbc	r17, r1
-	uart__printf(r2);
-	uart__print_new_line();
-	uart__printf(r3);
-	uart__print_new_line();
 	uart__print_new_line();
 	for(int i = 0; i < 39; i++)
-    1a10:	d1 f7       	brne	.-12     	; 0x1a06 <uart__print_welcome+0x94>
 		uart__polled_put('#');
 	uart__print_new_line();
-    1a12:	0e 94 b2 0c 	call	0x1964	; 0x1964 <uart__print_new_line>
 }
+
+    1a10:	d1 f7       	brne	.-12     	; 0x1a06 <uart__print_welcome+0x94>
+
+void uart__print_hex(unsigned char data) {
+    1a12:	0e 94 b2 0c 	call	0x1964	; 0x1964 <uart__print_new_line>
+	unsigned char upperNibble, lowerNibble;
     1a16:	c9 58       	subi	r28, 0x89	; 137
     1a18:	df 4f       	sbci	r29, 0xFF	; 255
     1a1a:	0f b6       	in	r0, 0x3f	; 63
@@ -4718,238 +4718,238 @@ void uart__print_welcome() {
     1a2c:	08 95       	ret
 
 00001a2e <uart__print_hex>:
-
-
-void uart__print_hex(unsigned char data) {
+	upperNibble = (data & 0xF0) >> 4;
+	if (upperNibble <= 9) {
+		upperNibble += 48;
     1a2e:	cf 93       	push	r28
     1a30:	df 93       	push	r29
-	unsigned char upperNibble, lowerNibble;
-	upperNibble = (data & 0xF0) >> 4;
+	}
+	else {
     1a32:	98 2f       	mov	r25, r24
     1a34:	92 95       	swap	r25
     1a36:	9f 70       	andi	r25, 0x0F	; 15
-	if (upperNibble <= 9) {
+		upperNibble += 55;
     1a38:	9a 30       	cpi	r25, 0x0A	; 10
     1a3a:	18 f4       	brcc	.+6      	; 0x1a42 <uart__print_hex+0x14>
-		upperNibble += 48;
+	}
     1a3c:	d0 e3       	ldi	r29, 0x30	; 48
     1a3e:	d9 0f       	add	r29, r25
     1a40:	02 c0       	rjmp	.+4      	; 0x1a46 <uart__print_hex+0x18>
-	}
-	else {
-		upperNibble += 55;
+	lowerNibble = data & 0x0F;
+	if (lowerNibble <= 9) {
+		lowerNibble += 48;
     1a42:	d7 e3       	ldi	r29, 0x37	; 55
     1a44:	d9 0f       	add	r29, r25
 	}
-	lowerNibble = data & 0x0F;
+	else {
     1a46:	8f 70       	andi	r24, 0x0F	; 15
-	if (lowerNibble <= 9) {
+		lowerNibble += 55;
     1a48:	8a 30       	cpi	r24, 0x0A	; 10
     1a4a:	18 f4       	brcc	.+6      	; 0x1a52 <uart__print_hex+0x24>
-		lowerNibble += 48;
+	}
     1a4c:	c0 e3       	ldi	r28, 0x30	; 48
     1a4e:	c8 0f       	add	r28, r24
     1a50:	02 c0       	rjmp	.+4      	; 0x1a56 <uart__print_hex+0x28>
-	}
-	else {
-		lowerNibble += 55;
+	uart__polled_put('0');
+	uart__polled_put('x');
+	uart__polled_put(upperNibble);
     1a52:	c7 e3       	ldi	r28, 0x37	; 55
     1a54:	c8 0f       	add	r28, r24
-	}
-	uart__polled_put('0');
+	uart__polled_put(lowerNibble);
+}
     1a56:	80 e3       	ldi	r24, 0x30	; 48
     1a58:	0e 94 8c 0c 	call	0x1918	; 0x1918 <uart__polled_put>
-	uart__polled_put('x');
+
     1a5c:	88 e7       	ldi	r24, 0x78	; 120
     1a5e:	0e 94 8c 0c 	call	0x1918	; 0x1918 <uart__polled_put>
-	uart__polled_put(upperNibble);
+
     1a62:	8d 2f       	mov	r24, r29
     1a64:	0e 94 8c 0c 	call	0x1918	; 0x1918 <uart__polled_put>
-	uart__polled_put(lowerNibble);
+void uart__print_disk_info(void) {
     1a68:	8c 2f       	mov	r24, r28
     1a6a:	0e 94 8c 0c 	call	0x1918	; 0x1918 <uart__polled_put>
-}
+	stat = disk_initialize();
     1a6e:	df 91       	pop	r29
     1a70:	cf 91       	pop	r28
     1a72:	08 95       	ret
 
 00001a74 <uart__print_disk_info>:
-
-/*-----------------------------------------------------------------------*/
-/* Display Disk Drive Initialization Info on LCD                         */
-/*-----------------------------------------------------------------------*/
-void uart__print_disk_info(void) {
-	stat = disk_initialize();
+		uart__printf("*** DISK TYPE: ");
+		if (disk_get_card_type() == CT_MMC) {
+			uart__printf("MMCv3");
+		}
+		else if (disk_get_card_type() == CT_SD1) {
+			uart__printf("SDSC");
     1a74:	0e 94 b7 04 	call	0x96e	; 0x96e <disk_initialize>
     1a78:	80 93 cb 03 	sts	0x03CB, r24	; 0x8003cb <stat>
-	if (!stat) { //There is no error and flag indicating change needed
+		}
     1a7c:	81 11       	cpse	r24, r1
     1a7e:	33 c0       	rjmp	.+102    	; 0x1ae6 <uart__print_disk_info+0x72>
-		uart__printf("*** DISK TYPE: ");
+		else if (disk_get_card_type() == CT_SD2) {
     1a80:	85 e7       	ldi	r24, 0x75	; 117
     1a82:	92 e0       	ldi	r25, 0x02	; 2
     1a84:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
-		if (disk_get_card_type() == CT_MMC) {
+			uart__printf("SDHC+ (BYTE MODE)");
     1a88:	0e 94 91 05 	call	0xb22	; 0xb22 <disk_get_card_type>
     1a8c:	81 30       	cpi	r24, 0x01	; 1
     1a8e:	29 f4       	brne	.+10     	; 0x1a9a <uart__print_disk_info+0x26>
-			uart__printf("MMCv3");
+		}
     1a90:	85 e8       	ldi	r24, 0x85	; 133
     1a92:	92 e0       	ldi	r25, 0x02	; 2
     1a94:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
     1a98:	23 c0       	rjmp	.+70     	; 0x1ae0 <uart__print_disk_info+0x6c>
-		}
-		else if (disk_get_card_type() == CT_SD1) {
+		else if (disk_get_card_type() == (CT_SD2 | CT_BLOCK)) {
+			uart__printf("SDHC+ (BLOCK MODE)");
     1a9a:	0e 94 91 05 	call	0xb22	; 0xb22 <disk_get_card_type>
     1a9e:	82 30       	cpi	r24, 0x02	; 2
     1aa0:	29 f4       	brne	.+10     	; 0x1aac <uart__print_disk_info+0x38>
-			uart__printf("SDSC");
+		}
     1aa2:	8b e8       	ldi	r24, 0x8B	; 139
     1aa4:	92 e0       	ldi	r25, 0x02	; 2
     1aa6:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
     1aaa:	1a c0       	rjmp	.+52     	; 0x1ae0 <uart__print_disk_info+0x6c>
-		}
-		else if (disk_get_card_type() == CT_SD2) {
+		else {
+			uart__printf("UNKNOWN, CODE = ");
     1aac:	0e 94 91 05 	call	0xb22	; 0xb22 <disk_get_card_type>
     1ab0:	84 30       	cpi	r24, 0x04	; 4
     1ab2:	29 f4       	brne	.+10     	; 0x1abe <uart__print_disk_info+0x4a>
-			uart__printf("SDHC+ (BYTE MODE)");
+			uart__print_hex(disk_get_card_type());
     1ab4:	80 e9       	ldi	r24, 0x90	; 144
     1ab6:	92 e0       	ldi	r25, 0x02	; 2
     1ab8:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
     1abc:	11 c0       	rjmp	.+34     	; 0x1ae0 <uart__print_disk_info+0x6c>
 		}
-		else if (disk_get_card_type() == (CT_SD2 | CT_BLOCK)) {
+		uart__print_new_line();
     1abe:	0e 94 91 05 	call	0xb22	; 0xb22 <disk_get_card_type>
     1ac2:	8c 30       	cpi	r24, 0x0C	; 12
     1ac4:	29 f4       	brne	.+10     	; 0x1ad0 <uart__print_disk_info+0x5c>
-			uart__printf("SDHC+ (BLOCK MODE)");
+	}
     1ac6:	82 ea       	ldi	r24, 0xA2	; 162
     1ac8:	92 e0       	ldi	r25, 0x02	; 2
     1aca:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
     1ace:	08 c0       	rjmp	.+16     	; 0x1ae0 <uart__print_disk_info+0x6c>
-		}
-		else {
-			uart__printf("UNKNOWN, CODE = ");
+	else { //There is an error
+		uart__printf("*** COULD NOT PRINT DISK INFO");
+		uart__print_new_line();
     1ad0:	85 eb       	ldi	r24, 0xB5	; 181
     1ad2:	92 e0       	ldi	r25, 0x02	; 2
     1ad4:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
-			uart__print_hex(disk_get_card_type());
+	}
     1ad8:	0e 94 91 05 	call	0xb22	; 0xb22 <disk_get_card_type>
     1adc:	0e 94 17 0d 	call	0x1a2e	; 0x1a2e <uart__print_hex>
-		}
-		uart__print_new_line();
+}
+
     1ae0:	0e 94 b2 0c 	call	0x1964	; 0x1964 <uart__print_new_line>
     1ae4:	08 95       	ret
-	}
-	else { //There is an error
-		uart__printf("*** COULD NOT PRINT DISK INFO");
+
+void uart__print_disk_error(unsigned char res, unsigned char type) {
+	switch(type) {
     1ae6:	86 ec       	ldi	r24, 0xC6	; 198
     1ae8:	92 e0       	ldi	r25, 0x02	; 2
     1aea:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
-		uart__print_new_line();
+		case MOUNT: { //Switch of pff functions
     1aee:	0e 94 b2 0c 	call	0x1964	; 0x1964 <uart__print_new_line>
     1af2:	08 95       	ret
 
 00001af4 <uart__print_disk_error>:
-	}
-}
-
-void uart__print_disk_error(unsigned char res, unsigned char type) {
+			if (!res) { //No error, res == FR_OK
+				uart__printf("*** MOUNT SUCCESS!");
+			}
+			else { //Non-zero means error
     1af4:	cf 93       	push	r28
     1af6:	c8 2f       	mov	r28, r24
-	switch(type) {
+				uart__printf("*** MOUNT FAIL...");
     1af8:	61 30       	cpi	r22, 0x01	; 1
     1afa:	81 f0       	breq	.+32     	; 0x1b1c <uart__print_disk_error+0x28>
     1afc:	18 f0       	brcs	.+6      	; 0x1b04 <uart__print_disk_error+0x10>
     1afe:	62 30       	cpi	r22, 0x02	; 2
     1b00:	49 f1       	breq	.+82     	; 0x1b54 <uart__print_disk_error+0x60>
     1b02:	34 c0       	rjmp	.+104    	; 0x1b6c <uart__print_disk_error+0x78>
-		case MOUNT: { //Switch of pff functions
-			if (!res) { //No error, res == FR_OK
+			}
+			break;
     1b04:	81 11       	cpse	r24, r1
     1b06:	05 c0       	rjmp	.+10     	; 0x1b12 <uart__print_disk_error+0x1e>
-				uart__printf("*** MOUNT SUCCESS!");
+		}
     1b08:	84 ee       	ldi	r24, 0xE4	; 228
     1b0a:	92 e0       	ldi	r25, 0x02	; 2
     1b0c:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
     1b10:	63 c0       	rjmp	.+198    	; 0x1bd8 <uart__print_disk_error+0xe4>
-			}
-			else { //Non-zero means error
-				uart__printf("*** MOUNT FAIL...");
+		case OPEN: {
+			if (!res) { //No error, res == FR_OK
+				uart__printf("*** FILE ");
     1b12:	87 ef       	ldi	r24, 0xF7	; 247
     1b14:	92 e0       	ldi	r25, 0x02	; 2
     1b16:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
     1b1a:	61 c0       	rjmp	.+194    	; 0x1bde <uart__print_disk_error+0xea>
+				uart__printf(FILE_NAME);
+				uart__printf(" OPEN SUCCESS!");
 			}
-			break;
-		}
-		case OPEN: {
-			if (!res) { //No error, res == FR_OK
+			else { //Non-zero means error
+				uart__printf("*** FILE ");
     1b1c:	81 11       	cpse	r24, r1
     1b1e:	0d c0       	rjmp	.+26     	; 0x1b3a <uart__print_disk_error+0x46>
-				uart__printf("*** FILE ");
+				uart__printf(FILE_NAME);
     1b20:	89 e0       	ldi	r24, 0x09	; 9
     1b22:	93 e0       	ldi	r25, 0x03	; 3
     1b24:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
-				uart__printf(FILE_NAME);
+				uart__printf(" OPEN FAIL...");
     1b28:	85 e7       	ldi	r24, 0x75	; 117
     1b2a:	91 e0       	ldi	r25, 0x01	; 1
     1b2c:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
-				uart__printf(" OPEN SUCCESS!");
+			}
     1b30:	83 e1       	ldi	r24, 0x13	; 19
     1b32:	93 e0       	ldi	r25, 0x03	; 3
     1b34:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
     1b38:	4f c0       	rjmp	.+158    	; 0x1bd8 <uart__print_disk_error+0xe4>
-			}
-			else { //Non-zero means error
-				uart__printf("*** FILE ");
+			break;
+		}
+		case READ: {
     1b3a:	89 e0       	ldi	r24, 0x09	; 9
     1b3c:	93 e0       	ldi	r25, 0x03	; 3
     1b3e:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
-				uart__printf(FILE_NAME);
+			if (!res) { //No error, res == FR_OK
     1b42:	85 e7       	ldi	r24, 0x75	; 117
     1b44:	91 e0       	ldi	r25, 0x01	; 1
     1b46:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
-				uart__printf(" OPEN FAIL...");
+				uart__printf("*** READ SUCCESS!");
     1b4a:	82 e2       	ldi	r24, 0x22	; 34
     1b4c:	93 e0       	ldi	r25, 0x03	; 3
     1b4e:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
     1b52:	45 c0       	rjmp	.+138    	; 0x1bde <uart__print_disk_error+0xea>
 			}
+			else { //Non-zero means error
+				uart__printf("*** READ FAIL...");
+			}
 			break;
-		}
-		case READ: {
-			if (!res) { //No error, res == FR_OK
     1b54:	81 11       	cpse	r24, r1
     1b56:	05 c0       	rjmp	.+10     	; 0x1b62 <uart__print_disk_error+0x6e>
-				uart__printf("*** READ SUCCESS!");
+		}
     1b58:	80 e3       	ldi	r24, 0x30	; 48
     1b5a:	93 e0       	ldi	r25, 0x03	; 3
     1b5c:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
     1b60:	3b c0       	rjmp	.+118    	; 0x1bd8 <uart__print_disk_error+0xe4>
-			}
-			else { //Non-zero means error
-				uart__printf("*** READ FAIL...");
+	}
+	uart__print_new_line();
+	
     1b62:	82 e4       	ldi	r24, 0x42	; 66
     1b64:	93 e0       	ldi	r25, 0x03	; 3
     1b66:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
     1b6a:	39 c0       	rjmp	.+114    	; 0x1bde <uart__print_disk_error+0xea>
-			}
-			break;
-		}
-	}
-	uart__print_new_line();
-    1b6c:	0e 94 b2 0c 	call	0x1964	; 0x1964 <uart__print_new_line>
-	
 	if (res) {
+		uart__printf("Err: ");
+		switch(res) { //Switch of all FRESULT enumerators, except FR_OK
+			case FR_DISK_ERR: {
+				uart__printf("FR_DISK_ERR (1)");
+    1b6c:	0e 94 b2 0c 	call	0x1964	; 0x1964 <uart__print_new_line>
+				break;
+			}
     1b70:	cc 23       	and	r28, r28
     1b72:	c1 f1       	breq	.+112    	; 0x1be4 <uart__print_disk_error+0xf0>
-		uart__printf("Err: ");
+			case FR_NOT_READY: {
     1b74:	83 e5       	ldi	r24, 0x53	; 83
     1b76:	93 e0       	ldi	r25, 0x03	; 3
     1b78:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
-		switch(res) { //Switch of all FRESULT enumerators, except FR_OK
+				uart__printf("FR_NOT_READY (2)");
     1b7c:	c3 30       	cpi	r28, 0x03	; 3
     1b7e:	b1 f0       	breq	.+44     	; 0x1bac <uart__print_disk_error+0xb8>
     1b80:	28 f4       	brcc	.+10     	; 0x1b8c <uart__print_disk_error+0x98>
@@ -4964,73 +4964,62 @@ void uart__print_disk_error(unsigned char res, unsigned char type) {
     1b92:	c6 30       	cpi	r28, 0x06	; 6
     1b94:	d1 f0       	breq	.+52     	; 0x1bca <uart__print_disk_error+0xd6>
     1b96:	1d c0       	rjmp	.+58     	; 0x1bd2 <uart__print_disk_error+0xde>
-			case FR_DISK_ERR: {
-				uart__printf("FR_DISK_ERR (1)");
+				break;
+			}
     1b98:	89 e5       	ldi	r24, 0x59	; 89
     1b9a:	93 e0       	ldi	r25, 0x03	; 3
     1b9c:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
-				break;
+			case FR_NO_FILE: {
     1ba0:	18 c0       	rjmp	.+48     	; 0x1bd2 <uart__print_disk_error+0xde>
+				uart__printf("FR_NO_FILE (3)");
+				break;
 			}
-			case FR_NOT_READY: {
-				uart__printf("FR_NOT_READY (2)");
     1ba2:	89 e6       	ldi	r24, 0x69	; 105
     1ba4:	93 e0       	ldi	r25, 0x03	; 3
     1ba6:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
-				break;
+			case FR_NOT_OPENED: {
     1baa:	13 c0       	rjmp	.+38     	; 0x1bd2 <uart__print_disk_error+0xde>
+				uart__printf("FR_NOT_OPENED (4)");
+				break;
 			}
-			case FR_NO_FILE: {
-				uart__printf("FR_NO_FILE (3)");
     1bac:	8a e7       	ldi	r24, 0x7A	; 122
     1bae:	93 e0       	ldi	r25, 0x03	; 3
     1bb0:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
-				break;
+			case FR_NOT_ENABLED: {
     1bb4:	0e c0       	rjmp	.+28     	; 0x1bd2 <uart__print_disk_error+0xde>
+				uart__printf("FR_NOT_ENABLED (5)");
+				break;
 			}
-			case FR_NOT_OPENED: {
-				uart__printf("FR_NOT_OPENED (4)");
     1bb6:	89 e8       	ldi	r24, 0x89	; 137
     1bb8:	93 e0       	ldi	r25, 0x03	; 3
     1bba:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
-				break;
+			case FR_NO_FILESYSTEM: {
     1bbe:	09 c0       	rjmp	.+18     	; 0x1bd2 <uart__print_disk_error+0xde>
+				uart__printf("FR_NO_FILESYSTEM (6)");
+				break;
 			}
-			case FR_NOT_ENABLED: {
-				uart__printf("FR_NOT_ENABLED (5)");
     1bc0:	8b e9       	ldi	r24, 0x9B	; 155
     1bc2:	93 e0       	ldi	r25, 0x03	; 3
     1bc4:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
-				break;
+		}
     1bc8:	04 c0       	rjmp	.+8      	; 0x1bd2 <uart__print_disk_error+0xde>
-			}
-			case FR_NO_FILESYSTEM: {
-				uart__printf("FR_NO_FILESYSTEM (6)");
+		uart__print_new_line();
+	}
     1bca:	8e ea       	ldi	r24, 0xAE	; 174
     1bcc:	93 e0       	ldi	r25, 0x03	; 3
     1bce:	0e 94 97 0c 	call	0x192e	; 0x192e <uart__printf>
-				break;
-			}
-		}
-		uart__print_new_line();
     1bd2:	0e 94 b2 0c 	call	0x1964	; 0x1964 <uart__print_new_line>
-	}
     1bd6:	06 c0       	rjmp	.+12     	; 0x1be4 <uart__print_disk_error+0xf0>
-				uart__printf("*** READ FAIL...");
-			}
-			break;
-		}
-	}
-	uart__print_new_line();
+	
+	if (res) {
+		uart__printf("Err: ");
+		switch(res) { //Switch of all FRESULT enumerators, except FR_OK
+			case FR_DISK_ERR: {
+				uart__printf("FR_DISK_ERR (1)");
     1bd8:	0e 94 b2 0c 	call	0x1964	; 0x1964 <uart__print_new_line>
     1bdc:	03 c0       	rjmp	.+6      	; 0x1be4 <uart__print_disk_error+0xf0>
     1bde:	0e 94 b2 0c 	call	0x1964	; 0x1964 <uart__print_new_line>
     1be2:	c8 cf       	rjmp	.-112    	; 0x1b74 <uart__print_disk_error+0x80>
-				break;
-			}
-		}
-		uart__print_new_line();
-	}
     1be4:	cf 91       	pop	r28
     1be6:	08 95       	ret
 

@@ -724,31 +724,31 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x44a2
+.debug_info     0x00000000     0x44a1
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x5f4 F:/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
- .debug_info    0x000005f4      0xeba 1602lcd.o
- .debug_info    0x000014ae      0x38f buttons.o
- .debug_info    0x0000183d      0x6e6 diskio.o
- .debug_info    0x00001f23      0x102 i2c.o
- .debug_info    0x00002025      0x485 main.o
- .debug_info    0x000024aa     0x16d5 pff.o
- .debug_info    0x00003b7f      0x11b spi.o
- .debug_info    0x00003c9a      0x12f uart.o
- .debug_info    0x00003dc9      0x6d9 uart_printf.o
+ .debug_info    0x000005f4      0xeb9 1602lcd.o
+ .debug_info    0x000014ad      0x38f buttons.o
+ .debug_info    0x0000183c      0x6e6 diskio.o
+ .debug_info    0x00001f22      0x102 i2c.o
+ .debug_info    0x00002024      0x485 main.o
+ .debug_info    0x000024a9     0x16d5 pff.o
+ .debug_info    0x00003b7e      0x11b spi.o
+ .debug_info    0x00003c99      0x12f uart.o
+ .debug_info    0x00003dc8      0x6d9 uart_printf.o
 
-.debug_abbrev   0x00000000     0x12c8
+.debug_abbrev   0x00000000     0x12b0
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x5a2 F:/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
- .debug_abbrev  0x000005a2      0x2a4 1602lcd.o
- .debug_abbrev  0x00000846      0x145 buttons.o
- .debug_abbrev  0x0000098b      0x1cf diskio.o
- .debug_abbrev  0x00000b5a       0x90 i2c.o
- .debug_abbrev  0x00000bea      0x163 main.o
- .debug_abbrev  0x00000d4d      0x275 pff.o
- .debug_abbrev  0x00000fc2       0xbd spi.o
- .debug_abbrev  0x0000107f       0xc1 uart.o
- .debug_abbrev  0x00001140      0x188 uart_printf.o
+ .debug_abbrev  0x000005a2      0x28c 1602lcd.o
+ .debug_abbrev  0x0000082e      0x145 buttons.o
+ .debug_abbrev  0x00000973      0x1cf diskio.o
+ .debug_abbrev  0x00000b42       0x90 i2c.o
+ .debug_abbrev  0x00000bd2      0x163 main.o
+ .debug_abbrev  0x00000d35      0x275 pff.o
+ .debug_abbrev  0x00000faa       0xbd spi.o
+ .debug_abbrev  0x00001067       0xc1 uart.o
+ .debug_abbrev  0x00001128      0x188 uart_printf.o
 
 .debug_line     0x00000000     0x227f
  *(.debug_line .debug_line.* .debug_line_end)

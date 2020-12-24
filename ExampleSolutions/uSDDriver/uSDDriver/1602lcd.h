@@ -23,7 +23,7 @@
 
 #define LCD_TIMEOUT 6 //In seconds
 
-void LCD_write(unsigned char data, uint8_t mode);
+void LCD_write(unsigned char data, uint8_t mode); /* Writes byte via I2C.  */
 void LCD_cmd(unsigned char cmd);
 void LCD_char(unsigned char data);
 void LCD_hex(unsigned char data);
