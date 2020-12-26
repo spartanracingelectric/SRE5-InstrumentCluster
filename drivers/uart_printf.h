@@ -12,6 +12,8 @@
 #include <stdio.h>
 
 void uart__printf(char *message);
-
+void uart__print_num(uint8_t number); 
+void uart__print_binary(uint8_t number);
+void uart__print_can_id(uint16_t id); 
 
 #endif /* UART_PRINTF_H_ */
