@@ -35,24 +35,29 @@ LCD_D7 = (1<<D7); //(1<<7)
 
 int main(void) {
 	i2c__init();
-	timer__init();
-
+	LCD_init(LCD_ADDRESS, LCD_RS, LCD_E, LCD_BL, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
+	LCD_wake();
+	LCD_clr();
+	//timer__init(); only needed for PWM
+	
 	rpm__set(0b1111111111111111);
 	left_rgb__set(BLACK);
 	right_rgb__set(BLACK);
 	left_indicator__set(1); //TURN OFF BLUE LED #1 NOTE THAT 1 = OFF. 0 = ON
 	right_indicator__set(1); //TURN OFF BLUE LED #1 NOTE THAT 1 = OFF. 0 = ON
-
-    while (1) 
+	
+	while (1) 
     {
+	//in this case, 1 = ON; 0 = OFF
 	_delay_ms(300);
 	rpm__set(0b0000000011111111);
 	_delay_ms(300);
 	rpm__set(0b1111111100000000);
 	_delay_ms(300);
 
+	//1 = OFF; 0 = ON 
 	uint16_t status = 0b1111111111111111;
-	
+
 	for(int i = 0; i < 16; i++) {
 		status &= ~(1<<i);
 		rpm__set(status);
@@ -64,71 +69,39 @@ int main(void) {
 		status |= (1<<i);
 		rpm__set(status);
 		_delay_ms(100);
-	}
-
-	//test RGB and blue indicators 
-	/*
-	left_rgb__set(RED);
-	right_rgb__set(RED);
-	_delay_ms(500);
-	left_rgb__set(BLACK);
-	right_rgb__set(BLACK);
-	_delay_ms(500);
-	right_rgb__set(GREEN);
-	left_rgb__set(GREEN);
-	_delay_ms(500);
-	left_rgb__set(BLACK);
-	right_rgb__set(BLACK);
-	_delay_ms(500);
-	left_rgb__set(BLUE);
-	right_rgb__set(BLUE);
-	_delay_ms(500);
-	left_rgb__set(BLACK);
-	right_rgb__set(BLACK);
-	_delay_ms(500);
-	*/
+	}	
 	
-	
-	left_rgb__set(ORANGE);
-	right_rgb__set(BLACK);
-	_delay_ms(300);
-	left_rgb__set(PINK);
-	right_rgb__set(VIOLET);
-	_delay_ms(300);
-	left_rgb__set(WHITE);
-	right_rgb__set(ORANGE);
-	_delay_ms(300);
-	left_rgb__set(GREEN);
-	right_rgb__set(RED);
-	_delay_ms(300);
-	left_indicator__set(1); //TURN OFF BLUE LED #1 NOTE THAT 1 = OFF. 0 = ON
-	right_indicator__set(0); //TURN OFF BLUE LED #1 NOTE THAT 1 = OFF. 0 = ON
-	left_rgb__set(MAGENTA);
-	right_rgb__set(CYAN);
-	_delay_ms(300);
-	left_rgb__set(CYAN);
-	right_rgb__set(MAGENTA);
-	_delay_ms(300);
-	left_rgb__set(RED);
-	right_rgb__set(GREEN);
-	_delay_ms(300);
-	left_rgb__set(ORANGE);
-	right_rgb__set(VIOLET);
-	_delay_ms(300);
-	left_rgb__set(VIOLET);
-	right_rgb__set(WHITE);
-	_delay_ms(300);
-	left_rgb__set(BLACK);
-	right_rgb__set(ORANGE);
 	_delay_ms(300);
 	left_indicator__set(0);
-	right_indicator__set(1); //TURN OFF BLUE LED #1 NOTE THAT 1 = OFF. 0 = ON
+	_delay_ms(300);
+	right_indicator__set(0);
 	_delay_ms(300);
 	left_indicator__set(1);
+	_delay_ms(300);
 	right_indicator__set(1);
+	_delay_ms(300);
+	left_rgb__set(RED);
+	_delay_ms(300);
+	left_rgb__set(WHITE);
+	_delay_ms(300);
+	left_rgb__set(BLUE);
+	_delay_ms(300);
+	left_rgb__set(GREEN);
+	_delay_ms(300);
 	left_rgb__set(BLACK);
+	_delay_ms(300);
+	right_rgb__set(RED);
+	_delay_ms(300);
+	right_rgb__set(WHITE);
+	_delay_ms(300);
+	right_rgb__set(BLUE);
+	_delay_ms(300);
+	right_rgb__set(GREEN);
+	_delay_ms(300);
 	right_rgb__set(BLACK);
-	_delay_ms(300); 
+	_delay_ms(300);
 	
+	LCD_wake();
+	LCD_clr();
 	}
 }
