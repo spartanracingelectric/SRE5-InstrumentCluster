@@ -30,6 +30,7 @@
 #define LCD_D6 (1<<6) //P6
 #define LCD_D7 (1<<7) //P7
 
+//LCD I2C address already defined in i2c.h
 //#define I2C_ADDRESS 0x27 //PCF8574T LCD Backpack
 //#define I2C_ADDRESS 0x20 //PCF8574T 9 Pin Board and PCF8574P
 //#define I2C_ADDRESS 0x38 //PCF8574AN
