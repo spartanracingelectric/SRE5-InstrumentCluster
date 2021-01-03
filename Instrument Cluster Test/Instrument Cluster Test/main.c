@@ -6,7 +6,7 @@
  */ 
 
  #ifndef F_CPU
- #define F_CPU 20000000UL
+ #define F_CPU 16000000UL
  #endif
 
 #include <avr/io.h>
@@ -16,6 +16,7 @@
 #include "indicators.h"
 #include "1602lcd.h"
 
+/*
 //LCD ports
 #define RS 0 //PCF P0
 #define E  2 //P2
@@ -32,10 +33,12 @@ LCD_D4 = (1<<D4), //(1<<4)
 LCD_D5 = (1<<D5), //(1<<5)
 LCD_D6 = (1<<D6), //(1<<6)
 LCD_D7 = (1<<D7); //(1<<7)
+*/
 
 int main(void) {
 	i2c__init();
-	LCD_init(LCD_ADDRESS, LCD_RS, LCD_E, LCD_BL, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
+	//LCD_init(LCD_ADDRESS, LCD_RS, LCD_E, LCD_BL, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
+	LCD_init();
 	LCD_wake();
 	LCD_clr();
 	//timer__init(); only needed for PWM
@@ -76,10 +79,6 @@ int main(void) {
 	_delay_ms(300);
 	right_indicator__set(0);
 	_delay_ms(300);
-	left_indicator__set(1);
-	_delay_ms(300);
-	right_indicator__set(1);
-	_delay_ms(300);
 	left_rgb__set(RED);
 	_delay_ms(300);
 	left_rgb__set(WHITE);
@@ -87,8 +86,6 @@ int main(void) {
 	left_rgb__set(BLUE);
 	_delay_ms(300);
 	left_rgb__set(GREEN);
-	_delay_ms(300);
-	left_rgb__set(BLACK);
 	_delay_ms(300);
 	right_rgb__set(RED);
 	_delay_ms(300);
@@ -99,6 +96,12 @@ int main(void) {
 	right_rgb__set(GREEN);
 	_delay_ms(300);
 	right_rgb__set(BLACK);
+	_delay_ms(300);
+	left_rgb__set(BLACK);
+	_delay_ms(300);
+	left_indicator__set(1);
+	_delay_ms(300);
+	right_indicator__set(1);
 	_delay_ms(300);
 	
 	LCD_wake();

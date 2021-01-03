@@ -21,7 +21,7 @@ void LCD_write(unsigned char data, uint8_t mode) {
 	
 	uint8_t dataTemp;
 	
-	i2c__start(I2C_ADDRESS);
+	i2c__start(LCD_ADDRESS);
     
     // Send upper nibble
 	dataTemp = (data & 0xF0) | LCD_BL | LCD_E; //Loads upper nibble onto last four bits P4-P7
@@ -55,7 +55,7 @@ void LCD_write(unsigned char data, uint8_t mode) {
 	i2c__write(dataTemp); //Send "toggle E off"
     _delay_ms(1);
     
-	twi_stop();
+	i2c__stop();
 }
 
 void LCD_cmd(unsigned char cmd)
@@ -99,7 +99,7 @@ void LCD_init()
 	TCCR0B = (1<<CS02) | (1<<CS00); //Set Clk/1024
 	
 	//LCD_DDR = 0xFF;			/* Make LCD port direction as o/p */ //4 bit mode, sets PORTD on MCU as output. Perhaps unnecessary in I2C since it's through SCL/SDA
-	twi_init();
+	i2c__init();
 	
 	_delay_ms(20);			/* LCD Power ON delay always >15ms */
 	
