@@ -31,22 +31,11 @@ Discarded input sections
  .text.LCD_str_xy
                 0x00000000       0x38 1602lcd.o
  .text.LCD_int  0x00000000       0x2c 1602lcd.o
- .text.LCD_clr_ln
-                0x00000000       0x22 1602lcd.o
  .text.LCD_update
                 0x00000000       0x1e 1602lcd.o
- .text.LCD_timestamp
-                0x00000000       0x2a 1602lcd.o
- .text.LCD_menu
-                0x00000000       0x2a 1602lcd.o
- .text.LCD_back
-                0x00000000       0x14 1602lcd.o
- .text.LCD_settings
-                0x00000000       0x2a 1602lcd.o
- .text.LCD_optionx
-                0x00000000       0x2a 1602lcd.o
- .text.LCD_optiony
-                0x00000000       0x2a 1602lcd.o
+ .text          0x00000000        0x0 buttons.o
+ .data          0x00000000        0x0 buttons.o
+ .bss           0x00000000        0x0 buttons.o
  .text          0x00000000        0x0 i2c.o
  .data          0x00000000        0x0 i2c.o
  .bss           0x00000000        0x0 i2c.o
@@ -54,12 +43,21 @@ Discarded input sections
  .text          0x00000000        0x0 indicators.o
  .data          0x00000000        0x0 indicators.o
  .bss           0x00000000        0x0 indicators.o
- .text.timer__init
-                0x00000000       0x3a indicators.o
+ .bss.timerTick
+                0x00000000        0x1 indicators.o
  .bss.right_rgb_flag
                 0x00000000        0x1 indicators.o
  .bss.left_rgb_flag
                 0x00000000        0x1 indicators.o
+ .bss.rpm_flag  0x00000000        0x1 indicators.o
+ .bss.right_indicator_flag
+                0x00000000        0x1 indicators.o
+ .bss.left_indicator_flag
+                0x00000000        0x1 indicators.o
+ .data.right_duty_cyles
+                0x00000000        0x3 indicators.o
+ .data.left_duty_cyles
+                0x00000000        0x3 indicators.o
  .text          0x00000000        0x0 main.o
  .data          0x00000000        0x0 main.o
  .bss           0x00000000        0x0 main.o
@@ -144,6 +142,7 @@ Linker script and memory map
 Address of section .data set to 0x800100
 LOAD C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
 LOAD 1602lcd.o
+LOAD buttons.o
 LOAD i2c.o
 LOAD indicators.o
 LOAD main.o
@@ -256,7 +255,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x8b2
+.text           0x00000000      0xa70
  *(.vectors)
  .vectors       0x00000000       0x68 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
                 0x00000000                __vector_default
@@ -324,12 +323,12 @@ END GROUP
                 0x000000a2                __vector_3
                 0x000000a2                __vector_23
                 0x000000a2                __vector_25
+                0x000000a2                __vector_11
                 0x000000a2                __vector_13
                 0x000000a2                __vector_17
                 0x000000a2                __vector_19
                 0x000000a2                __vector_7
                 0x000000a2                __vector_5
-                0x000000a2                __vector_4
                 0x000000a2                __vector_9
                 0x000000a2                __vector_2
                 0x000000a2                __vector_21
@@ -356,55 +355,81 @@ END GROUP
                 0x000001e0                LCD_str
  .text.LCD_clr  0x000001fe       0x1a 1602lcd.o
                 0x000001fe                LCD_clr
+ .text.LCD_clr_ln
+                0x00000218       0x22 1602lcd.o
+                0x00000218                LCD_clr_ln
  .text.LCD_wake
-                0x00000218       0xd8 1602lcd.o
-                0x00000218                LCD_wake
+                0x0000023a       0xd8 1602lcd.o
+                0x0000023a                LCD_wake
+ .text.LCD_timestamp
+                0x00000312       0x2a 1602lcd.o
+                0x00000312                LCD_timestamp
  .text.LCD_default
-                0x000002f0       0x2e 1602lcd.o
-                0x000002f0                LCD_default
+                0x0000033c       0x2e 1602lcd.o
+                0x0000033c                LCD_default
+ .text.LCD_menu
+                0x0000036a       0x2a 1602lcd.o
+                0x0000036a                LCD_menu
+ .text.LCD_back
+                0x00000394       0x14 1602lcd.o
+                0x00000394                LCD_back
+ .text.LCD_settings
+                0x000003a8       0x2a 1602lcd.o
+                0x000003a8                LCD_settings
+ .text.LCD_optionx
+                0x000003d2       0x2a 1602lcd.o
+                0x000003d2                LCD_optionx
+ .text.LCD_optiony
+                0x000003fc       0x2a 1602lcd.o
+                0x000003fc                LCD_optiony
  .text.__vector_14
-                0x0000031e       0x68 1602lcd.o
-                0x0000031e                __vector_14
+                0x00000426       0x68 1602lcd.o
+                0x00000426                __vector_14
+ .text.button_flag_reset.1936
+                0x0000048e       0x1c buttons.o
+ .text.buttons_init
+                0x000004aa       0x16 buttons.o
+                0x000004aa                buttons_init
+ .text.__vector_4
+                0x000004c0      0x23c buttons.o
+                0x000004c0                __vector_4
  .text.i2c__init
-                0x00000386       0x26 i2c.o
-                0x00000386                i2c__init
+                0x000006fc       0x26 i2c.o
+                0x000006fc                i2c__init
  .text.i2c__start
-                0x000003ac       0x30 i2c.o
-                0x000003ac                i2c__start
+                0x00000722       0x30 i2c.o
+                0x00000722                i2c__start
  .text.i2c__write
-                0x000003dc       0x1a i2c.o
-                0x000003dc                i2c__write
+                0x00000752       0x1a i2c.o
+                0x00000752                i2c__write
  .text.i2c__stop
-                0x000003f6        0x8 i2c.o
-                0x000003f6                i2c__stop
+                0x0000076c        0x8 i2c.o
+                0x0000076c                i2c__stop
  .text.indicator__update
-                0x000003fe       0x14 indicators.o
-                0x000003fe                indicator__update
+                0x00000774       0x14 indicators.o
+                0x00000774                indicator__update
  .text.left_rgb__set
-                0x00000412       0x12 indicators.o
-                0x00000412                left_rgb__set
+                0x00000788       0x12 indicators.o
+                0x00000788                left_rgb__set
  .text.right_rgb__set
-                0x00000424       0x1a indicators.o
-                0x00000424                right_rgb__set
+                0x0000079a       0x1a indicators.o
+                0x0000079a                right_rgb__set
  .text.left_indicator__set
-                0x0000043e       0x12 indicators.o
-                0x0000043e                left_indicator__set
+                0x000007b4       0x12 indicators.o
+                0x000007b4                left_indicator__set
  .text.right_indicator__set
-                0x00000450       0x1a indicators.o
-                0x00000450                right_indicator__set
+                0x000007c6       0x1a indicators.o
+                0x000007c6                right_indicator__set
  .text.rpm__set
-                0x0000046a       0x2e indicators.o
-                0x0000046a                rpm__set
- .text.__vector_11
-                0x00000498      0x1ba indicators.o
-                0x00000498                __vector_11
- .text.main     0x00000652      0x25c main.o
-                0x00000652                main
-                0x000008ae                . = ALIGN (0x2)
+                0x000007e0       0x2e indicators.o
+                0x000007e0                rpm__set
+ .text.main     0x0000080e      0x25e main.o
+                0x0000080e                main
+                0x00000a6c                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000008ae        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x000008ae                _exit
-                0x000008ae                exit
+ .fini9         0x00000a6c        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x00000a6c                _exit
+                0x00000a6c                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -423,11 +448,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000008ae        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x00000a6c        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x000008b2                _etext = .
+                0x00000a70                _etext = .
 
-.data           0x00800100       0x7c load address 0x000008b2
+.data           0x00800100       0x76 load address 0x00000a70
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -436,55 +461,38 @@ END GROUP
  .data.bitstate
                 0x00800101        0x1 indicators.o
                 0x00800101                bitstate
- .data.right_duty_cyles
-                0x00800102        0x3 indicators.o
-                0x00800102                right_duty_cyles
- .data.left_duty_cyles
-                0x00800105        0x3 indicators.o
-                0x00800105                left_duty_cyles
  *(.gnu.linkonce.d*)
  *(.rodata)
  *(.rodata*)
  .rodata.str1.1
-                0x00800108       0x74 1602lcd.o
+                0x00800102       0x74 1602lcd.o
                                  0x7c (size before relaxing)
  *(.gnu.linkonce.r*)
-                0x0080017c                . = ALIGN (0x2)
-                0x0080017c                _edata = .
-                0x0080017c                PROVIDE (__data_end, .)
+                0x00800176                . = ALIGN (0x2)
+                0x00800176                _edata = .
+                0x00800176                PROVIDE (__data_end, .)
 
-.bss            0x0080017c        0x9
-                0x0080017c                PROVIDE (__bss_start, .)
+.bss            0x00800176        0x5
+                0x00800176                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
  .bss.extraTime
-                0x0080017c        0x2 1602lcd.o
-                0x0080017c                extraTime
- .bss.timerTick
-                0x0080017e        0x1 indicators.o
-                0x0080017e                timerTick
- .bss.rpm_flag  0x0080017f        0x1 indicators.o
-                0x0080017f                rpm_flag
- .bss.right_indicator_flag
-                0x00800180        0x1 indicators.o
-                0x00800180                right_indicator_flag
- .bss.left_indicator_flag
-                0x00800181        0x1 indicators.o
-                0x00800181                left_indicator_flag
+                0x00800176        0x2 1602lcd.o
+                0x00800176                extraTime
  *(COMMON)
- COMMON         0x00800182        0x3 indicators.o
-                0x00800182                rgb_colors
-                0x00800183                byte2
-                0x00800184                byte1
-                0x00800185                PROVIDE (__bss_end, .)
-                0x000008b2                __data_load_start = LOADADDR (.data)
-                0x0000092e                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800178        0x3 indicators.o
+                0x00800178                rgb_colors
+                0x00800179                byte2
+                0x0080017a                byte1
+                0x0080017b                PROVIDE (__bss_end, .)
+                0x00000a70                __data_load_start = LOADADDR (.data)
+                0x00000ae6                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800185        0x0
+.noinit         0x0080017b        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x00800185                _end = .
+                0x0080017b                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -528,6 +536,7 @@ END GROUP
  *(.comment)
  .comment       0x00000000       0x30 1602lcd.o
                                  0x31 (size before relaxing)
+ .comment       0x00000030       0x31 buttons.o
  .comment       0x00000030       0x31 i2c.o
  .comment       0x00000030       0x31 indicators.o
  .comment       0x00000030       0x31 main.o
@@ -552,69 +561,78 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x170
+.debug_aranges  0x00000000      0x190
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0xb8 1602lcd.o
  .debug_aranges
-                0x000000b8       0x40 i2c.o
+                0x000000b8       0x30 buttons.o
  .debug_aranges
-                0x000000f8       0x58 indicators.o
+                0x000000e8       0x40 i2c.o
  .debug_aranges
-                0x00000150       0x20 main.o
+                0x00000128       0x48 indicators.o
+ .debug_aranges
+                0x00000170       0x20 main.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x23f5
+.debug_info     0x00000000     0x267b
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x5f4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_info    0x000005f4      0xed6 1602lcd.o
- .debug_info    0x000014ca      0x137 i2c.o
- .debug_info    0x00001601      0x514 indicators.o
- .debug_info    0x00001b15      0x8e0 main.o
+ .debug_info    0x000014ca      0x3a9 buttons.o
+ .debug_info    0x00001873      0x137 i2c.o
+ .debug_info    0x000019aa      0x3d9 indicators.o
+ .debug_info    0x00001d83      0x8f8 main.o
 
-.debug_abbrev   0x00000000      0xbc1
+.debug_abbrev   0x00000000      0xcf5
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x5a2 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_abbrev  0x000005a2      0x2a2 1602lcd.o
- .debug_abbrev  0x00000844       0xa6 i2c.o
- .debug_abbrev  0x000008ea      0x161 indicators.o
- .debug_abbrev  0x00000a4b      0x176 main.o
+ .debug_abbrev  0x00000844      0x16c buttons.o
+ .debug_abbrev  0x000009b0       0xa6 i2c.o
+ .debug_abbrev  0x00000a56      0x10e indicators.o
+ .debug_abbrev  0x00000b64      0x191 main.o
 
-.debug_line     0x00000000      0xeec
+.debug_line     0x00000000     0x107a
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x133 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_line    0x00000133      0x661 1602lcd.o
- .debug_line    0x00000794      0x167 i2c.o
- .debug_line    0x000008fb      0x2dc indicators.o
- .debug_line    0x00000bd7      0x315 main.o
+ .debug_line    0x00000794      0x2ea buttons.o
+ .debug_line    0x00000a7e      0x167 i2c.o
+ .debug_line    0x00000be5      0x176 indicators.o
+ .debug_line    0x00000d5b      0x31f main.o
 
-.debug_frame    0x00000000      0x378
+.debug_frame    0x00000000      0x398
  *(.debug_frame)
  .debug_frame   0x00000000      0x1ec 1602lcd.o
- .debug_frame   0x000001ec       0x64 i2c.o
- .debug_frame   0x00000250      0x104 indicators.o
- .debug_frame   0x00000354       0x24 main.o
+ .debug_frame   0x000001ec       0xb0 buttons.o
+ .debug_frame   0x0000029c       0x64 i2c.o
+ .debug_frame   0x00000300       0x74 indicators.o
+ .debug_frame   0x00000374       0x24 main.o
 
-.debug_str      0x00000000      0x6fd
+.debug_str      0x00000000      0x730
  *(.debug_str)
  .debug_str     0x00000000      0x208 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.3.300/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_str     0x00000208      0x339 1602lcd.o
                                 0x37d (size before relaxing)
- .debug_str     0x00000541       0x1d i2c.o
+ .debug_str     0x00000541       0x54 buttons.o
+                                0x2a4 (size before relaxing)
+ .debug_str     0x00000595       0x1d i2c.o
                                 0x1fd (size before relaxing)
- .debug_str     0x0000055e      0x18e indicators.o
-                                0x368 (size before relaxing)
- .debug_str     0x000006ec       0x11 main.o
-                                0x2d7 (size before relaxing)
+ .debug_str     0x000005b2      0x16d indicators.o
+                                0x350 (size before relaxing)
+ .debug_str     0x0000071f       0x11 main.o
+                                0x2f0 (size before relaxing)
 
-.debug_loc      0x00000000     0x1493
+.debug_loc      0x00000000     0x1622
  *(.debug_loc)
  .debug_loc     0x00000000      0xbcd 1602lcd.o
- .debug_loc     0x00000bcd       0x4e i2c.o
- .debug_loc     0x00000c1b      0x28f indicators.o
- .debug_loc     0x00000eaa      0x5e9 main.o
+ .debug_loc     0x00000bcd      0x3bc buttons.o
+ .debug_loc     0x00000f89       0x4e i2c.o
+ .debug_loc     0x00000fd7       0xaa indicators.o
+ .debug_loc     0x00001081      0x5a1 main.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -634,12 +652,13 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000      0x198
+.debug_ranges   0x00000000      0x190
  *(.debug_ranges)
  .debug_ranges  0x00000000       0xd8 1602lcd.o
- .debug_ranges  0x000000d8       0x30 i2c.o
- .debug_ranges  0x00000108       0x60 indicators.o
- .debug_ranges  0x00000168       0x30 main.o
+ .debug_ranges  0x000000d8       0x20 buttons.o
+ .debug_ranges  0x000000f8       0x30 i2c.o
+ .debug_ranges  0x00000128       0x38 indicators.o
+ .debug_ranges  0x00000160       0x30 main.o
 
 .debug_macro
  *(.debug_macro)

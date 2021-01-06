@@ -31,7 +31,7 @@ const uint8_t LCD_RS = (1<<RS), //(1<<0)
 
 int main(void)
 {
-	//cli();
+	cli();
 	LCD_init();			/* Initialization of LCD, twi_init() is called here. ptr to the lcd port array is passed */
 	buttons_init();
     LCD_wake();			/* Wake function to test LCD functionality */

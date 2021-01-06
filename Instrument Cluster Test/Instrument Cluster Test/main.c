@@ -15,6 +15,7 @@
 #include "i2c.h"
 #include "indicators.h"
 #include "1602lcd.h"
+#include "buttons.h"
 
 /*
 //LCD ports
@@ -39,8 +40,11 @@ int main(void) {
 	i2c__init();
 	//LCD_init(LCD_ADDRESS, LCD_RS, LCD_E, LCD_BL, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
 	LCD_init();
+	buttons_init();
 	LCD_wake();
 	LCD_clr();
+	LCD_default();
+	sei();
 	//timer__init(); only needed for PWM
 	
 	rpm__set(0b1111111111111111);
@@ -103,8 +107,5 @@ int main(void) {
 	_delay_ms(300);
 	right_indicator__set(1);
 	_delay_ms(300);
-	
-	LCD_wake();
-	LCD_clr();
 	}
 }

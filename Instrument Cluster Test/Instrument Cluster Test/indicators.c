@@ -72,6 +72,7 @@
 
  //Everything after this is for PWM (Delete eventually)
  //Interrupt that pulses at 10khz; 100 pulses = 100hz period
+ /*
  ISR(TIMER1_COMPA_vect){
 	 //1 = off; 0 = on
 	 if (rpm_flag == 1){
@@ -141,7 +142,6 @@
  }
 
  //PWM functions
- /*
  void left_rgb__set(const uint16_t color[]){
 	 for (uint8_t i = 0; i < 3; i++){
 		 left_duty_cyles[i] = color[i];

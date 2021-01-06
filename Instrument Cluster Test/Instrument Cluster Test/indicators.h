@@ -9,7 +9,7 @@
 #ifndef INDICATORS_H_
 #define INDICATORS_H_
 
-//Color Profiles {G, B, R}
+//Color Profiles {G, B, R} for PWM Delete eventually
 /*
 static const uint16_t RED[] = {0, 0, 100};
 static const uint16_t ORANGE[] = {2, 0, 32};

@@ -4,6 +4,8 @@
 
 1602lcd.c
 
+buttons.c
+
 i2c.c
 
 indicators.c
