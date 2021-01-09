@@ -37,22 +37,22 @@
 
 extern uint8_t state;
 
-void LCD_write(unsigned char data, uint8_t mode);
-void LCD_cmd(unsigned char cmd);
-void LCD_char(unsigned char data);
-void LCD_hex(unsigned char data);
-void LCD_init();
-void LCD_str(char *str);
-void LCD_str_xy (char row, char pos, char *str);
-void LCD_clr();
-void LCD_wake();
-void LCD_update();
-void LCD_timestamp();
-void LCD_default();
-void LCD_menu();
-void LCD_back();
-void LCD_settings();
-void LCD_optionx();
-void LCD_optiony();
+void LCD__write(unsigned char data, uint8_t mode);
+void LCD__cmd(unsigned char cmd);
+void LCD__char(unsigned char data);
+void LCD__hex(unsigned char data);
+void LCD__init();
+void LCD__str(char *str);
+void LCD__str_xy (char row, char pos, char *str);
+void LCD__clr();
+void LCD__wake();
+void LCD__update();
+void LCD__timestamp();
+void LCD__default();
+void LCD__menu();
+void LCD__back();
+void LCD__settings();
+void LCD__optionx();
+void LCD__optiony();
 
 #endif /* 1602LCD_H_ */

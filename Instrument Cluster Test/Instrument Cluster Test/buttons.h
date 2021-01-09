@@ -30,6 +30,6 @@ sei(); //Enables interrupts by setting the global interrupt mask
 
 #define HOLD_TIME 1000 //Button hold time for bottom buttons on default screen
 
-void buttons_init();
+void buttons__init();
 
 #endif /* BUTTONS_H_ */

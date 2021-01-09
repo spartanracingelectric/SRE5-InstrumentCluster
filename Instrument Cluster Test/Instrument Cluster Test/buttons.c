@@ -9,7 +9,7 @@
 #define DEBOUNCE_TIME 20
 #define LOCK_TIME 100
 
-void buttons_init() {
+void buttons__init() {
 	PCMSK1 |= PCINT_BUT1 | PCINT_BUT2 | PCINT_BUT3 | PCINT_BUT4; //Enable pin change interrupts on pc0 -> pc3 pins ( Pin Change Mask Register 1 )
 	PCICR |= (1<<PCIE1);  //When the PCIE1 bit is set (one) and the I-bit in the status register (SREG) is set (one), pin change interrupt 1 is enabled ( Pin Change Interrupt Control Register )
 }
@@ -68,40 +68,40 @@ ISR(PCINT1_vect) {
 	switch(state) {
 		case DEFAULT_SCREEN: { //state = 1
 			if (button_flag[0])
-			LCD_timestamp();
+			LCD__timestamp();
 			else if (button_flag[1])
-			LCD_timestamp();
+			LCD__timestamp();
 			else if (button_flag[2])
-			LCD_menu();
+			LCD__menu();
 			else if (button_flag[3])
-			LCD_menu();
+			LCD__menu();
 			button_flag_reset();
 			
 		}
 		case MENU_SCREEN: { //state = 2
 			if (button_flag[0])
-			LCD_settings();
+			LCD__settings();
 			else if (button_flag[1])
-			LCD_optionx();
+			LCD__optionx();
 			else if (button_flag[2])
-			LCD_back();
+			LCD__back();
 			else if (button_flag[3])
-			LCD_optiony();
+			LCD__optiony();
 			button_flag_reset();
 		}
 		case SETTINGS_SCREEN: { //state = 3
 			if (button_flag[2])
-			LCD_back();
+			LCD__back();
 			button_flag_reset();
 		}
 		case OPTIONX_SCREEN: { //state = 4
 			if (button_flag[2])
-			LCD_back();
+			LCD__back();
 			button_flag_reset();
 		}
 		case OPTIONY_SCREEN: { //state = 5
 			if (button_flag[2])
-			LCD_back();
+			LCD__back();
 			button_flag_reset();
 		}
 	}

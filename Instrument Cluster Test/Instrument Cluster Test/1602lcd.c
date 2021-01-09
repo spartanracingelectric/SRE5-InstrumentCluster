@@ -17,7 +17,7 @@ int extraTime = 0;
 
 extern uint8_t state = 1;
 
-void LCD_write(unsigned char data, uint8_t mode) {
+void LCD__write(unsigned char data, uint8_t mode) {
 	
 	uint8_t dataTemp;
 	
@@ -58,17 +58,17 @@ void LCD_write(unsigned char data, uint8_t mode) {
 	i2c__stop();
 }
 
-void LCD_cmd(unsigned char cmd)
+void LCD__cmd(unsigned char cmd)
 {
-	LCD_write(cmd, CMD_MODE);
+	LCD__write(cmd, CMD_MODE);
 }
 
-void LCD_char(unsigned char data)
+void LCD__char(unsigned char data)
 {
-	LCD_write(data, DATA_MODE);
+	LCD__write(data, DATA_MODE);
 }
 
-void LCD_hex(unsigned char data) //Displays byte in the form of two hex nibbles/digits
+void LCD__hex(unsigned char data) //Displays byte in the form of two hex nibbles/digits
 {
 	unsigned char upperNibble, lowerNibble;
 	upperNibble = (data & 0xF0) >> 4;
@@ -85,12 +85,12 @@ void LCD_hex(unsigned char data) //Displays byte in the form of two hex nibbles/
 	else {
 		lowerNibble += 55;
 	}
-	LCD_char(upperNibble);
-	LCD_char(lowerNibble);
+	LCD__char(upperNibble);
+	LCD__char(lowerNibble);
 }
 
 /* LCD Initialize function, INITIALIZE LCD PORTS HERE! */
-void LCD_init()
+void LCD__init()
 {	
 	
 	TCCR0A = (1<<WGM01); //Set CTC bit
@@ -104,186 +104,169 @@ void LCD_init()
 	_delay_ms(20);			/* LCD Power ON delay always >15ms */
 	
     // We send this three times so that we can configure 4-bit mode after soft reset
-	LCD_cmd(0x02);		/* 1st send for 4 bit initialization of LCD  */
+	LCD__cmd(0x02);		/* 1st send for 4 bit initialization of LCD  */
     _delay_ms(5);
-    LCD_cmd(0x02);		/* 2nd send for 4 bit initialization of LCD  */
+    LCD__cmd(0x02);		/* 2nd send for 4 bit initialization of LCD  */
     _delay_ms(1);
-    LCD_cmd(0x02);		/* 3rd send for 4 bit initialization of LCD  */
+    LCD__cmd(0x02);		/* 3rd send for 4 bit initialization of LCD  */
     _delay_ms(1); 
-	LCD_cmd(0x28);              /* 2 line, 5 x 8 dot char font in 4-bit mode */
-	LCD_cmd(0x0C);				/* Turns cursor off */
-	LCD_cmd(0x01);              /* Clear display screen*/
-    LCD_cmd(0x02);              /* Return home*/
+	LCD__cmd(0x28);              /* 2 line, 5 x 8 dot char font in 4-bit mode */
+	LCD__cmd(0x0C);				/* Turns cursor off */
+	LCD__cmd(0x01);              /* Clear display screen*/
+    LCD__cmd(0x02);              /* Return home*/
 }
 
-void LCD_str(char *str)		/* Send string to LCD function */
+void LCD__str(char *str)		/* Send string to LCD function */
 {
 	int i;
 	for(i=0;str[i]!=0;i++)		/* Send each char of string till the NULL */
 	{
-		LCD_char (str[i]);
+		LCD__char (str[i]);
 	}
 }
 
 void LCD_str_xy (char row, char pos, char *str)	/* Send string to LCD with xy position */
 {
 	if (row == 0 && pos<16)
-	LCD_cmd((pos & 0x0F)|0x80);	/* Command of first row and required position<16 */
+	LCD__cmd((pos & 0x0F)|0x80);	/* Command of first row and required position<16 */
 	else if (row == 1 && pos<16)
-	LCD_cmd((pos & 0x0F)|0xC0);	/* Command of first row and required position<16 */
-	LCD_str(str);		/* Call LCD string function */
+	LCD__cmd((pos & 0x0F)|0xC0);	/* Command of first row and required position<16 */
+	LCD__str(str);		/* Call LCD string function */
 }
 
 void LCD_int(int num) {
 	char buff[3];
 	itoa(num, buff, 10);
-	LCD_str(buff);
+	LCD__str(buff);
 }
 
 void LCD_clr()
 {
-	LCD_cmd (0x01);		/* Clear display */
+	LCD__cmd (0x01);		/* Clear display */
 	_delay_ms(2);
-	LCD_cmd (0x80);		/* Cursor at home position */
+	LCD__cmd (0x80);		/* Cursor at home position */
 }
 
 void LCD_clr_ln(int lineNo){ //1st line = 0, 2nd line = 1
 	if (lineNo == 0)
-		LCD_cmd(0x80);
+		LCD__cmd(0x80);
 	else
-		LCD_cmd(0xC0);
-	LCD_str("                ");
-	LCD_cmd(0x80);
+		LCD__cmd(0xC0);
+	LCD__str("                ");
+	LCD__cmd(0x80);
 }
 
-void LCD_wake() {
-	LCD_clr();
-	LCD_cmd(0x80); //1st line
+void LCD__wake() {
+	LCD__clr();
+	LCD__cmd(0x80); //1st line
 	
 	for(int k = 177; k < 182; k++) { //177-182 to print A I U E O
-		LCD_clr();
-		LCD_cmd(0x80); //1st line
+		LCD__clr();
+		LCD__cmd(0x80); //1st line
 		for (int l = 0; l < 16; l++) {
-			LCD_char(k);
+			LCD__char(k);
 			//_delay_ms(5);
 		}
-		LCD_cmd(0xC0); //2nd line
+		LCD__cmd(0xC0); //2nd line
 		for (int m = 0; m < 16; m++) {
-			LCD_char(k);
+			LCD__char(k);
 			//_delay_ms(5);
 		}
 		_delay_ms(250); //Wait 350ms per character change
 	}
-	LCD_cmd(0x80); //1st line
+	LCD__cmd(0x80); //1st line
 	for (int i = 0; i < 16; i++) { //print black bars on first line
-		LCD_char(0xFF);
+		LCD__char(0xFF);
 		_delay_ms(10);
 	}
-	LCD_cmd(0xC0); //2nd line
+	LCD__cmd(0xC0); //2nd line
 	for (int j = 0; j < 16; j++) { //print black bars on second line
-		LCD_char(0xFF);
+		LCD__char(0xFF);
 		_delay_ms(10);
 	}
 	_delay_ms(500); //Wait a 500ms before clearing
-	LCD_clr();
-	LCD_cmd(0x83);
-	LCD_str("LCD Ready!");
+	LCD__clr();
+	LCD__cmd(0x83);
+	LCD__str("LCD Ready!");
 	_delay_ms(400);
-	LCD_clr();
+	LCD__clr();
 
 }
 
 void LCD_update() {
 	//Called by CAN interrupt
 
-	LCD_cmd(0x84);
-	LCD_str("    ");
-	LCD_cmd(0x8D);
-	LCD_str("  ");
+	LCD__cmd(0x84);
+	LCD__str("    ");
+	LCD__cmd(0x8D);
+	LCD__str("  ");
 }
 
 void LCD_timestamp() {
-	LCD_cmd(0xC2);
-	LCD_str("TMSTMP REC!");
+	LCD__cmd(0xC2);
+	LCD__str("TMSTMP REC!");
 	_delay_ms(400);
 	LCD_clr_ln(1); //clear 2nd line	
 }
 
-void LCD_default() {
+void LCD__default() {
 	state = 1;
-	LCD_clr();
-	LCD_str("SOC:");
-	LCD_cmd(0x89);
-	LCD_str("Bat:");
-	LCD_cmd(0x8F);
-	LCD_char(0b11011111); //Degree
+	LCD__clr();
+	LCD__str("SOC:");
+	LCD__cmd(0x89);
+	LCD__str("Bat:");
+	LCD__cmd(0x8F);
+	LCD__char(0b11011111); //Degree
 }
 
-void LCD_menu() {
+void LCD__menu() {
 	state = 2;
 	extraTime = 0;
-	LCD_clr();
-	LCD_str("Stgs.      Op. X");
-	LCD_cmd(0xC0);
-	LCD_str("Back       Op. Y");
+	LCD__clr();
+	LCD__str("Stgs.      Op. X");
+	LCD__cmd(0xC0);
+	LCD__str("Back       Op. Y");
 }
 
-void LCD_back() {
+void LCD__back() {
 	if (state >= 3)
-		LCD_menu();
+		LCD__menu();
 	else
-		LCD_default();
+		LCD__default();
 }
 
-void LCD_settings() {
+void LCD__settings() {
 	state = 3;
 	extraTime = 0;
-	LCD_clr();
-	LCD_str("Settings");
-	LCD_cmd(0xC0);
-	LCD_str("Back");
+	LCD__clr();
+	LCD__str("Settings");
+	LCD__cmd(0xC0);
+	LCD__str("Back");
 }
 
-void LCD_optionx() {
+void LCD__optionx() {
 	state = 4;
 	extraTime = 0;
-	LCD_clr();
-	LCD_str("Option X");
-	LCD_cmd(0xC0);
-	LCD_str("Back");
+	LCD__clr();
+	LCD__str("Option X");
+	LCD__cmd(0xC0);
+	LCD__str("Back");
 }
 
-void LCD_optiony() {
+void LCD__optiony() {
 	state = 5;
 	extraTime = 0;
-	LCD_clr();
-	LCD_str("Option Y");
-	LCD_cmd(0xC0);
-	LCD_str("Back");
+	LCD__clr();
+	LCD__str("Option Y");
+	LCD__cmd(0xC0);
+	LCD__str("Back");
 }
-
-/**
-void checkTime() {
-	if (state >= 2) {
-		LCD_cmd(0x87);
-		LCD_int(TIMEOUT-(extraTime/100));
-		if (extraTime > TIMEOUT*100) //600*.01s = 6s
-			LCD_default();
-	}
-}
-**/
 
 ISR(TIMER0_COMPA_vect) { //Interrupt for button
 	
 	if (state >= 2) {
 		extraTime++;
-		/**	//Too slow, conflicts with other interrupt causing button glitches
-		if (extraTime/100.0 == extraTime/100) {
-			LCD_cmd(0x87);
-			LCD_int(TIMEOUT-(extraTime/100));
-		}
-		**/
 		if (extraTime > TIMEOUT*100) //600*.01s = 6s
-			LCD_default(); //Return to default
+			LCD__default(); //Return to default
 	}
 }

@@ -38,14 +38,12 @@ LCD_D7 = (1<<D7); //(1<<7)
 
 int main(void) {
 	i2c__init();
-	//LCD_init(LCD_ADDRESS, LCD_RS, LCD_E, LCD_BL, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
-	LCD_init();
-	buttons_init();
-	LCD_wake();
-	LCD_clr();
-	LCD_default();
-	sei();
-	//timer__init(); only needed for PWM
+	LCD__init();
+	buttons__init();
+	LCD__wake();
+	LCD__clr();
+	LCD__default();
+	sei(); //initialize interupts for buttons
 	
 	rpm__set(0b1111111111111111);
 	left_rgb__set(BLACK);
