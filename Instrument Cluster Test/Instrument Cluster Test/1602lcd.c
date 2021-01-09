@@ -125,7 +125,7 @@ void LCD__str(char *str)		/* Send string to LCD function */
 	}
 }
 
-void LCD_str_xy (char row, char pos, char *str)	/* Send string to LCD with xy position */
+void LCD__str_xy (char row, char pos, char *str)	/* Send string to LCD with xy position */
 {
 	if (row == 0 && pos<16)
 	LCD__cmd((pos & 0x0F)|0x80);	/* Command of first row and required position<16 */
@@ -134,20 +134,20 @@ void LCD_str_xy (char row, char pos, char *str)	/* Send string to LCD with xy po
 	LCD__str(str);		/* Call LCD string function */
 }
 
-void LCD_int(int num) {
+void LCD__int(int num) {
 	char buff[3];
 	itoa(num, buff, 10);
 	LCD__str(buff);
 }
 
-void LCD_clr()
+void LCD__clr()
 {
 	LCD__cmd (0x01);		/* Clear display */
 	_delay_ms(2);
 	LCD__cmd (0x80);		/* Cursor at home position */
 }
 
-void LCD_clr_ln(int lineNo){ //1st line = 0, 2nd line = 1
+void LCD__clr_ln(int lineNo){ //1st line = 0, 2nd line = 1
 	if (lineNo == 0)
 		LCD__cmd(0x80);
 	else
@@ -193,7 +193,7 @@ void LCD__wake() {
 
 }
 
-void LCD_update() {
+void LCD__update() {
 	//Called by CAN interrupt
 
 	LCD__cmd(0x84);
@@ -202,11 +202,11 @@ void LCD_update() {
 	LCD__str("  ");
 }
 
-void LCD_timestamp() {
+void LCD__timestamp() {
 	LCD__cmd(0xC2);
 	LCD__str("TMSTMP REC!");
 	_delay_ms(400);
-	LCD_clr_ln(1); //clear 2nd line	
+	LCD__clr_ln(1); //clear 2nd line	
 }
 
 void LCD__default() {
@@ -263,7 +263,6 @@ void LCD__optiony() {
 }
 
 ISR(TIMER0_COMPA_vect) { //Interrupt for button
-	
 	if (state >= 2) {
 		extraTime++;
 		if (extraTime > TIMEOUT*100) //600*.01s = 6s
