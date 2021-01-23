@@ -5,9 +5,9 @@
  * Author : wayne
  */ 
 
- #ifndef F_CPU
- #define F_CPU 16000000UL
- #endif
+#ifndef F_CPU
+#define F_CPU 16000000UL
+#endif
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -16,25 +16,6 @@
 #include "indicators.h"
 #include "1602lcd.h"
 #include "buttons.h"
-
-/*
-//LCD ports
-#define RS 0 //PCF P0
-#define E  2 //P2
-#define BL 3 //P3 goes to backlight A/K on LCD
-#define D4 4 //P4
-#define D5 5 //P5
-#define D6 6 //P6
-#define D7 7 //P7
-
-const uint8_t LCD_RS = (1<<RS), //(1<<0)
-LCD_E  = (1<<E),  //(1<<2)
-LCD_BL = (1<<BL), //(1<<3)
-LCD_D4 = (1<<D4), //(1<<4)
-LCD_D5 = (1<<D5), //(1<<5)
-LCD_D6 = (1<<D6), //(1<<6)
-LCD_D7 = (1<<D7); //(1<<7)
-*/
 
 int main(void) {
 	i2c__init();
