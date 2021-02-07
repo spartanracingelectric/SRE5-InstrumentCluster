@@ -11,6 +11,7 @@
 #define MOUNT 0
 #define OPEN 1
 #define READ 2
+#define WRITE 3
 
 void uart__printf(char *message); /* Prints string/char array */
 void uart__print_new_line(); /* New CRLF line (\r\n) */
