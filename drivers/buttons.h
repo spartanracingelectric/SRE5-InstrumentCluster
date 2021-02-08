@@ -16,8 +16,6 @@ sei(); //Enables interrupts by setting the global interrupt mask
 #include <util/delay.h>
 #include "1602lcd.h"
 
-#define HOLD_TIME 1000 //Button hold time for bottom buttons on default screen. In ms
-
 void buttons_init(); //Initialize buttons. Pinout found on conf.h
 
 #endif /* BUTTONS_H_ */
