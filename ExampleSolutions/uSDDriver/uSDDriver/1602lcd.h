@@ -21,8 +21,6 @@
 #include <util/delay.h>
 #include "i2c.h"
 
-#define LCD_TIMEOUT 6 //In seconds
-
 void LCD_write(unsigned char data, uint8_t mode); /* Writes byte via I2C. Mode is for LCD data transmission */
 void LCD_cmd(unsigned char cmd); /* Sends byte to LCD in LCD_CMD_MODE mode */
 void LCD_char(unsigned char data); /* Sends byte to LCD in LCD_DATA_MODE mode. Displays char */

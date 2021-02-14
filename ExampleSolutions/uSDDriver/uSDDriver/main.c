@@ -10,46 +10,46 @@
 #include "i2c.h"
 #include "diskio.h"
 #include "pff.h"
+#include "sd.h"
 
 int main(void)
 { 
-	char c[100];
-	
 	FATFS pfs;
-	UINT br;
-	FRESULT res;
+	UINT bw;
 	
 	uart__init(9600);
+	
 	spi_init();
-	//spi_start();
 	
 	LCD_init();
+	
 	buttons_init();
 	
 	uart__print_welcome();
-	
 	uart__print_disk_info();
 	
-	res = pf_mount(&pfs);
-	uart__print_disk_error(res, MOUNT);
-	
-	res = pf_open(FILE_NAME); //File name found in conf.h
-	uart__print_disk_error(res, OPEN);
+	sd__mount(&pfs);
+	sd__open(FILE_NAME);
 
 	LCD_wake();
-
 	LCD_default();
 	
 	sei(); //Enable interrupts
 	
-	res = pf_read(c, sizeof(c), &br);
-	uart__print_disk_error(res, READ);
+	int count = 0;
+	char test[6] = "Test ";
+	char temp_str[16];
+	char count_char[8];
 	
     while (1) 
     {
-		uart__printf(c);
-		uart__print_new_line();
-		_delay_ms(2000);
+		memset(temp_str, '\0', 16);
+		strcpy(temp_str, test);
+		itoa(count, count_char, 10);
+		strcat(temp_str, count_char);
+		sd__new_entry(temp_str, BUFFER_SIZE, &bw);
+		count++;
+		_delay_ms(250);
     }
 }
 
