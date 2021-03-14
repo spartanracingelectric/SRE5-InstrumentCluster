@@ -190,7 +190,7 @@ void mcp2515_turn_off_filter_receive_all_message(void)
 	mcp2515_write_register(RXB1CTRL, 0x60);
 }
 
-bool mcp2515_tx(can_message_t *msg_ptr)
+bool mcp2515_tx(can_message_s *msg_ptr)
 {
 	uint8_t buffer_index; 
 	uint8_t status = mcp2515_read_status(); 
@@ -234,7 +234,7 @@ bool mcp2515_tx(can_message_t *msg_ptr)
 	return true; 
 }
 
-bool mcp2515_rx(can_message_t *msg_ptr) 
+bool mcp2515_rx(can_message_s *msg_ptr) 
 {
 
 	uint8_t buffer_index;
