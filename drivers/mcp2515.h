@@ -13,7 +13,7 @@ typedef struct {
 	uint16_t id;
 	uint8_t data_length;
 	uint8_t data[8];
-}can_message_t;
+}can_message_s;
 
 typedef enum {
 	normal_mode = 0x00,
@@ -34,8 +34,8 @@ uint8_t mcp2515_read_status(void);
 uint8_t mcp2515_read_register(uint8_t address); 
 uint8_t mcp2515_read_rx_buffer_status(void); 
 bool mcp2515_set_mode(mcp2515_mode_e mode); 
-bool mcp2515_tx(can_message_t *msg_ptr);  
-bool mcp2515_rx(can_message_t *msg_ptr);
+bool mcp2515_tx(can_message_s *msg_ptr);  
+bool mcp2515_rx(can_message_s *msg_ptr);
 bool mcp2515_is_there_new_message(void); 
 
 
