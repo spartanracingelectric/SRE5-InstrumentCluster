@@ -14,8 +14,6 @@
 #include "mcp2515_defs.h"
 #include "spi.h"
 
-#include <avr/sfr_defs.h>
-
 bool mcp2515_init(uint16_t baudrate_kbps)
 {	
 	// set chip select, PortB Pin2
@@ -25,7 +23,9 @@ bool mcp2515_init(uint16_t baudrate_kbps)
 	// set interrupt pin, PortD Pin2
 	DDRD &= ~(1 << PIND2); 
 	PORTD |= (1 << PIND2); 
-	
+
+	spi_enable_master_mode(); 
+
 	mcp2515_software_reset(); 
 	
 	// 16MHz = 62.5ns/clk Fosc = Tosc = 62.5ns

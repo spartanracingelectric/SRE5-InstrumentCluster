@@ -19,11 +19,14 @@ void spi_init(void)
 	DDRB |= (1 << PINB3) | (1 << PINB5); // Set MOSI and CLK as output 
 	DDRB &= ~(1 << PINB4); // set MISO as input 
 	
-	SPCR = (1 << SPE) | (1 << MSTR); // Enable SPI and set it to master mode
-	
 	// Set SPI speed to 1MHz (fosc / 16). When CPU speed set to 16MHz, 1 MHz SPI is running stably 
 	SPCR |= ((0 << SPR1) | (1 << SPR0)); 
 	SPSR = 0;
+}
+
+void spi_enable_master_mode(void) 
+{
+	SPCR = (1 << SPE) | (1 << MSTR); 
 }
 
 uint8_t spi_exchange_byte(uint8_t byte_to_transmit)
