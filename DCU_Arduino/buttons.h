@@ -7,7 +7,7 @@
 #define OPTIONX_SCREEN 4
 #define OPTIONY_SCREEN 5
 
-#define DEBOUNCE_TIME 20
+#define DEBOUNCE_TIME 50
 #define LOCK_TIME 100
 
 #define HOLD_TIME 1000 //Button hold time for bottom buttons on default screen
@@ -17,6 +17,8 @@
 #include "conf.h"
 
 void buttons__init();
-//void buttons__flag_reset();
+void buttons__poll();
+void buttons__update_LCD();
+void buttons__flag_reset();
 
 #endif /* BUTTONS_H_ */
