@@ -2,10 +2,16 @@
 #include "indicators.h"
 #include "1602lcd.h"
 #include "buttons.h"
+#include "can.h"
+
+signed int RPM;
+float SOC, TEMP;
+bool SOC_blink, TEMP_blink;
 
 void setup() {
   LCD__init(); 
-  buttons__init();
+  CAN_initialize();
+  //buttons__init();
 
   LCD__wake();
   LCD__default();
@@ -17,8 +23,24 @@ void setup() {
 }
 
 void loop() {
-  buttons__poll();
-  buttons__update_LCD();
+  RPM = (signed int)CAN__receive_RPM();
+  SOC = CAN__receive_SOC();
+  TEMP = CAN__receive_TEMP();
+
+  Serial.println("******************************************************************************");
+  Serial.print("RPM:\t");
+  Serial.println(RPM);
+  Serial.print("SOC:\t");
+  Serial.println(SOC);
+  Serial.print("TEMP:\t");
+  Serial.println(TEMP);
+
+  indicator__update(RPM, SOC, TEMP, &SOC_blink, &TEMP_blink);
+  delay(5);
+  
+  //buttons__poll();
+  //buttons__update_LCD();
+
   /*
   // in this case, 1 = ON; 0 = OFF
   delay(300);
