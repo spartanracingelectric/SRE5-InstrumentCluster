@@ -1,6 +1,8 @@
 #include "can.h"
 MCP_CAN CAN(SPI_CS_PIN);  
 
+int currentIndex = 0;
+
 void CAN_initialize() {
   while (CAN_OK != CAN.begin(CAN_500KBPS)) {            // init can bus : baudrate = 500k
         SERIAL.println("CAN BUS Shield init fail");
@@ -50,7 +52,7 @@ signed int CAN__receive_RPM() {
 float CAN__receive_SOC() {
   bool SOC_flag = 0;
   unsigned char len = 0;
-  unsigned char buf[32];
+  unsigned char buf[8];
   float out;
 
   while(!SOC_flag) {
@@ -84,7 +86,7 @@ float CAN__receive_SOC() {
 float CAN__receive_TEMP() {
   bool TEMP_flag = 0;
   unsigned char len = 0;
-  unsigned char buf[32];
+  unsigned char buf[8];
   float out;
 
   while(!TEMP_flag) {

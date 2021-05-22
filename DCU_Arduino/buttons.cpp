@@ -10,6 +10,7 @@ void buttons__init() {
     pinMode(button_pins[i], INPUT);
     button_flag[i] = 0;
   }
+  Serial.println("Button init done");
 }
 
 // Poll the buttons and update the respective button flags

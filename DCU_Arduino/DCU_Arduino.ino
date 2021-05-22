@@ -1,3 +1,4 @@
+#include <ArduinoSTL.h>
 #include <avr/interrupt.h>
 #include "conf.h"
 #include "indicators.h"
@@ -10,7 +11,6 @@ float SOC, TEMP;
 
 void setup() {
   LCD__init();  // Serial.begin(9600);
-  //Serial.begin(9600);
   CAN_initialize();
   buttons__init();
 

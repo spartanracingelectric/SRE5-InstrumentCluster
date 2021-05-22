@@ -11,6 +11,11 @@
     #define SERIAL Serial
 #endif
 
+typedef struct CAN_message {
+  unsigned long id;
+  unsigned char data[8];
+} can_message;
+
 // CAN packet addresses based on the spreadsheet
 #define SOC_ADDR 0x627
 #define BAT_TEMP_ADDR 0x628
