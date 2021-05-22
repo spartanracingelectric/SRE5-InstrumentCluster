@@ -7,8 +7,6 @@
 
 signed int RPM;
 float SOC, TEMP;
-bool SOC_blink = false;
-bool TEMP_blink = false;
 
 void setup() {
   LCD__init();  // Serial.begin(9600);
@@ -26,7 +24,6 @@ void setup() {
 }
 
 void loop() {
-  /*
   RPM = (signed int)CAN__receive_RPM();
   SOC = CAN__receive_SOC();
   TEMP = CAN__receive_TEMP();
@@ -39,8 +36,7 @@ void loop() {
   Serial.print("TEMP:\t");
   Serial.println(TEMP);
 
-  indicator__update(RPM, SOC, TEMP, &SOC_blink, &TEMP_blink);
-  */
+  indicator__update(RPM, SOC, TEMP);
   
   buttons__poll();
   buttons__update_LCD();

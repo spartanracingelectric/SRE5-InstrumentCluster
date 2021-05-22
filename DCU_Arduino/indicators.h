@@ -33,6 +33,6 @@ void left_indicator__set(uint8_t status);
 void right_indicator__set(uint8_t status);
 void rpm__set(uint16_t LED_PATTERN);
 void indicator__update();
-void indicator__update(signed int RPM, float SOC, float TEMP, bool* SOC_blink, bool* TEMP_blink);
+void indicator__update(signed int RPM, float SOC, float TEMP);
 
 #endif /* INDICATORS_H_ */

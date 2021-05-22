@@ -7,8 +7,13 @@ uint8_t byte1, byte2;
 // L indicator, R indicator, RR, RB, RG, LR, LB, LG 
 uint8_t bitstate = 0b11111111;
 
+// Blink variables
 uint32_t SOC_last_blink = 0;
 uint32_t TEMP_last_blink = 0;
+
+// If SOC_blink or TEMP_blink are true, that means turn off the led
+bool TEMP_blink = false;
+bool SOC_blink = false;
 
 /**************************************************************/
 // RGB set functions
@@ -62,8 +67,7 @@ void indicator__update() {
 }
 
 // Updates all the LEDS based on the information received from the CAN packets
-// If SOC_blink or TEMP_blink are true, that means turn off the led
-void indicator__update(signed int RPM, float SOC, float TEMP, bool* SOC_blink, bool* TEMP_blink) {
+void indicator__update(signed int RPM, float SOC, float TEMP) {
   uint16_t led_pattern = 0xFFFF;
   uint8_t SOC_color;
   uint8_t TEMP_color;
@@ -91,10 +95,10 @@ void indicator__update(signed int RPM, float SOC, float TEMP, bool* SOC_blink, b
     if (SOC_blink && (millis() - SOC_last_blink > blink_const)) {
       SOC_color = BLACK;
       SOC_last_blink = millis();
-      *SOC_blink = false;
+      SOC_blink = false;
     } else {
       SOC_color = RED;
-      *SOC_blink = true;
+      SOC_blink = true;
     }
   }
 
@@ -111,10 +115,10 @@ void indicator__update(signed int RPM, float SOC, float TEMP, bool* SOC_blink, b
     if (TEMP_blink && (millis() - TEMP_last_blink > blink_const)) {
       TEMP_color = BLACK;
       TEMP_last_blink = millis();
-      *TEMP_blink = false;
+      TEMP_blink = false;
     } else {
       TEMP_color = RED;
-      *TEMP_blink = true;
+      TEMP_blink = true;
     }
   }
 
