@@ -7,8 +7,8 @@ uint8_t byte1, byte2;
 // L indicator, R indicator, RR, RB, RG, LR, LB, LG 
 uint8_t bitstate = 0b11111111;
 
-uint32_t last_blink_SOC = 0;
-uint32_t last_blink_TEMP = 0;
+uint32_t SOC_last_blink = 0;
+uint32_t TEMP_last_blink = 0;
 
 /**************************************************************/
 // RGB set functions
@@ -62,7 +62,7 @@ void indicator__update() {
 }
 
 // Updates all the LEDS based on the information received from the CAN packets
-// If SOC_blink or TEMP_blink are false, that means turn off the led
+// If SOC_blink or TEMP_blink are true, that means turn off the led
 void indicator__update(signed int RPM, float SOC, float TEMP, bool* SOC_blink, bool* TEMP_blink) {
   uint16_t led_pattern = 0xFFFF;
   uint8_t SOC_color;
@@ -88,13 +88,14 @@ void indicator__update(signed int RPM, float SOC, float TEMP, bool* SOC_blink, b
   } else if (SOC <= 10 && SOC > 5) {
     SOC_color = RED;
   } else if (SOC <= 5) {
-    if (SOC_blink && (millis() - last_blink_SOC > blink_const)) {
+    if (SOC_blink && (millis() - SOC_last_blink > blink_const)) {
       SOC_color = BLACK;
-      last_blink_SOC = millis();
+      SOC_last_blink = millis();
+      *SOC_blink = false;
     } else {
       SOC_color = RED;
+      *SOC_blink = true;
     }
-    *SOC_blink = !(*SOC_blink);
   }
 
   // Battery temperatures are given in celsius
@@ -107,13 +108,14 @@ void indicator__update(signed int RPM, float SOC, float TEMP, bool* SOC_blink, b
   } else if (TEMP >= 50 && TEMP < 55) {
     TEMP_color = RED;
   } else if (TEMP >= 55) {
-    if (TEMP_blink && (millis() - last_blink_TEMP > blink_const)) {
+    if (TEMP_blink && (millis() - TEMP_last_blink > blink_const)) {
       TEMP_color = BLACK;
-      last_blink_TEMP = millis();
+      TEMP_last_blink = millis();
+      *TEMP_blink = false;
     } else {
       TEMP_color = RED;
+      *TEMP_blink = true;
     }
-    *TEMP_blink = !(*SOC_blink);
   }
 
   rpm__set(led_pattern);
