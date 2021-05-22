@@ -5,6 +5,8 @@
 #ifndef INDICATORS_H_
 #define INDICATORS_H_
 
+#define blink_const 100
+
 // Color Profiles 0bRBG
 // Use if you're not using PWM
 // LED indicator bits (what each bit in the byte controls): 

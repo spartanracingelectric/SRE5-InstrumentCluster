@@ -7,6 +7,9 @@ uint8_t byte1, byte2;
 // L indicator, R indicator, RR, RB, RG, LR, LB, LG 
 uint8_t bitstate = 0b11111111;
 
+uint32_t last_blink_SOC = 0;
+uint32_t last_blink_TEMP = 0;
+
 /**************************************************************/
 // RGB set functions
 // color input are the three bits controlling the RGB pins
@@ -85,8 +88,9 @@ void indicator__update(signed int RPM, float SOC, float TEMP, bool* SOC_blink, b
   } else if (SOC <= 10 && SOC > 5) {
     SOC_color = RED;
   } else if (SOC <= 5) {
-    if (!(*SOC_blink)) {
+    if (SOC_blink && (millis() - last_blink_SOC > blink_const)) {
       SOC_color = BLACK;
+      last_blink_SOC = millis();
     } else {
       SOC_color = RED;
     }
@@ -103,12 +107,13 @@ void indicator__update(signed int RPM, float SOC, float TEMP, bool* SOC_blink, b
   } else if (TEMP >= 50 && TEMP < 55) {
     TEMP_color = RED;
   } else if (TEMP >= 55) {
-    if (!(*TEMP_blink)) {
+    if (TEMP_blink && (millis() - last_blink_TEMP > blink_const)) {
       TEMP_color = BLACK;
+      last_blink_TEMP = millis();
     } else {
       TEMP_color = RED;
     }
-    *TEMP_blink = !(*TEMP_blink);
+    *TEMP_blink = !(*SOC_blink);
   }
 
   rpm__set(led_pattern);
