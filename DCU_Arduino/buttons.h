@@ -7,7 +7,7 @@
 #define OPTIONX_SCREEN 4
 #define OPTIONY_SCREEN 5
 
-#define DEBOUNCE_TIME 50
+#define DEBOUNCE_TIME 150
 #define LOCK_TIME 100
 
 #define HOLD_TIME 1000 //Button hold time for bottom buttons on default screen

@@ -35,10 +35,10 @@
 / BUTTON PINS AND CONSTANTS
 /---------------------------------------------------------------------------*/
 
-#define BUT1 PINC0
-#define BUT2 PINC1
-#define BUT3 PINC2
-#define BUT4 PINC3
+#define BUT1 14 //PINC0
+#define BUT2 15 //PINC1
+#define BUT3 16 //PINC2
+#define BUT4 17 //PINC3
 
 #define PCINT_BUT1 (1<<PCINT8)
 #define PCINT_BUT2 (1<<PCINT9)

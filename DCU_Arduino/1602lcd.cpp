@@ -32,7 +32,7 @@ void LCD__wake() {
 /*---------------------------------------------------------------------------/
 / LCD Write functions
 /---------------------------------------------------------------------------*/
-
+// Takes in a string to output with a position (x = col y = row)
 void LCD__write(String str, int x = 0, int y = 0) {
   lcd.setCursor(x, y);
   lcd.print(str);

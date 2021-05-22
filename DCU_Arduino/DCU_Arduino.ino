@@ -1,4 +1,5 @@
 #include <avr/interrupt.h>
+#include "conf.h"
 #include "indicators.h"
 #include "1602lcd.h"
 #include "buttons.h"
@@ -9,9 +10,10 @@ float SOC, TEMP;
 bool SOC_blink, TEMP_blink;
 
 void setup() {
-  LCD__init(); 
+  LCD__init();  // Serial.begin(9600);
+  //Serial.begin(9600);
   CAN_initialize();
-  //buttons__init();
+  buttons__init();
 
   LCD__wake();
   LCD__default();
@@ -23,6 +25,7 @@ void setup() {
 }
 
 void loop() {
+  /*
   RPM = (signed int)CAN__receive_RPM();
   SOC = CAN__receive_SOC();
   TEMP = CAN__receive_TEMP();
@@ -37,11 +40,13 @@ void loop() {
 
   indicator__update(RPM, SOC, TEMP, &SOC_blink, &TEMP_blink);
   delay(5);
+  */
   
-  //buttons__poll();
-  //buttons__update_LCD();
+  buttons__poll();
+  buttons__update_LCD();
 
   /*
+  // Use this stuff to test the leds
   // in this case, 1 = ON; 0 = OFF
   delay(300);
   rpm__set(0b0000000011111111);

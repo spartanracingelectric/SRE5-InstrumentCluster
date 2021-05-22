@@ -7,7 +7,8 @@ uint32_t last_debounce_time = 0;
 
 void buttons__init() {
   for (int i = 0; i < 4; i++) {
-    pinMode(button_pins[i], INPUT_PULLUP);
+    pinMode(button_pins[i], INPUT);
+    button_flag[i] = 0;
   }
 }
 
@@ -30,10 +31,11 @@ void buttons__poll() {
   } else {
     last_debounce_time = millis();
   }
-
+  /*
   for(int i = 0; i < 4; i++) {
     Serial.print(button_flag[i]);
   }
+  */
   Serial.println();
 }
 
