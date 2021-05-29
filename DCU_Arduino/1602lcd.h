@@ -25,5 +25,6 @@ void LCD__back();
 void LCD__settings();
 void LCD__optionx();
 void LCD__optiony();
+void LCD__update(float SOC, float TEMP);
 
 #endif /* LCD1602_H_ */

@@ -1,4 +1,5 @@
 #include <SPI.h>
+#include "conf.h"
 #include "mcp_can.h"
 
 #ifndef CAN_H_
@@ -16,18 +17,14 @@ typedef struct CAN_message {
   unsigned char data[8];
 } can_message;
 
-// CAN packet addresses based on the spreadsheet
-#define SOC_ADDR 0x627
-#define BAT_TEMP_ADDR 0x628
-#define RPM_ADDR 0x0A5
-
-// the cs pin of the version after v1.1 is default to D9
-// v0.9b and v1.0 is default D10
-const int SPI_CS_PIN = 9;
-
 void CAN_initialize();
-//void CAN_receive_SOC();
-signed int CAN__receive_RPM();
-float CAN__receive_SOC();
-float CAN__receive_TEMP();
+can_message CAN__receive_packet();
+
+signed int CAN__convert_RPM(can_message packet);
+float CAN__convert_SOC(can_message packet);
+float CAN__convert_TEMP(can_message packet);
+
+//signed int CAN__receive_RPM();
+//float CAN__receive_SOC();
+//float CAN__receive_TEMP();
 #endif /* CAN_H_ */

@@ -1,4 +1,4 @@
-#include <ArduinoSTL.h>
+#include <ArduinoQueue.h>
 #include <avr/interrupt.h>
 #include "conf.h"
 #include "indicators.h"
@@ -6,8 +6,13 @@
 #include "buttons.h"
 #include "can.h"
 
+#define QUEUE_MAX_SIZE 100
+
 signed int RPM;
 float SOC, TEMP;
+
+can_message input;
+ArduinoQueue<can_message> messages(QUEUE_MAX_SIZE);
 
 void setup() {
   LCD__init();  // Serial.begin(9600);
@@ -19,11 +24,44 @@ void setup() {
   rpm__set(0b1111111111111111);
   left_rgb__set(BLACK);
   right_rgb__set(BLACK);
-  left_indicator__set(1); // TURN OFF BLUE LED #1 NOTE THAT 1 = OFF. 0 = ON
-  right_indicator__set(1); // TURN OFF BLUE LED #1 NOTE THAT 1 = OFF. 0 = ON
+  left_indicator__set(1);   // NOTE THAT 1 = OFF. 0 = ON
+  right_indicator__set(1);  // NOTE THAT 1 = OFF. 0 = ON
 }
 
 void loop() {
+  input = CAN__receive_packet();
+
+  // This should never happen
+  // If the messages queue is full, empty the queue
+  if (messages.isFull()) {
+    for (int i = 0; i < QUEUE_MAX_SIZE; i++) {
+      messages.dequeue();
+    }
+  }
+  
+  messages.enqueue(input);
+  
+  switch (messages.getHead().id) {
+  case SOC_ADDR:
+    SOC = CAN__convert_SOC(messages.dequeue());
+    break;
+  case BAT_TEMP_ADDR:
+    TEMP = CAN__convert_TEMP(messages.dequeue());
+    break;
+  case RPM_ADDR:  
+    RPM = CAN__convert_RPM(messages.dequeue());
+    break;
+  default:
+    messages.dequeue();
+    break;
+  }
+  
+  indicator__update(RPM, SOC, TEMP);
+  LCD__update(SOC, TEMP);
+  buttons__poll();
+  buttons__update_LCD();
+  
+  /*
   RPM = (signed int)CAN__receive_RPM();
   SOC = CAN__receive_SOC();
   TEMP = CAN__receive_TEMP();
@@ -40,6 +78,7 @@ void loop() {
   
   buttons__poll();
   buttons__update_LCD();
+  */
 
   /*
   // Use this stuff to test the leds

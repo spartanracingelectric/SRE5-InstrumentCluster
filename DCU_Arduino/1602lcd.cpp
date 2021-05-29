@@ -65,7 +65,6 @@ void LCD__clear_row(int row) {
 /*---------------------------------------------------------------------------/
 / LCD Menu Functions
 /---------------------------------------------------------------------------*/
-
 void LCD__timestamp() {
   LCD__write("TMSTMP REC!", 2, 1);
   delay(400);
@@ -115,4 +114,11 @@ void LCD__optiony() {
   LCD__clear();
   LCD__write("Option Y");
   LCD__write("Back", 0, 1);
+}
+
+void LCD__update(float SOC, float TEMP) {
+  if (state == 1) {
+    LCD__write((int)SOC, 4, 0);
+    LCD__write((int)TEMP, ROWS - 3, 0);
+  }
 }
