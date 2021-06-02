@@ -1,5 +1,7 @@
 #include "indicators.h"
 
+#define BLINK_INTERVAL 500  // If the RGB LEDS blink, they will blink every 'X' ms
+
 // RPM bar segments represented as bytes
 uint8_t byte1, byte2;
 
@@ -8,8 +10,7 @@ uint8_t byte1, byte2;
 uint8_t bitstate = 0b11111111;
 
 // Blink variables
-uint32_t SOC_last_blink = 0;
-uint32_t TEMP_last_blink = 0;
+uint32_t last_blink = 0;
 
 // If SOC_blink or TEMP_blink are true, that means turn off the led
 bool TEMP_blink = false;
@@ -92,13 +93,10 @@ void indicator__update(signed int RPM, float SOC, float TEMP) {
   } else if (SOC <= 10 && SOC > 5) {
     SOC_color = RED;
   } else if (SOC <= 5) {
-    if (SOC_blink && (millis() - SOC_last_blink > blink_const)) {
-      SOC_color = BLACK;
-      SOC_last_blink = millis();
-      SOC_blink = false;
-    } else {
+    if (!SOC_blink) {
       SOC_color = RED;
       SOC_blink = true;
+      last_blink = millis();
     }
   }
 
@@ -107,18 +105,41 @@ void indicator__update(signed int RPM, float SOC, float TEMP) {
     TEMP_color = BLACK;
   } else if (TEMP >= 20 && TEMP < 30) {
     TEMP_color = GREEN;
-  } else if (TEMP >= 30 && TEMP < 40) {
+  } else if (TEMP >= 30 && TEMP < 50) {
     TEMP_color = BLUE;
   } else if (TEMP >= 50 && TEMP < 55) {
     TEMP_color = RED;
   } else if (TEMP >= 55) {
-    if (TEMP_blink && (millis() - TEMP_last_blink > blink_const)) {
-      TEMP_color = BLACK;
-      TEMP_last_blink = millis();
-      TEMP_blink = false;
-    } else {
+    if (!TEMP_blink) {
       TEMP_color = RED;
       TEMP_blink = true;
+      last_blink = millis();
+    }
+  }
+
+  Serial.println(millis() - last_blink);
+  if (millis() - last_blink > BLINK_INTERVAL) {
+    Serial.println("hellooooo");
+    if (SOC_blink && TEMP_blink) {
+      Serial.println("ok");
+      SOC_color = BLACK;
+      TEMP_color = BLACK;
+      SOC_blink = false;
+      TEMP_blink = false;
+      last_blink = millis();
+    } else if (SOC_blink && !TEMP_blink) {
+      Serial.println("wowowow");
+      SOC_color = BLACK;
+      SOC_blink = false;
+      last_blink = millis();
+    } else if (!SOC_blink && TEMP_blink) {
+      Serial.println("gogogogo");
+      TEMP_color = BLACK;
+      TEMP_blink = false;
+      last_blink = millis();
+    } else {
+      Serial.println("nononono");
+      // Do nothing
     }
   }
 

@@ -38,9 +38,23 @@ void loop() {
       messages.dequeue();
     }
   }
-  
+
+  // Add the CAN packet to the queue
   messages.enqueue(input);
-  
+
+  // Print the head of the queue for testing
+  Serial.println("-------------------------------");
+  Serial.print("Messages at ID: 0x");
+  Serial.println(messages.getHead().id, HEX);
+  for (int i = 0; i < 8; i++) { // print the data
+        Serial.print(messages.getHead().data[i], HEX);
+        Serial.print("\t");
+   }
+  Serial.println();
+   
+  // If the CAN ID of the queue's head is the 
+  // SOC, TEMP, or RPM address, do the proper conversion and dequeue
+  // Else, dequeue and continue
   switch (messages.getHead().id) {
   case SOC_ADDR:
     SOC = CAN__convert_SOC(messages.dequeue());
@@ -55,7 +69,18 @@ void loop() {
     messages.dequeue();
     break;
   }
-  
+
+  Serial.println("******************************************************************************");
+  Serial.print("RPM:\t");
+  Serial.println(RPM);
+  Serial.print("SOC:\t");
+  Serial.println(SOC);
+  Serial.print("TEMP:\t");
+  Serial.println(TEMP);
+  Serial.println("******************************************************************************");
+
+  // Update the LEDs and LCD
+  // Then poll the buttons and upadate LCD based on button states
   indicator__update(RPM, SOC, TEMP);
   LCD__update(SOC, TEMP);
   buttons__poll();

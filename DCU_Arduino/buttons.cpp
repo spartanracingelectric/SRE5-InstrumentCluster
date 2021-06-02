@@ -5,6 +5,7 @@ int button_flag[4];
 
 uint32_t last_debounce_time = 0;
 
+// Initialize the buttons, run in the setup function
 void buttons__init() {
   for (int i = 0; i < 4; i++) {
     pinMode(button_pins[i], INPUT);

@@ -4,6 +4,7 @@ uint8_t state = 1;
 
 LiquidCrystal_I2C lcd(LCD_ADDRESS, ROWS, COLS); 
 
+// Initialize the LCD, run in the setup function
 void LCD__init() {
   Serial.begin(9600);
   lcd.init();
@@ -116,6 +117,7 @@ void LCD__optiony() {
   LCD__write("Back", 0, 1);
 }
 
+// Take in the SOC and TEMP and update the LCD to display it
 void LCD__update(float SOC, float TEMP) {
   if (state == 1) {
     LCD__write((int)SOC, 4, 0);

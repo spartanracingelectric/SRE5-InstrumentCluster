@@ -3,6 +3,7 @@ MCP_CAN CAN(SPI_CS_PIN);
 
 int currentIndex = 0;
 
+// Initialize CAN module, run in the setup function
 void CAN_initialize() {
   while (CAN_OK != CAN.begin(CAN_500KBPS)) {            // init can bus : baudrate = 500k
         SERIAL.println("CAN BUS Shield init fail");
@@ -24,13 +25,26 @@ can_message CAN__receive_packet() {
         out.id = canId;
         for(int i = 0; i < len; i++) {
           out.data[i] = buf[i];
-        }
+        }        
     } else {
       out.id = 0x00;
-      for(int i = 0; i < len; i++) {
+      for(int i = 0; i < 8; i++) {
         out.data[i] = 0x01;
       }
     }
+
+    /*
+    SERIAL.println("-----------------------------");
+    SERIAL.print("Get data from ID: 0x");
+    SERIAL.println(out.id, HEX);
+
+    for (int i = 0; i < 8; i++) { // print the data
+        SERIAL.print(out.data[i], HEX);
+        SERIAL.print("\t");
+    }
+    SERIAL.println();
+    */
+    
     return out;
 }
 
