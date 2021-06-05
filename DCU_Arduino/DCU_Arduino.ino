@@ -72,23 +72,27 @@ void loop() {
   // SOC, TEMP, or RPM address, do the proper conversion and dequeue
   // Else, dequeue and continue
   switch (input.id) {
-  case SOC_ADDR:
-    SOC = CAN__convert_SOC(input);
-    indicator__update(RPM, SOC, TEMP);
-    LCD__update(SOC, TEMP);
-    break;
-  case BAT_TEMP_ADDR:
-    TEMP = CAN__convert_TEMP(input);
-    indicator__update(RPM, SOC, TEMP);
-    LCD__update(SOC, TEMP);
-    break;
-  case RPM_ADDR:  
-    RPM = CAN__convert_RPM(input);
-    indicator__update(RPM, SOC, TEMP);
-    LCD__update(SOC, TEMP);
-    break;
-  default:
-    break;
+    case SOC_ADDR: {
+      SOC = CAN__convert_SOC(input);
+      indicator__update(RPM, SOC, TEMP);
+      LCD__update(SOC, TEMP);
+      break;
+    }
+    case BAT_TEMP_ADDR: {
+      TEMP = CAN__convert_TEMP(input);
+      indicator__update(RPM, SOC, TEMP);
+      LCD__update(SOC, TEMP);
+      break;
+    }
+    case RPM_ADDR: {  
+      RPM = CAN__convert_RPM(input);
+      indicator__update(RPM, SOC, TEMP);
+      LCD__update(SOC, TEMP);
+      break;
+    }
+    default: {
+      break;
+    }
   }
 
   Serial.println("******************************************************************************");
