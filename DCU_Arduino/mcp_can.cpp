@@ -715,9 +715,9 @@ byte MCP_CAN::mcp2515_init(const byte canSpeed, const byte clock) {
 
         init_Mask(0, 0, 0x6AF);
         init_Mask(1, 0, 0x6AF);
-        init_Filt(0, 0, SOC_ADDR);
-        init_Filt(1, 0, BAT_TEMP_ADDR);
-        init_Filt(2, 0, RPM_ADDR);
+        //init_Filt(0, 0, SOC_ADDR);
+        //init_Filt(1, 0, BAT_TEMP_ADDR);
+        //init_Filt(2, 0, RPM_ADDR);
         
         // enter normal mode
         res = setMode(MODE_NORMAL);

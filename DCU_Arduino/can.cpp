@@ -1,5 +1,6 @@
 #include "can.h"
-MCP_CAN CAN(SPI_CS_PIN);  
+
+extern MCP_CAN CAN(SPI_CS_PIN);  
 
 int currentIndex = 0;
 

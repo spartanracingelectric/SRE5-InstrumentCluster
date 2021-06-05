@@ -12,6 +12,8 @@
     #define SERIAL Serial
 #endif
 
+extern MCP_CAN CAN;  
+
 typedef struct CAN_message {
   unsigned long id;
   unsigned char data[8];

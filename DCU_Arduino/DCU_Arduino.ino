@@ -5,11 +5,14 @@
 #include "1602lcd.h"
 #include "buttons.h"
 #include "can.h"
+#include "mcp_can.h"
 
 #define QUEUE_MAX_SIZE 50
 
 signed int RPM;
 float SOC, TEMP;
+
+int address_counter = 0;
 
 can_message input;
 ArduinoQueue<can_message> messages(QUEUE_MAX_SIZE);
@@ -18,6 +21,8 @@ void setup() {
   LCD__init();  // Serial.begin(9600);
   CAN_initialize();
   buttons__init();
+
+  CAN.init_Filt(0, 0, SOC_ADDR);
 
   LCD__wake();
   LCD__default();
@@ -40,7 +45,29 @@ void loop() {
         Serial.print("\t");
   }
   Serial.println();
-   
+
+  switch (address_counter) {
+    case 0: {
+      CAN.init_Filt(0, 0, SOC_ADDR);
+      address_counter++;
+      break;
+    }
+    case 1: {
+      CAN.init_Filt(0, 0, BAT_TEMP_ADDR);
+      address_counter++;
+      break;
+    }
+    case 2: {
+      CAN.init_Filt(0, 0, RPM_ADDR);
+      address_counter++;
+      break;
+    }
+    default: {
+      address_counter = 0;
+      break;
+    }
+  }
+  
   // If the CAN ID of the queue's head is the 
   // SOC, TEMP, or RPM address, do the proper conversion and dequeue
   // Else, dequeue and continue
@@ -72,8 +99,6 @@ void loop() {
   Serial.print("TEMP:\t");
   Serial.println(TEMP);
   Serial.println("******************************************************************************");
-
-  delay(55);
 
   /*
   // When the queue is full, start processing them all
