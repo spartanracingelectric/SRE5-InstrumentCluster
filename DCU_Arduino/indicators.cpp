@@ -1,6 +1,6 @@
 #include "indicators.h"
 
-#define BLINK_INTERVAL 500  // If the RGB LEDS blink, they will blink every 'X' ms
+#define BLINK_INTERVAL 250  // If the RGB LEDS blink, they will blink every 'X' ms
 
 // RPM bar segments represented as bytes
 uint8_t byte1, byte2;
@@ -119,26 +119,21 @@ void indicator__update(signed int RPM, float SOC, float TEMP) {
 
   Serial.println(millis() - last_blink);
   if (millis() - last_blink > BLINK_INTERVAL) {
-    Serial.println("hellooooo");
     if (SOC_blink && TEMP_blink) {
-      Serial.println("ok");
       SOC_color = BLACK;
       TEMP_color = BLACK;
       SOC_blink = false;
       TEMP_blink = false;
       last_blink = millis();
     } else if (SOC_blink && !TEMP_blink) {
-      Serial.println("wowowow");
       SOC_color = BLACK;
       SOC_blink = false;
       last_blink = millis();
     } else if (!SOC_blink && TEMP_blink) {
-      Serial.println("gogogogo");
       TEMP_color = BLACK;
       TEMP_blink = false;
       last_blink = millis();
     } else {
-      Serial.println("nononono");
       // Do nothing
     }
   }

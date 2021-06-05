@@ -6,11 +6,12 @@ int currentIndex = 0;
 // Initialize CAN module, run in the setup function
 void CAN_initialize() {
   while (CAN_OK != CAN.begin(CAN_500KBPS)) {            // init can bus : baudrate = 500k
-        SERIAL.println("CAN BUS Shield init fail");
-        SERIAL.println(" Init CAN BUS Shield again");
-        delay(100);
-    }
-    SERIAL.println("CAN BUS Shield init ok!");    
+    SERIAL.println("CAN BUS Shield init fail");
+    SERIAL.println(" Init CAN BUS Shield again");
+    delay(100);
+  }
+    
+  SERIAL.println("CAN BUS Shield init ok!");    
 }
 
 // Returns a can message struct with the id and data buffer
@@ -62,7 +63,7 @@ signed int CAN__convert_RPM(can_message packet) {
 // The CAN packet is big endian
 // SOC percentage is located in bytes 0, 1, 2, and 3 (buf[0 - 3]) of address 0x627
 float CAN__convert_SOC(can_message packet) {
-  return ((float)(packet.data[0] | (packet.data[1] << 8) | (packet.data[2] << 16) | (packet.data[3] << 32)));
+  return ((float)(packet.data[0] | (packet.data[1] << 8) | (packet.data[2] << 16) | (packet.data[3] << 32)) * 0.1f);
 }
 
 // Input is a can message struct
@@ -71,7 +72,7 @@ float CAN__convert_SOC(can_message packet) {
 // The CAN packet is big endian
 // SOC percentage is located in bytes 0, 1, 2, and 3 (buf[0 - 3]) of address 0x628
 float CAN__convert_TEMP(can_message packet) {
-  return ((float)(packet.data[0] | (packet.data[1] << 8) | (packet.data[2] << 16) | (packet.data[3] << 32)));
+  return ((float)(packet.data[0] | (packet.data[1] << 8) | (packet.data[2] << 16) | (packet.data[3] << 32)) * 0.1f) - 100;
 }
 
 /*
