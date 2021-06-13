@@ -58,6 +58,69 @@ void rpm__set(uint16_t led_pattern) {
   Wire.endTransmission();
 }
 
+void indicator__wake() {
+  // Use this stuff to test the leds
+  // in this case, 1 = ON; 0 = OFF
+  delay(100);
+  rpm__set(0b0000000011111111);
+  delay(100);
+  rpm__set(0b1111111100000000);
+  delay(100);
+
+  // 1 = OFF; 0 = ON 
+  uint16_t status = 0b1111111111111111;
+
+  for (int i = 0; i < 16; i++) {
+    status &= ~(1<<i);
+    rpm__set(status);
+    delay(50);
+
+  }
+  
+  for (int i = 16; i >= 0; i--) {
+    status |= (1<<i);
+    rpm__set(status);
+    delay(50);
+  } 
+
+  delay(50);
+  left_indicator__set(0);
+  delay(50);
+  right_indicator__set(0);
+  delay(50);
+  left_rgb__set(RED);
+  delay(50);
+  left_rgb__set(WHITE);
+  delay(50);
+  left_rgb__set(BLUE);
+  delay(50);
+  left_rgb__set(GREEN);
+  delay(50);
+  right_rgb__set(RED);
+  delay(50);
+  right_rgb__set(WHITE);
+  delay(50);
+  right_rgb__set(BLUE);
+  delay(50);
+  right_rgb__set(GREEN);
+  delay(50);
+  right_rgb__set(BLACK);
+  delay(50);
+  left_rgb__set(BLACK);
+  delay(50);
+  left_indicator__set(1);
+  delay(50);
+  right_indicator__set(1);
+  delay(50);
+  
+  rpm__set(0b1111111111111111);
+  left_rgb__set(BLACK);
+  right_rgb__set(BLACK);
+  left_indicator__set(1);   // NOTE THAT 1 = OFF. 0 = ON
+  right_indicator__set(1);  // NOTE THAT 1 = OFF. 0 = ON
+}
+
+
 /**************************************************************/
 // LED update functions
 // Updates the status of the LED indicators using i2c

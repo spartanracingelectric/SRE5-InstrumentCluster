@@ -32,6 +32,7 @@ void right_rgb__set(const uint8_t color);
 void left_indicator__set(uint8_t status);
 void right_indicator__set(uint8_t status);
 void rpm__set(uint16_t LED_PATTERN);
+void indicator__wake();
 void indicator__update();
 void indicator__update(signed int RPM, float SOC, float TEMP);
 

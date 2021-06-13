@@ -1,4 +1,4 @@
-#include <ArduinoQueue.h>
+// #include <ArduinoQueue.h>
 #include <avr/interrupt.h>
 #include "conf.h"
 #include "indicators.h"
@@ -7,7 +7,7 @@
 #include "can.h"
 #include "mcp_can.h"
 
-#define QUEUE_MAX_SIZE 50
+// #define QUEUE_MAX_SIZE 50
 
 signed int RPM;
 float SOC, TEMP;
@@ -15,7 +15,7 @@ float SOC, TEMP;
 int address_counter = 0;
 
 can_message input;
-ArduinoQueue<can_message> messages(QUEUE_MAX_SIZE);
+// ArduinoQueue<can_message> messages(QUEUE_MAX_SIZE);
 
 void setup() {
   LCD__init();  // Serial.begin(9600);
@@ -26,11 +26,8 @@ void setup() {
 
   LCD__wake();
   LCD__default();
-  rpm__set(0b1111111111111111);
-  left_rgb__set(BLACK);
-  right_rgb__set(BLACK);
-  left_indicator__set(1);   // NOTE THAT 1 = OFF. 0 = ON
-  right_indicator__set(1);  // NOTE THAT 1 = OFF. 0 = ON
+
+  indicator__wake();
 }
 
 void loop() {
