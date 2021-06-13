@@ -58,6 +58,8 @@ void rpm__set(uint16_t led_pattern) {
   Wire.endTransmission();
 }
 
+/**************************************************************/
+// Run this function during setup to test the leds
 void indicator__wake() {
   // Use this stuff to test the leds
   // in this case, 1 = ON; 0 = OFF
