@@ -18,9 +18,9 @@ can_message input;
 // ArduinoQueue<can_message> messages(QUEUE_MAX_SIZE);
 
 void setup() {
-  LCD__init();  // Serial.begin(9600);
-  CAN_initialize();
-  buttons__init();
+  LCD__init();        // Serial.begin(9600) is included in this function;
+  CAN_initialize();   
+  // buttons__init();    We won't be using the buttons for now
 
   CAN.init_Filt(0, 0, SOC_ADDR);
 
