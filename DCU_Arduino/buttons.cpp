@@ -33,11 +33,7 @@ void buttons__poll() {
   } else {
     last_debounce_time = millis();
   }
-  /*
-  for(int i = 0; i < 4; i++) {
-    Serial.print(button_flag[i]);
-  }
-  */
+
   Serial.println();
 }
 

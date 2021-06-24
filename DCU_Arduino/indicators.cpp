@@ -1,7 +1,5 @@
 #include "indicators.h"
 
-#define BLINK_INTERVAL 250  // If the RGB LEDS blink, they will blink every 'X' ms
-
 // RPM bar segments represented as bytes
 uint8_t byte1, byte2;
 

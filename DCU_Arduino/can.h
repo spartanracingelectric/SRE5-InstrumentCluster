@@ -5,7 +5,6 @@
 #ifndef CAN_H_
 #define CAN_H_
 
-
 #ifdef ARDUINO_SAMD_VARIANT_COMPLIANCE
     #define SERIAL SerialUSB
 #else
@@ -25,8 +24,6 @@ can_message CAN__receive_packet();
 signed int CAN__convert_RPM(can_message packet);
 float CAN__convert_SOC(can_message packet);
 float CAN__convert_TEMP(can_message packet);
-
-//signed int CAN__receive_RPM();
-//float CAN__receive_SOC();
-//float CAN__receive_TEMP();
+void CAN__print_packet(can_message packet);
+void CAN__print_recieved_values(signed int RPM, float SOC, float TEMP);
 #endif /* CAN_H_ */

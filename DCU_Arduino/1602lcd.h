@@ -6,9 +6,6 @@
 #ifndef LCD1602_H_
 #define LCD1602_H_
 
-#define ROWS 16
-#define COLS 2
-
 extern uint8_t state;
 
 void LCD__init();
