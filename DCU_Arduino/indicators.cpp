@@ -1,5 +1,7 @@
 #include "indicators.h"
 
+uint32_t BLINK_INTERVAL = 250;
+
 // RPM bar segments represented as bytes
 uint8_t byte1, byte2;
 
@@ -157,6 +159,7 @@ void indicator__update(signed int RPM, float SOC, float TEMP) {
     SOC_color = RED;
   } else if (SOC <= 5) {
     if (!SOC_blink) {
+      Serial.println("SOC help");
       SOC_color = RED;
       SOC_blink = true;
       last_blink = millis();
@@ -174,6 +177,7 @@ void indicator__update(signed int RPM, float SOC, float TEMP) {
     TEMP_color = RED;
   } else if (TEMP >= 55) {
     if (!TEMP_blink) {
+      Serial.println("TEMP help");
       TEMP_color = RED;
       TEMP_blink = true;
       last_blink = millis();
@@ -200,6 +204,11 @@ void indicator__update(signed int RPM, float SOC, float TEMP) {
       // Do nothing
     }
   }
+
+  Serial.print("SOC blink: ");
+  Serial.println(SOC_blink);
+  Serial.print("TEMP blink: ");
+  Serial.println(TEMP_blink);
 
   rpm__set(led_pattern);
   left_rgb__set(SOC_color);

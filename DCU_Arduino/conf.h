@@ -1,6 +1,9 @@
 #ifndef CONF_H_
 #define CONF_H_
 
+// Set to 1 if you want to print the input data over serial
+#define SERIAL_PRINT_TESTS 0
+
 /****************************************************************************/
 /*  INSTRUMENT CLUSTER - SETUP CONFIGURATION FILE (for ports, etc)			*/
 /*																			                                */
@@ -73,7 +76,7 @@ const int SPI_CS_PIN = 9;
 / LED CONSTANTS
 /---------------------------------------------------------------------------*/
 /* If the RGB LEDS blink, they will blink every 'X' ms */
-#define BLINK_INTERVAL 250  
+//#define BLINK_INTERVAL 250  
 
 // Color Profiles 0bRBG
 // Use if you're not using PWM

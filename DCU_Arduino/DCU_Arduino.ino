@@ -28,11 +28,13 @@ void setup() {
 }
 
 void loop() {
+indicator__update(5500, 10, 50);
+/*
   input = CAN__receive_packet();
 
   // Print recieved packet's data
   // use for testing, leave commented out during real use
-  CAN__print_packet(input);
+  // CAN__print_packet(input);
 
   // DYNAMIC CAN ADDRESS FILTERS
   switch (address_counter) {
@@ -83,8 +85,8 @@ void loop() {
       break;
     }
   }
-
+*/
   // Print the RPM, SOC, and TEMP
   // use for testing, leave commented out during real use
-  CAN__print_recieved_values(RPM, SOC, TEMP);
+  // CAN__print_recieved_values(RPM, SOC, TEMP);
 }

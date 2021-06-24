@@ -120,8 +120,8 @@ void LCD__optiony() {
 // Take in the SOC and TEMP and update the LCD to display it
 void LCD__update(float SOC, float TEMP) {
   if (state == 1) {
-    LCD__write("  ", 4, 0);
-    LCD__write("  ", ROWS - 3, 0);
+    LCD__write("   ", 4, 0);
+    LCD__write("   ", ROWS - 3, 0);
     LCD__write((int)SOC, 4, 0);
     LCD__write((int)TEMP, ROWS - 3, 0);
   }
