@@ -100,7 +100,7 @@ void LCD__menu() {
   state = 2;
   LCD__clear();
   LCD__write("Stgs.", 0, 0);
-  LCD__write("Op. X" , ROWS - 5, 0);
+  LCD__write("TMaps" , ROWS - 5, 0);
   LCD__write("Back", 0, 1);
 }
 
@@ -122,8 +122,10 @@ void LCD__settings() {
 void LCD__optionx() {
   state = 4;
   LCD__clear();
-  LCD__write("Option X");
+  LCD__write("Map1", 0, 0);
+  LCD__write("Map2", ROWS-4, 0);
   LCD__write("Back", 0, 1);
+  LCD__write("Map3", ROWS-4, 1);
 }
 
 void LCD__optiony() {

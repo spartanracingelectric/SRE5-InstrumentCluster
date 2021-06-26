@@ -49,10 +49,14 @@ void buttons__flag_reset() {
 void buttons__update_LCD() {
   switch(state) {
     case DEFAULT_SCREEN: //state = 1
-      if (button_flag[0])
+      if (button_flag[0]) {
         indicator__timestamp();
-      else if (button_flag[1])
+        CAN__transmit_timestamp();
+      }
+      else if (button_flag[1]) {
         indicator__timestamp();
+        CAN__transmit_timestamp();
+      }
       else if (button_flag[2])
         LCD__menu();
       else if (button_flag[3])
@@ -78,9 +82,19 @@ void buttons__update_LCD() {
       buttons__flag_reset();
       break;
     
-    case OPTIONX_SCREEN: //state = 4
+    case OPTIONX_SCREEN: //state = 4, T Map
+      if (button_flag[0]) {
+        CAN__transmit_torquemap(1);
+        indicator__blink_bottom();
+      }
+      if (button_flag[1]) {
+        CAN__transmit_torquemap(2);
+        indicator__blink_bottom();
+      }
       if (button_flag[2])
         LCD__back();
+      if (button_flag[3])
+        CAN__transmit_torquemap(3);
       buttons__flag_reset();
       break;
     

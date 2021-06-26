@@ -228,3 +228,11 @@ void indicator__timestamp() {
   left_indicator__set(1);
   right_indicator__set(1);
 }
+
+void indicator__blink_bottom() {
+  left_indicator__set(0);
+  right_indicator__set(0);
+  delay(125);
+  left_indicator__set(1);
+  right_indicator__set(1);
+}

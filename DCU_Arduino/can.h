@@ -20,7 +20,11 @@ typedef struct CAN_message {
 
 void CAN_initialize();
 can_message CAN__receive_packet();
+void CAN__transmit_packet(unsigned long id, uint8_t len, uint8_t *data);
+void CAN__transmit_one_byte(unsigned long id, uint8_t one_byte);
 
+void CAN__transmit_torquemap(uint8_t map_num);
+void CAN__transmit_timestamp();
 float CAN__convert_HV(can_message packet);
 float CAN__convert_LV(can_message packet);
 signed int CAN__convert_RPM(can_message packet);

@@ -15,5 +15,6 @@ void indicator__wake();
 void indicator__update();
 void indicator__update(signed int RPM, float SOC, float TEMP);
 void indicator__timestamp();
+void indicator__blink_bottom();
 
 #endif /* INDICATORS_H_ */

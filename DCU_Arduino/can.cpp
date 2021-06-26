@@ -35,6 +35,25 @@ can_message CAN__receive_packet() {
     return out;
 }
 
+void CAN__transmit_packet(unsigned int id, uint8_t len, uint8_t *data) {
+  CAN.sendMsgBuf(id, 0, len, data);
+}
+
+void CAN__transmit_one_byte(unsigned int id, uint8_t one_byte) {
+  uint8_t *data;
+  *data = one_byte;     //Assign value of pointer to the singular byte
+  CAN.sendMsgBuf(id, 0, 1, data);
+}
+
+void CAN__transmit_torquemap(uint8_t map_num) {
+  CAN__transmit_one_byte((unsigned int)TM_ADDR, map_num);
+}
+
+// Transmit packet over CAN to DAQ, DAQ will see marks in data
+void CAN__transmit_timestamp() {
+  CAN__transmit_one_byte((unsigned int)TS_ADDR, 0xFF); //Induce a big spike in DAQ channel
+}
+
 // Input is a can message struct
 // Returns the average battery temperature as a signed float 
 // The value returned is in Celsius with one decimal of precision
