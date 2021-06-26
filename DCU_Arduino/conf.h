@@ -32,6 +32,8 @@
 #define SOC_ADDR 0x627
 #define BAT_TEMP_ADDR 0x628
 #define RPM_ADDR 0x0A5
+#define LV_ADDR 0x700
+#define HV_ADDR 0x625
 
 /*---------------------------------------------------------------------------/
 / I/O PORTS

@@ -21,6 +21,8 @@ typedef struct CAN_message {
 void CAN_initialize();
 can_message CAN__receive_packet();
 
+float CAN__convert_HV(can_message packet);
+float CAN__convert_LV(can_message packet);
 signed int CAN__convert_RPM(can_message packet);
 float CAN__convert_SOC(can_message packet);
 float CAN__convert_TEMP(can_message packet);

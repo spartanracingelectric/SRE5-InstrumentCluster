@@ -36,6 +36,25 @@ can_message CAN__receive_packet() {
 }
 
 // Input is a can message struct
+// Returns the average battery temperature as a signed float 
+// The value returned is in Celsius with one decimal of precision
+// The CAN packet is big endian
+// SOC percentage is located in bytes 0, 1, 2, and 3 (buf[0 - 3]) of address 0x628
+float CAN__convert_HV(can_message packet) {
+  return ((float)(packet.data[0] | (packet.data[1] << 8) | (packet.data[2] << 16) | (packet.data[3] << 32)) * 0.01f);
+}
+
+// Input is a can message struct
+// Returns the low voltage as an integer
+// The CAN packet is big endian (0x50E = 1294, div by 100 to get 12.94v)
+// RPM is byte 0 and 1 (buf[0] and buf[1]) of address 0x700
+float CAN__convert_LV(can_message packet) {
+  //Serial.println((packet.data[0] | (packet.data[1] << 8)) * 0.01f);
+  return ((packet.data[0] | (packet.data[1] << 8)) * 0.01f);
+}
+
+
+// Input is a can message struct
 // Returns the RPM as a signed integer
 // The CAN packet is little endian
 // RPM is byte 2 and 3 (buf[5] and buf[4]) of address 0x0A5

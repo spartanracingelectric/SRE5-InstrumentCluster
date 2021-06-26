@@ -34,7 +34,7 @@ void buttons__poll() {
     last_debounce_time = millis();
   }
 
-  Serial.println();
+  //Serial.println();
 }
 
 // Reset the button flags
@@ -50,9 +50,9 @@ void buttons__update_LCD() {
   switch(state) {
     case DEFAULT_SCREEN: //state = 1
       if (button_flag[0])
-        LCD__timestamp();
+        indicator__timestamp();
       else if (button_flag[1])
-        LCD__timestamp();
+        indicator__timestamp();
       else if (button_flag[2])
         LCD__menu();
       else if (button_flag[3])

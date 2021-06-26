@@ -14,5 +14,6 @@ void rpm__set(uint16_t LED_PATTERN);
 void indicator__wake();
 void indicator__update();
 void indicator__update(signed int RPM, float SOC, float TEMP);
+void indicator__timestamp();
 
 #endif /* INDICATORS_H_ */

@@ -214,3 +214,17 @@ void indicator__update(signed int RPM, float SOC, float TEMP) {
   left_rgb__set(SOC_color);
   right_rgb__set(TEMP_color);
 }
+
+void indicator__timestamp() {
+  left_indicator__set(0);
+  right_indicator__set(0);
+  delay(75);
+  left_indicator__set(1);
+  right_indicator__set(1);
+  delay(75);
+  left_indicator__set(0);
+  right_indicator__set(0);
+  delay(75);
+  left_indicator__set(1);
+  right_indicator__set(1);
+}

@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include "1602lcd.h"
+#include "indicators.h"
 #include "conf.h"
 
 void buttons__init();
