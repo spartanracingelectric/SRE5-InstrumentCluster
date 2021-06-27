@@ -142,7 +142,11 @@ void indicator__update(signed int RPM, float SOC, float TEMP) {
   // This will also evenly space out the cut off points
   // To change the range, change the second or third argument
   // This integer will indicate how many leds from the RPM bar will be lit
-  int bar_num = (int) map(RPM, 0, 5500, 0, 16);
+  int bar_num;
+  if (RPM > 20)
+      bar_num = (int) map(RPM, 20, 3020, 1, 16);
+  else
+      bar_num = 0;
   for(int i = 0; i < bar_num; i++) {
     led_pattern &= ~(1 << i); 
     //Serial.println(led_pattern, BIN);

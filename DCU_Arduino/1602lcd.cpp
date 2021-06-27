@@ -102,6 +102,7 @@ void LCD__menu() {
   LCD__write("Stgs.", 0, 0);
   LCD__write("TMaps" , ROWS - 5, 0);
   LCD__write("Back", 0, 1);
+  delay(750);
 }
 
 void LCD__back() {
@@ -117,6 +118,7 @@ void LCD__settings() {
   LCD__clear();
   LCD__write("Settings");
   LCD__write("Back", 0, 1);
+  delay(750);
 }
 
 void LCD__optionx() {
@@ -126,6 +128,7 @@ void LCD__optionx() {
   LCD__write("Map2", ROWS-4, 0);
   LCD__write("Back", 0, 1);
   LCD__write("Map3", ROWS-4, 1);
+  delay(750);
 }
 
 void LCD__optiony() {
@@ -133,13 +136,14 @@ void LCD__optiony() {
   LCD__clear();
   LCD__write("Option Y");
   LCD__write("Back", 0, 1);
+  delay(750);
 }
 
 // Take in the SOC and TEMP and update the LCD to display it
 void LCD__update(float SOC, float TEMP, float LV, float HV) {
   if (state == 1) {
     LCD__write((int)SOC, ROWS-12, 0);
-    LCD__write((int)TEMP, ROWS - 5, 0);
+    LCD__write((int)TEMP, ROWS - 6, 0);
     LCD__write((float)LV, 4, 1, ROWS-13, 1);
     LCD__write((float)HV, 5, 1, ROWS-8, 1);
   }

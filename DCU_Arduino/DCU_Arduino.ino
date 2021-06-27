@@ -16,7 +16,7 @@ can_message input;
 void setup() {
   LCD__init();        // Serial.begin(9600) is included in this function;
   CAN_initialize();   
-  //buttons__init();    //We won't be using the buttons for now
+  buttons__init();    //We won't be using the buttons for now
 
   // initialize the first filter to search for RPM
   //CAN.init_Filt(0, 0, RPM_ADDR);
@@ -62,7 +62,6 @@ void loop() {
       CAN.init_Filt(0, 0, RPM_ADDR);      // Search for RPM
       address_counter++;
       break;
-      break;
     }
   }
   
@@ -70,6 +69,11 @@ void loop() {
   // SOC, TEMP, or RPM address, do the proper conversion
   // Else, do nothing (this should never happen because of the filters)
   switch (input.id) {
+    case RPM_ADDR: {  
+      RPM = CAN__convert_RPM(input);
+      indicator__update(RPM, SOC, TEMP);
+      break;
+    }
     case SOC_ADDR: {
       SOC = CAN__convert_SOC(input);
       indicator__update(RPM, SOC, TEMP);
@@ -78,12 +82,6 @@ void loop() {
     }
     case BAT_TEMP_ADDR: {
       TEMP = CAN__convert_TEMP(input);
-      indicator__update(RPM, SOC, TEMP);
-      LCD__update(SOC, TEMP, LV, HV);
-      break;
-    }
-    case RPM_ADDR: {  
-      RPM = CAN__convert_RPM(input);
       indicator__update(RPM, SOC, TEMP);
       LCD__update(SOC, TEMP, LV, HV);
       break;
@@ -105,6 +103,8 @@ void loop() {
     }
   }
 
+  buttons__poll();
+  buttons__update_LCD();
   // Print the RPM, SOC, and TEMP
   // use for testing, leave commented out during real use
   // CAN__print_recieved_values(RPM, SOC, TEMP);

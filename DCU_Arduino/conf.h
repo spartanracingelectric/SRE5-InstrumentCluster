@@ -33,7 +33,7 @@
 #define BAT_TEMP_ADDR 0x628
 #define RPM_ADDR 0x0A5
 #define LV_ADDR 0x700
-#define HV_ADDR 0x625
+#define HV_ADDR 0x623
 #define TS_ADDR 0x701       //Timestamp Address (-> DAQ)
 #define TM_ADDR 0x702       //Torque Mapping Select Address  (-> VCU)
 
@@ -48,10 +48,10 @@ const int SPI_CS_PIN = 9;
 /*---------------------------------------------------------------------------/
 / BUTTON PINS AND CONSTANTS
 /---------------------------------------------------------------------------*/
-#define BUT1 14 //PINC0
-#define BUT2 15 //PINC1
-#define BUT3 16 //PINC2
-#define BUT4 17 //PINC3
+#define BUT1 16 //PINC0
+#define BUT2 14 //PINC1
+#define BUT3 17 //PINC2
+#define BUT4 15 //PINC3
 
 #define PCINT_BUT1 (1<<PCINT8)
 #define PCINT_BUT2 (1<<PCINT9)
@@ -64,7 +64,7 @@ const int SPI_CS_PIN = 9;
 #define OPTIONX_SCREEN 4
 #define OPTIONY_SCREEN 5
 
-#define DEBOUNCE_TIME 150
+#define DEBOUNCE_TIME 600
 #define LOCK_TIME 100
 
 #define HOLD_TIME 1000 //Button hold time for bottom buttons on default screen

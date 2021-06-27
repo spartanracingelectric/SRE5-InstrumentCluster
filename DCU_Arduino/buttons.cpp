@@ -24,11 +24,11 @@ void buttons__poll() {
   if (millis() - last_debounce_time > DEBOUNCE_TIME) {
     if (but1_state == LOW)
       button_flag[0] = 1;
-    else if (but2_state == LOW)
+    if (but2_state == LOW)
       button_flag[1] = 1;
-    else if (but3_state == LOW)
+    if (but3_state == LOW)
       button_flag[2] = 1;
-    else if (but4_state == LOW)
+    if (but4_state == LOW)
       button_flag[3] = 1;
   } else {
     last_debounce_time = millis();
@@ -57,11 +57,13 @@ void buttons__update_LCD() {
         indicator__timestamp();
         CAN__transmit_timestamp();
       }
-      else if (button_flag[2])
+      else if (button_flag[2] && button_flag[3]) {
         LCD__menu();
-      else if (button_flag[3])
-        LCD__menu();
+      }
+      //else if (button_flag[3])
+        //LCD__menu();
       buttons__flag_reset();
+      
       break;
       
     case MENU_SCREEN: //state = 2

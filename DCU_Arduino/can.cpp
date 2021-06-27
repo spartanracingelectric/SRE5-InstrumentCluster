@@ -60,7 +60,7 @@ void CAN__transmit_timestamp() {
 // The CAN packet is big endian
 // SOC percentage is located in bytes 0, 1, 2, and 3 (buf[0 - 3]) of address 0x628
 float CAN__convert_HV(can_message packet) {
-  return ((float)(packet.data[0] | (packet.data[1] << 8) | (packet.data[2] << 16) | (packet.data[3] << 32)) * 0.01f);
+  return ((float)(packet.data[0] | (packet.data[1] << 8))*0.1f);
 }
 
 // Input is a can message struct
@@ -69,16 +69,16 @@ float CAN__convert_HV(can_message packet) {
 // RPM is byte 0 and 1 (buf[0] and buf[1]) of address 0x700
 float CAN__convert_LV(can_message packet) {
   //Serial.println((packet.data[0] | (packet.data[1] << 8)) * 0.01f);
-  return ((packet.data[0] | (packet.data[1] << 8)) * 0.01f);
+  return ((packet.data[1] | (packet.data[0] << 8)) * 0.01f);
 }
 
 
 // Input is a can message struct
 // Returns the RPM as a signed integer
 // The CAN packet is little endian
-// RPM is byte 2 and 3 (buf[5] and buf[4]) of address 0x0A5
+// RPM is byte 2 and 3 of address 0x0A5
 signed int CAN__convert_RPM(can_message packet) {
-  return (packet.data[5] | (packet.data[4] << 8));
+  return -(packet.data[2] | (packet.data[3] << 8));
 }
 
 // Input is a can message struct
@@ -96,7 +96,7 @@ float CAN__convert_SOC(can_message packet) {
 // The CAN packet is big endian
 // SOC percentage is located in bytes 0, 1, 2, and 3 (buf[0 - 3]) of address 0x628
 float CAN__convert_TEMP(can_message packet) {
-  return ((float)(packet.data[0] | (packet.data[1] << 8) | (packet.data[2] << 16) | (packet.data[3] << 32)) * 0.1f) - 100;
+  return ((float)(packet.data[0] | (packet.data[1] << 8) | (packet.data[2] << 16) | (packet.data[3] << 32)) * 0.1f);
 }
 
 // Input is a can message struct
