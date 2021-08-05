@@ -102,6 +102,7 @@ void LCD__menu() {
   LCD__write("Stgs.", 0, 0);
   LCD__write("TMaps" , ROWS - 5, 0);
   LCD__write("Back", 0, 1);
+  LCD__write("Launch" , ROWS - 6, 1);
   delay(750);
 }
 
@@ -131,10 +132,14 @@ void LCD__optionx() {
   delay(750);
 }
 
-void LCD__optiony() {
+void LCD__optiony(uint8_t launch_state) {
   state = 5;
   LCD__clear();
-  LCD__write("Option Y");
+  if (launch_state == 0) {
+    LCD__write("Turn ON");
+  } else {
+    LCD__write("Turn OFF");
+  }
   LCD__write("Back", 0, 1);
   delay(750);
 }

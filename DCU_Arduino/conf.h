@@ -34,8 +34,9 @@
 #define RPM_ADDR 0x0A5
 #define LV_ADDR 0x700
 #define HV_ADDR 0x623
-#define TS_ADDR 0x701       //Timestamp Address (-> DAQ)
-#define TM_ADDR 0x702       //Torque Mapping Select Address  (-> VCU)
+#define TS_ADDR 0x701       // Timestamp Address (-> DAQ)
+#define TM_ADDR 0x702       // Torque Mapping Select Address  (-> VCU)
+#define LC_ADDR 0x703       // Launch Control Address (-> VCU)
 
 /*---------------------------------------------------------------------------/
 / I/O PORTS

@@ -74,7 +74,7 @@ void buttons__update_LCD() {
       else if (button_flag[2])
         LCD__back();
       else if (button_flag[3])
-        LCD__optiony();
+        LCD__optiony(launch_flag);
       buttons__flag_reset();
       break;
     
@@ -101,6 +101,11 @@ void buttons__update_LCD() {
       break;
     
     case OPTIONY_SCREEN: //state = 5
+      if (button_flag[0]) {
+        CAN__toggle_launch();
+        indicator__blink_bottom();
+        LCD__optiony(launch_flag);
+      }
       if (button_flag[2])
         LCD__back();
       buttons__flag_reset();

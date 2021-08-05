@@ -2,6 +2,8 @@
 
 extern MCP_CAN CAN(SPI_CS_PIN);  
 
+uint8_t launch_flag = 0;  // 0 = off; 1 = on
+
 // Initialize CAN module, run in the setup function
 void CAN_initialize() {
   while (CAN_OK != CAN.begin(CAN_500KBPS)) {            // init can bus : baudrate = 500k
@@ -43,6 +45,17 @@ void CAN__transmit_one_byte(unsigned int id, uint8_t one_byte) {
   uint8_t *data;
   *data = one_byte;     //Assign value of pointer to the singular byte
   CAN.sendMsgBuf(id, 0, 1, data);
+}
+
+// launch_flag 1 = ON; 0 = OFF
+void CAN__toggle_launch() {
+  if (launch_flag == 0) {
+    launch_flag = 1;
+    CAN__transmit_one_byte((unsigned int)LC_ADDR, launch_flag);
+  } else {
+    launch_flag = 0; 
+    CAN__transmit_one_byte((unsigned int)LC_ADDR, launch_flag);
+  }
 }
 
 void CAN__transmit_torquemap(uint8_t map_num) {
