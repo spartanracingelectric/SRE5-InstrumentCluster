@@ -42,24 +42,33 @@ void CAN__transmit_packet(unsigned int id, uint8_t len, uint8_t *data) {
 }
 
 void CAN__transmit_one_byte(unsigned int id, uint8_t one_byte) {
-  uint8_t *data;
-  *data = one_byte;     //Assign value of pointer to the singular byte
+  uint8_t data[8] = {0};
+  data[0] = one_byte;     //Assign value of pointer to the singular byte
   CAN.sendMsgBuf(id, 0, 1, data);
+}
+
+void CAN__transmit_eight_bytes(unsigned int id, uint8_t one_byte) {
+  uint8_t data[8] = {0};
+  data[0] = one_byte;     //Assign value of pointer to the singular byte
+  CAN.sendMsgBuf(id, 0, 8, data);
 }
 
 // launch_flag 1 = ON; 0 = OFF
 void CAN__toggle_launch() {
   if (launch_flag == 0) {
     launch_flag = 1;
-    CAN__transmit_one_byte((unsigned int)LC_ADDR, launch_flag);
+    //CAN__transmit_one_byte((unsigned int)LC_ADDR, launch_flag);
+    CAN__transmit_eight_bytes((unsigned int)LC_ADDR, (uint64_t)launch_flag);
   } else {
     launch_flag = 0; 
-    CAN__transmit_one_byte((unsigned int)LC_ADDR, launch_flag);
+    //CAN__transmit_one_byte((unsigned int)LC_ADDR, launch_flag);
+    CAN__transmit_eight_bytes((unsigned int)LC_ADDR, (uint64_t)launch_flag);
   }
 }
 
 void CAN__transmit_torquemap(uint8_t map_num) {
-  CAN__transmit_one_byte((unsigned int)TM_ADDR, map_num);
+  //CAN__transmit_one_byte((unsigned int)TM_ADDR, map_num);
+  CAN__transmit_eight_bytes((unsigned int)TM_ADDR, (uint64_t)map_num);
 }
 
 // Transmit packet over CAN to DAQ, DAQ will see marks in data

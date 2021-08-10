@@ -24,6 +24,7 @@ void CAN_initialize();
 can_message CAN__receive_packet();
 void CAN__transmit_packet(unsigned long id, uint8_t len, uint8_t *data);
 void CAN__transmit_one_byte(unsigned long id, uint8_t one_byte);
+void CAN__transmit_eight_bytes(unsigned int id, uint8_t one_byte);
 
 void CAN__transmit_torquemap(uint8_t map_num);
 void CAN__transmit_timestamp();
