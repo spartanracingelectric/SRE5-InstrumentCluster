@@ -1,0 +1,13 @@
+#User-defined
+**/Debug/
+
+#C project
+*.cproj
+
+#Visual Studio
+.vs/
+
+# Log files
+*.log
+
+

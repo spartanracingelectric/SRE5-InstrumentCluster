@@ -31,7 +31,7 @@ void LCD_write(unsigned char data, uint8_t mode) {
 	
 	uint8_t dataTemp;
 	
-	twi_start(I2C_ADDRESS);
+	i2c__start(I2C_ADDRESS);
 	
 	// Send upper nibble
 	dataTemp = (data & 0xF0) | LCD_BL_PORT | LCD_E_PORT; //Loads upper nibble onto last four bits P4-P7
@@ -43,10 +43,10 @@ void LCD_write(unsigned char data, uint8_t mode) {
 	{
 		dataTemp |= LCD_RS_PORT; //Set RS to 1 to signify character mode
 	}
-	twi_write(dataTemp); //Send upper nibble while toggling E ON
+	i2c__write(dataTemp); //Send upper nibble while toggling E ON
 	_delay_ms(1);
 	dataTemp &= ~LCD_E_PORT; //Toggle E off
-	twi_write(dataTemp); //Send "toggle E OFF"
+	i2c__write(dataTemp); //Send "toggle E OFF"
 	_delay_ms(1);
 	
 	// Send lower nibble
@@ -59,13 +59,13 @@ void LCD_write(unsigned char data, uint8_t mode) {
 	{
 		dataTemp |= LCD_RS_PORT; //Set RS to 1 to signify character mode
 	}
-	twi_write(dataTemp); //Lower nibble
+	i2c__write(dataTemp); //Lower nibble
 	_delay_ms(1);
 	dataTemp &= ~LCD_E_PORT; //Toggle E off
-	twi_write(dataTemp); //Send "toggle E off"
+	i2c__write(dataTemp); //Send "toggle E off"
 	_delay_ms(1);
 	
-	twi_stop();
+	i2c__stop();
 }
 
 void LCD_cmd(unsigned char cmd)
@@ -91,7 +91,7 @@ void LCD_init(uint8_t i2cAddress, uint8_t RS, uint8_t E, uint8_t BL, uint8_t D4,
 	I2C_ADDRESS = i2cAddress;
 	
 	//LCD_DDR = 0xFF;			/* Make LCD port direction as o/p */ //4 bit mode, sets PORTD on MCU as output. Perhaps unnecessary in I2C since it's through SCL/SDA
-	twi_init();
+	i2c__init();
 	
 	_delay_ms(20);			/* LCD Power ON delay always >15ms */
 	

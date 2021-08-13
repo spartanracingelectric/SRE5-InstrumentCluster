@@ -5,7 +5,9 @@ Formerly the DCU.<br/>
 _Waylon Woo_ - Project lead and software developer - CAN bus communications, RPM LED bar graph, and LED indicators<br/>
 Vincent Saw - Software developer - LCD firmware, User interface, Dash controls, and SD card firmware<br/>
 Wayne Flores - Hardware & software developer - PCB design/fabrication and steering wheel integration<br/>
+<br/>
 Nicholas Frangos - Software and PCB mentor - Former project lead<br/>
+Sean Lin - Software mentor<br/>
 Basan Patil - Hardware & software mentor<br/>
 <br/>
 ## **Schedule**<br/>
