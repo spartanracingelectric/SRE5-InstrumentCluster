@@ -14,11 +14,12 @@ Basan Patil - Hardware & software mentor<br/>
 ~~PCB Design (Complete design by Monday 3/23/20)<br/>~~
 ~~PCB Fab (Boards assembled by 4/6/20)<br/>~~
 ~~Software development by priority (4/27/20)<br/>~~
-    - CAN to VCU interface<br/>
+    - ~~CAN to VCU interface~~<br/>
     - ~~LCD<br/>~~
     - ~~User Interface<br/>~~
-System integration (4/27/20)<br/>
-    - In parallel with software development<br/>
+~~System integration (4/27/20)<br/>~~
+    - ~~In parallel with software development<br/>~~
+~~COMPETE IN FSAE MICHIGAN (7/5/21)<br/>~~
 <br/>
 ## **Links**<br/>
 [SR-E Website](http://sr-e.org/)<br/>
