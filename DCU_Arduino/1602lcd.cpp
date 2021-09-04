@@ -88,7 +88,7 @@ void LCD__timestamp() {
 void LCD__default() {
   state = 1;
   LCD__clear();
-  LCD__write("SOC>", 0, 0);
+  LCD__write("MPH>", 0, 0);
   LCD__write('<', ROWS-3, 0);
   LCD__write((char)223, ROWS-2, 0);
   LCD__write('C', ROWS-1, 0);
@@ -145,9 +145,9 @@ void LCD__optiony(uint8_t launch_state) {
 }
 
 // Take in the SOC and TEMP and update the LCD to display it
-void LCD__update(float SOC, float TEMP, float LV, float HV) {
+void LCD__update(float SpeedMPH, float TEMP, float LV, float HV) {
   if (state == 1) {
-    LCD__write((int)SOC, ROWS-12, 0);
+    LCD__write((int)SpeedMPH, ROWS-12, 0);
     LCD__write((int)TEMP, ROWS - 6, 0);
     LCD__write((float)LV, 4, 1, ROWS-13, 1);
     LCD__write((float)HV, 5, 1, ROWS-8, 1);

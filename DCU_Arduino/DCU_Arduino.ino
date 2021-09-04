@@ -7,7 +7,7 @@
 #include "mcp_can.h"
 
 signed int RPM;
-float SOC=0.0f, TEMP=0.0f, LV=0.0f, HV=0.0f;
+float SpeedMPH=0.0f, TEMP=0.0f, LV=0.0f, HV=0.0f;
 
 int address_counter = 0;
 
@@ -38,8 +38,8 @@ void loop() {
 
   // DYNAMIC CAN ADDRESS FILTERS
   switch (address_counter) {
-    case 28: {
-      CAN.init_Filt(0, 0, SOC_ADDR);      // Search for SOC
+    case 20 ... 28: {
+      CAN.init_Filt(0, 0, WSS_ADDR);      // Search for Speed
       address_counter++;
       break;
     }
@@ -66,36 +66,36 @@ void loop() {
   }
   
   // If the CAN ID of the recieved packet is the 
-  // SOC, TEMP, or RPM address, do the proper conversion
+  // SpeedMPH, TEMP, or RPM address, do the proper conversion
   // Else, do nothing (this should never happen because of the filters)
   switch (input.id) {
     case RPM_ADDR: {  
       RPM = CAN__convert_RPM(input);
-      indicator__update(RPM, SOC, TEMP);
+      indicator__update(RPM, SpeedMPH, TEMP);
       break;
     }
-    case SOC_ADDR: {
-      SOC = CAN__convert_SOC(input);
-      indicator__update(RPM, SOC, TEMP);
-      LCD__update(SOC, TEMP, LV, HV);
+    case WSS_ADDR: {
+      SpeedMPH = CAN__convert_SpeedMPH(input);
+      indicator__update(RPM, SpeedMPH, TEMP);
+      LCD__update(SpeedMPH, TEMP, LV, HV);
       break;
     }
     case BAT_TEMP_ADDR: {
       TEMP = CAN__convert_TEMP(input);
-      indicator__update(RPM, SOC, TEMP);
-      LCD__update(SOC, TEMP, LV, HV);
+      indicator__update(RPM, SpeedMPH, TEMP);
+      LCD__update(SpeedMPH, TEMP, LV, HV);
       break;
     }
     case LV_ADDR: {  
       LV = CAN__convert_LV(input);
-      indicator__update(RPM, SOC, TEMP);
-      LCD__update(SOC, TEMP, LV, HV);
+      indicator__update(RPM, SpeedMPH, TEMP);
+      LCD__update(SpeedMPH, TEMP, LV, HV);
       break;
     }
     case HV_ADDR: {  
       HV = CAN__convert_HV(input);
-      indicator__update(RPM, SOC, TEMP);
-      LCD__update(SOC, TEMP, LV, HV);
+      indicator__update(RPM, SpeedMPH, TEMP);
+      LCD__update(SpeedMPH, TEMP, LV, HV);
       break;
     }
     default: {
@@ -105,7 +105,7 @@ void loop() {
 
   buttons__poll();
   buttons__update_LCD();
-  // Print the RPM, SOC, and TEMP
+  // Print the RPM, SpeedMPH, and TEMP
   // use for testing, leave commented out during real use
-  // CAN__print_recieved_values(RPM, SOC, TEMP);
+  // CAN__print_recieved_values(RPM, SpeedMPH, TEMP);
 }

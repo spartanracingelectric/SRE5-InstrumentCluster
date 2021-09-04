@@ -32,7 +32,8 @@ void CAN__toggle_launch();
 float CAN__convert_HV(can_message packet);
 float CAN__convert_LV(can_message packet);
 signed int CAN__convert_RPM(can_message packet);
-float CAN__convert_SOC(can_message packet);
+float CAN__convert_SpeedMPH(can_message packet);
+float CAN__convert_SOC(can_message packet); //Unused
 float CAN__convert_TEMP(can_message packet);
 void CAN__print_packet(can_message packet);
 void CAN__print_recieved_values(signed int RPM, float SOC, float TEMP);

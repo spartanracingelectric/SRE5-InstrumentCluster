@@ -6,11 +6,19 @@
 
 /****************************************************************************/
 /*  INSTRUMENT CLUSTER - SETUP CONFIGURATION FILE (for ports, etc)			*/
-/*																			                                */
+/*																			*/
 /*  DUE TO F_CPU, conf.h MUST BE INCLUDED BEFORE ANY <avr/delay.h>			*/
 /****************************************************************************/
 /* ATMega328P CLOCK SPEED */
 #define F_CPU 16000000UL
+
+/*---------------------------------------------------------------------------/
+/ WHEEL SPEEDS
+/---------------------------------------------------------------------------*/
+//Wheel diameter in inches
+#define WHEEL_DIAMETER_IN 16.0f
+#define WHEEL_CIRCUMFERENCE_M (WHEEL_DIAMETER_IN * 0.0254 * 3.141f)
+#define METERS_SEC_TO_MPH  2.237f
 
 /*---------------------------------------------------------------------------/
 / I2C ADDRESSES
@@ -32,8 +40,9 @@
 #define SOC_ADDR 0x627
 #define BAT_TEMP_ADDR 0x628
 #define RPM_ADDR 0x0A5
-#define LV_ADDR 0x700
+#define WSS_ADDR 0x505      // Interpolated WSS address
 #define HV_ADDR 0x623
+#define LV_ADDR 0x700
 #define TS_ADDR 0x701       // Timestamp Address (-> DAQ)
 #define TM_ADDR 0x702       // Torque Mapping Select Address  (-> VCU)
 #define LC_ADDR 0x703       // Launch Control Address (-> VCU)
