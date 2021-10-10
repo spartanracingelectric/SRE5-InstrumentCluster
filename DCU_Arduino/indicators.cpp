@@ -215,8 +215,8 @@ void indicator__update(signed int RPM, float SOC, float TEMP) {
   Serial.println(TEMP_blink);
 
   rpm__set(led_pattern);
-  left_rgb__set(SOC_color);
-  right_rgb__set(TEMP_color);
+  //left_rgb__set(SOC_color);
+  //right_rgb__set(TEMP_color);
 }
 
 void indicator__timestamp() {

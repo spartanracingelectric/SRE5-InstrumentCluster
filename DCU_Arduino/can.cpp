@@ -107,11 +107,16 @@ signed int CAN__convert_RPM(can_message packet) {
 float CAN__convert_SpeedMPH(can_message packet) {
   uint16_t FL_rpm, FR_rpm;
   FL_rpm = (packet.data[0] | packet.data[1] << 8); //First two bytes
-  FR_rpm = (packet.data[2] | packet.data[3] << 8); //Second two bytes
+
+  //Buggy FR, disabled for now
+  //FR_rpm = (packet.data[2] | packet.data[3] << 8); //Second two bytes
 
   //Take average of front two, div by 60 to convert denom --> seconds, multiply by circumference in M,
   //and convert m/s to mph
-  return (float)((((FL_rpm+FR_rpm)/2.0f)/60.0f) * WHEEL_CIRCUMFERENCE_M * METERS_SEC_TO_MPH);
+  //return (float)((((FL_rpm+FR_rpm)/2.0f)/60.0f) * WHEEL_CIRCUMFERENCE_M * METERS_SEC_TO_MPH);
+
+  //Buggy FR, disabled for now
+  return (float)((FL_rpm/60.0f) * WHEEL_CIRCUMFERENCE_M * METERS_SEC_TO_MPH);
 }
 
 // Input is a can message struct
