@@ -89,17 +89,12 @@ void LCD__default() {
   state = 1;
   LCD__clear();
   
-  //LCD__write("MPH>", 0, 0);
-  //LCD__write('<', ROWS-3, 0);
-  //LCD__write((char)223, ROWS-2, 0);
-  //LCD__write('C', ROWS-1, 0);
-  //LCD__write("LV>", 0, 1);
-  //LCD__write("<HV", ROWS-3, 1);
-
-  LCD__write("  DON'T CRASH!  ", 0, 0);
-  LCD__write("<MPH", ROWS-4, 1);
+  LCD__write("HV>", 0, 0);
+  LCD__write('<', ROWS-3, 0);
+  LCD__write((char)223, ROWS-2, 0);
+  LCD__write('C', ROWS-1, 0);
   LCD__write("LV>", 0, 1);
-
+  LCD__write("    <MPH", 8, 1);
 }
 
 void LCD__menu() {
@@ -153,10 +148,27 @@ void LCD__optiony(uint8_t launch_state) {
 // Take in the SOC and TEMP and update the LCD to display it
 void LCD__update(float SpeedMPH, float TEMP, float LV, float HV) {
   if (state == 1) {
-    LCD__write(" ", ROWS-5, 1);
-    LCD__write((int)SpeedMPH, ROWS-6, 1);
-    //LCD__write((int)TEMP, ROWS - 6, 0);
-    LCD__write((float)LV, 4, 1, ROWS-13, 1);
-    //LCD__write((float)HV, 5, 1, ROWS-8, 1);
+    if (LV < LV_WARNING_THRESHOLD) {
+      LCD__write("STOP LV!", 8, 1);
+    }
+    else {
+      //Rewrite MPH indicator (can optimize?)
+      LCD__write("    <MPH", 8, 1);
+  
+      //First row, starting index 3 (WXY.Z 5 chars, "HV>" index is 0-2)
+      LCD__write((float)HV, 5, 1, 3, 0);
+
+      //First row, starting index 10 (XY 2 chars, "<°C" index is 13-15)
+      LCD__write((int)TEMP, 11, 0);
+
+      //Second row, starting index 3 (XY.Z 4 chars, "LV>" index is 0-2)
+      LCD__write((float)LV, 4, 1, 3, 1);
+
+      //Clear MPH ghost digit if MPH is single digit value
+      LCD__write(" ", 11, 1);
+
+      //Second row, starting index 10 (XY 2 chars, "<MPH" index is 12-15)
+      LCD__write((int)SpeedMPH, 10, 1);
+    }
   }
 }

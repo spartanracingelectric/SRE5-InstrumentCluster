@@ -13,8 +13,15 @@
 #define F_CPU 16000000UL
 
 /*---------------------------------------------------------------------------/
-/ WHEEL SPEEDS
+/ CUSTOM CONFIGURATION VARIABLES
 /---------------------------------------------------------------------------*/
+
+//  LOW VOLTAGE
+/////////////////////
+#define LV_WARNING_THRESHOLD 12.0f
+
+//  WHEEL SPEEDS
+/////////////////////
 //Wheel diameter in inches
 #define WHEEL_DIAMETER_IN 16.0f
 #define WHEEL_CIRCUMFERENCE_M (WHEEL_DIAMETER_IN * 0.0254 * 3.141f)
