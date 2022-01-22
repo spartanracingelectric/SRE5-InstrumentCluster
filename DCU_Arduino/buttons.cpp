@@ -4,6 +4,10 @@ const byte button_pins[] = {BUT1, BUT2, BUT3, BUT4};
 int button_flag[4];
 
 uint32_t last_debounce_time = 0;
+uint8_t regen_flag = 0;  // 0 = off; 1 = on
+
+
+CANMessage timestamp_frame;
 
 // Initialize the buttons, run in the setup function
 void buttons__init() {
@@ -12,6 +16,10 @@ void buttons__init() {
     button_flag[i] = 0;
   }
   Serial.println("Button init done");
+
+  timestamp_frame.id = TS_ADDR;
+  timestamp_frame.len = 1;
+  timestamp_frame.data[0] = 0x7F;
 }
 
 // Poll the buttons and update the respective button flags
@@ -46,16 +54,18 @@ void buttons__flag_reset() {
 }
 
 // Update the LCD to the correct menu
-void buttons__update_LCD() {
+void buttons__update_LCD(ACAN2515 *can_obj) {
   switch(state) {
     case DEFAULT_SCREEN: //state = 1
       if (button_flag[0]) {
         indicator__timestamp();
-        CAN__transmit_timestamp();
+        //CAN__transmit_timestamp();
+        can_obj->tryToSend(timestamp_frame);
       }
       else if (button_flag[1]) {
         indicator__timestamp();
-        CAN__transmit_timestamp();
+        //CAN__transmit_timestamp();
+        can_obj->tryToSend(timestamp_frame);
       }
       else if (button_flag[2] && button_flag[3]) {
         LCD__menu();
@@ -74,7 +84,7 @@ void buttons__update_LCD() {
       else if (button_flag[2])
         LCD__back();
       else if (button_flag[3])
-        LCD__optiony(launch_flag);
+        LCD__option_regen(regen_flag);
       buttons__flag_reset();
       break;
     
@@ -86,28 +96,32 @@ void buttons__update_LCD() {
     
     case OPTIONX_SCREEN: //state = 4, T Map
       if (button_flag[0]) {
-        CAN__transmit_torquemap(1);
+        //CAN__transmit_torquemap(1);
         indicator__blink_bottom();
       }
       if (button_flag[1]) {
-        CAN__transmit_torquemap(2);
+        //CAN__transmit_torquemap(2);
         indicator__blink_bottom();
       }
-      if (button_flag[2])
+      if (button_flag[2]) {
         LCD__back();
-      if (button_flag[3])
-        CAN__transmit_torquemap(3);
+      }
+      if (button_flag[3]) {
+        //CAN__transmit_torquemap(3);
+        indicator__blink_bottom();
+      }
       buttons__flag_reset();
       break;
     
     case OPTIONY_SCREEN: //state = 5
       if (button_flag[0]) {
-        CAN__toggle_launch();
+        //CAN__toggle_launch();
         indicator__blink_bottom();
-        LCD__optiony(launch_flag);
+        LCD__option_regen(regen_flag);
       }
-      if (button_flag[2])
+      if (button_flag[2]) {
         LCD__back();
+      }
       buttons__flag_reset();
       break;
   }

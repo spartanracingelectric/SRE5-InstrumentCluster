@@ -134,10 +134,10 @@ void LCD__optionx() {
   delay(750);
 }
 
-void LCD__optiony(uint8_t launch_state) {
+void LCD__option_regen(uint8_t regen_state) {
   state = 5;
   LCD__clear();
-  if (launch_state == 0) {
+  if (regen_state == 0) {
     LCD__write("Turn ON");
   } else {
     LCD__write("Turn OFF");

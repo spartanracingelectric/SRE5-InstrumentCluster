@@ -22,7 +22,7 @@ void LCD__menu();
 void LCD__back();
 void LCD__settings();
 void LCD__optionx();
-void LCD__optiony(uint8_t launch_state);
+void LCD__option_regen(uint8_t regen_state);
 void LCD__update(float SpeedMPH, float TEMP, float LV, float HV);
 
 #endif /* LCD1602_H_ */
