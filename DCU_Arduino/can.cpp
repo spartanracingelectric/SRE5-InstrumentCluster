@@ -91,7 +91,7 @@ float CAN__convert_HV(can_message packet) {
 // RPM is byte 0 and 1 (buf[0] and buf[1]) of address 0x700
 float CAN__convert_LV(can_message packet) {
   //Serial.println((packet.data[0] | (packet.data[1] << 8)) * 0.01f);
-  return ((packet.data[1] | (packet.data[0] << 8)) * 0.01f);
+  return ((packet.data[1] | (packet.data[0] << 8)) * 0.01f) + LV_OFFSET;
 }
 
 
