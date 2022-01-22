@@ -102,9 +102,9 @@ void LCD__menu() {
   state = 2;
   LCD__clear();
   LCD__write("Stgs.", 0, 0);
-  LCD__write("TMaps" , ROWS - 5, 0);
+  LCD__write("Rgn1" , ROWS - 4, 0);
   LCD__write("Back", 0, 1);
-  LCD__write("Launch" , ROWS - 6, 1);
+  LCD__write("Rgn2" , ROWS - 4, 1);
   delay(750);
 }
 
@@ -124,26 +124,24 @@ void LCD__settings() {
   delay(750);
 }
 
-void LCD__optionx() {
+void LCD__regen1(uint8_t rm) {
   state = 4;
   LCD__clear();
-  LCD__write("Map1", 0, 0);
-  LCD__write("Map2", ROWS-4, 0);
+  LCD__write(rm, ROWS-1, 0);
+  LCD__write("RgnMode", 0, 0);
   LCD__write("Back", 0, 1);
-  LCD__write("Map3", ROWS-4, 1);
-  delay(750);
+  LCD__write("Send", ROWS-4, 1);
+  delay(300);
 }
 
-void LCD__option_regen(uint8_t regen_state) {
+void LCD__regen2(uint8_t rtl) {
   state = 5;
   LCD__clear();
-  if (regen_state == 0) {
-    LCD__write("Turn ON");
-  } else {
-    LCD__write("Turn OFF");
-  }
+  LCD__write(rtl, ROWS-3, 0);
+  LCD__write("RgnTrqLim", 0, 0);
   LCD__write("Back", 0, 1);
-  delay(750);
+  LCD__write("Send", ROWS-4, 1);
+  delay(300);
 }
 
 // Take in the SOC and TEMP and update the LCD to display it

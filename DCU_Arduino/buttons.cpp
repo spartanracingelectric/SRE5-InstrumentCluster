@@ -8,6 +8,13 @@ uint8_t regen_flag = 0;  // 0 = off; 1 = on
 
 
 CANMessage timestamp_frame;
+CANMessage regen1_frame;
+CANMessage regen2_frame;
+
+uint8_t RegenMode = 0, RegenTorqueLimitNm = 0;
+
+uint8_t regenCanReceived = 0;
+uint8_t lRegenMode = 0, lRegenTorqueLimitNm = 0;
 
 // Initialize the buttons, run in the setup function
 void buttons__init() {
@@ -20,6 +27,10 @@ void buttons__init() {
   timestamp_frame.id = TS_ADDR;
   timestamp_frame.len = 1;
   timestamp_frame.data[0] = 0x7F;
+  regen1_frame.id = REGEN1_ADDR;
+  regen1_frame.len = 8;
+  regen2_frame.id = REGEN2_ADDR;
+  regen2_frame.len = 8;
 }
 
 // Poll the buttons and update the respective button flags
@@ -79,12 +90,16 @@ void buttons__update_LCD(ACAN2515 *can_obj) {
     case MENU_SCREEN: //state = 2
       if (button_flag[0])
         LCD__settings();
-      else if (button_flag[1])
-        LCD__optionx();
+      else if (button_flag[1]) {
+        lRegenMode = RegenMode;
+        LCD__regen1(lRegenMode);
+      }
       else if (button_flag[2])
         LCD__back();
-      else if (button_flag[3])
-        LCD__option_regen(regen_flag);
+      else if (button_flag[3]) {
+        lRegenTorqueLimitNm = RegenTorqueLimitNm;
+        LCD__regen2(lRegenTorqueLimitNm);
+      }
       buttons__flag_reset();
       break;
     
@@ -94,35 +109,54 @@ void buttons__update_LCD(ACAN2515 *can_obj) {
       buttons__flag_reset();
       break;
     
-    case OPTIONX_SCREEN: //state = 4, T Map
-      if (button_flag[0]) {
-        //CAN__transmit_torquemap(1);
+    case REGEN1_SCREEN: //state = 4 (Torque Map Mode)
+      if (button_flag[0]) { //Decrease
         indicator__blink_bottom();
+        if (lRegenMode != 0) { //min 0
+          LCD__write(--lRegenMode, ROWS-1, 0);
+        }
       }
-      if (button_flag[1]) {
-        //CAN__transmit_torquemap(2);
+      if (button_flag[1]) { //Increase
         indicator__blink_bottom();
+        if (lRegenMode != 4) { //min 4
+          LCD__write(++lRegenMode, ROWS-1, 0);
+        }
       }
       if (button_flag[2]) {
         LCD__back();
       }
-      if (button_flag[3]) {
-        //CAN__transmit_torquemap(3);
-        indicator__blink_bottom();
+      if (button_flag[3]) { //Send
+        regen1_frame.data[0] = lRegenMode;
+        can_obj->tryToSend(regen1_frame);
+        delay(300);
       }
       buttons__flag_reset();
       break;
     
-    case OPTIONY_SCREEN: //state = 5
-      if (button_flag[0]) {
-        //CAN__toggle_launch();
+    case REGEN2_SCREEN: //state = 5
+      if (button_flag[0]) { //Decrease
         indicator__blink_bottom();
-        LCD__option_regen(regen_flag);
+        if (lRegenTorqueLimitNm != 0) { //min 0
+          LCD__write("  ", ROWS-1, 0);
+          LCD__write(--lRegenTorqueLimitNm, ROWS-3, 0);
+        }
+      }
+      if (button_flag[1]) { //Increase
+        indicator__blink_bottom();
+        if (lRegenTorqueLimitNm != 180) { //max 80
+          LCD__write(++lRegenTorqueLimitNm, ROWS-3, 0);
+        }
       }
       if (button_flag[2]) {
         LCD__back();
       }
+      if (button_flag[3]) { //Send
+        regen2_frame.data[0] = lRegenTorqueLimitNm;
+        can_obj->tryToSend(regen2_frame);
+        delay(300);
+      }
       buttons__flag_reset();
       break;
+    
   }
 }

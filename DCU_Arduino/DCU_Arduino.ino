@@ -17,8 +17,6 @@ static const uint32_t QUARTZ_FREQUENCY = 16UL * 1000UL * 1000UL ; // 16 MHz
 signed int RPM;
 float SpeedMPH=0.0f, TEMP=0.0f, LV=0.0f, HV=0.0f;
 
-int address_counter = 0;
-
 CANMessage *can_ptr;
 
 static void rpm_rx (const CANMessage & inMessage) {
@@ -52,7 +50,9 @@ static void wss_rx (const CANMessage & inMessage) {
     Serial.println ("Receive 4") ;
 }
 
-static void receive5 (const CANMessage & inMessage) {
+static void regen_rx (const CANMessage & inMessage) {
+  RegenMode = inMessage.data[0];
+  RegenTorqueLimitNm = inMessage.data[3];
   Serial.println ("Receive 5") ;
 }
 
@@ -61,17 +61,18 @@ void setup() {
   SPI.begin();
   ACAN2515Settings settings (QUARTZ_FREQUENCY, 500UL * 1000UL) ; // CAN bit rate 500 kb/s
   const ACAN2515Mask rxm0 = extended2515Mask (0x1FFFFFFF) ;
-  const ACAN2515Mask rxm1 = standard2515Mask ((RPM_ADDR | LV_ADDR | HV_ADDR | BAT_TEMP_ADDR | WSS_ADDR), 0, 0) ;
+  const ACAN2515Mask rxm1 = standard2515Mask ((RPM_ADDR | LV_ADDR | HV_ADDR | BAT_TEMP_ADDR | WSS_ADDR | REGEN_ADDR), 0, 0) ;
   const ACAN2515AcceptanceFilter filters [] = {
   {standard2515Filter (RPM_ADDR, 0, 0), rpm_rx}, // RXF0
   {standard2515Filter (WSS_ADDR, 0, 0), wss_rx},  // RXF1
-  {standard2515Filter (HV_ADDR, 0, 0), hv_rx}, // RXF2
-  {standard2515Filter (BAT_TEMP_ADDR, 0, 0), temp_rx}, // RXF3
-  {standard2515Filter (LV_ADDR, 0, 0), lv_rx} // RXF4
+  {standard2515Filter (REGEN_ADDR, 0, 0), regen_rx},  // RXF2
+  {standard2515Filter (HV_ADDR, 0, 0), hv_rx}, // RXF3
+  {standard2515Filter (BAT_TEMP_ADDR, 0, 0), temp_rx}, // RXF4
+  {standard2515Filter (LV_ADDR, 0, 0), lv_rx} // RXF5
   } ;
   //const uint16_t errorCode = can.setFiltersOnTheFly (rxm0, rxm1, filters, 5) ;
   const uint16_t errorCode = can.begin (settings, [] { can.isr () ; },
-                                        rxm0, rxm1, filters, 5) ;
+                                        rxm0, rxm1, filters, 6) ;
 
   //CAN debug
   /*

@@ -7,6 +7,7 @@
 #include "indicators.h"
 #include "conf.h"
 
+extern uint8_t RegenMode, RegenTorqueLimitNm;
 
 void buttons__init();
 void buttons__poll();
