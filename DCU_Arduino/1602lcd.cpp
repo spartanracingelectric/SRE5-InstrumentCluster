@@ -1,6 +1,7 @@
 #include "1602lcd.h"
 
 uint8_t state = 1;
+uint8_t lv_warning = 0;
 
 LiquidCrystal_I2C lcd(LCD_ADDRESS, ROWS, COLS); 
 
@@ -149,26 +150,34 @@ void LCD__optiony(uint8_t launch_state) {
 void LCD__update(float SpeedMPH, float TEMP, float LV, float HV) {
   if (state == 1) {
     if (LV < LV_WARNING_THRESHOLD) {
-      LCD__write("STOP LV!", 8, 1);
+      if (lv_warning == 0) {
+        LCD__write("STOP LV!", 8, 1);
+      }
+      lv_warning = 1;
     }
     else {
-      //Rewrite MPH indicator (can optimize?)
-      LCD__write("    <MPH", 8, 1);
-  
-      //First row, starting index 3 (WXY.Z 5 chars, "HV>" index is 0-2)
-      LCD__write((float)HV, 5, 1, 3, 0);
-
-      //First row, starting index 10 (XY 2 chars, "<°C" index is 13-15)
-      LCD__write((int)TEMP, 11, 0);
-
-      //Second row, starting index 3 (XY.Z 4 chars, "LV>" index is 0-2)
-      LCD__write((float)LV, 4, 1, 3, 1);
-
-      //Clear MPH ghost digit if MPH is single digit value
-      LCD__write(" ", 11, 1);
-
+      if (lv_warning == 1) {
+        //Rewrite MPH indicator (can optimize?)
+        LCD__write("    <MPH", 8, 1);
+      }
+      
       //Second row, starting index 10 (XY 2 chars, "<MPH" index is 12-15)
       LCD__write((int)SpeedMPH, 10, 1);
+
+      lv_warning = 0;
     }
+
+    //First row, starting index 3 (WXY.Z 5 chars, "HV>" index is 0-2)
+    LCD__write((float)HV, 5, 1, 3, 0);
+
+    //Second row, starting index 3 (XY.Z 4 chars, "LV>" index is 0-2)
+    LCD__write((float)LV, 4, 1, 3, 1);
+
+    //First row, starting index 10 (XY 2 chars, "<°C" index is 13-15)
+    LCD__write((int)TEMP, 11, 0);
+
+    //Clear MPH ghost digit if MPH is single digit value
+    LCD__write(" ", 11, 1);
+
   }
 }
