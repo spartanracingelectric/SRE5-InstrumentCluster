@@ -111,21 +111,22 @@ void buttons__update_LCD(ACAN2515 *can_obj) {
     
     case REGEN1_SCREEN: //state = 4 (Torque Map Mode)
       if (button_flag[0]) { //Decrease
-        indicator__blink_bottom();
         if (lRegenMode != 0) { //min 0
           LCD__write(--lRegenMode, ROWS-1, 0);
         }
+        delay(200);
       }
       if (button_flag[1]) { //Increase
-        indicator__blink_bottom();
         if (lRegenMode != 4) { //min 4
           LCD__write(++lRegenMode, ROWS-1, 0);
         }
+        delay(200);
       }
       if (button_flag[2]) {
         LCD__back();
       }
       if (button_flag[3]) { //Send
+        indicator__blink_bottom();
         regen1_frame.data[0] = lRegenMode;
         can_obj->tryToSend(regen1_frame);
         delay(300);
@@ -135,22 +136,23 @@ void buttons__update_LCD(ACAN2515 *can_obj) {
     
     case REGEN2_SCREEN: //state = 5
       if (button_flag[0]) { //Decrease
-        indicator__blink_bottom();
         if (lRegenTorqueLimitNm != 0) { //min 0
           LCD__write("  ", ROWS-1, 0);
           LCD__write(--lRegenTorqueLimitNm, ROWS-3, 0);
         }
+        delay(50);
       }
       if (button_flag[1]) { //Increase
-        indicator__blink_bottom();
         if (lRegenTorqueLimitNm != 180) { //max 80
           LCD__write(++lRegenTorqueLimitNm, ROWS-3, 0);
         }
+        delay(50);
       }
       if (button_flag[2]) {
         LCD__back();
       }
       if (button_flag[3]) { //Send
+        indicator__blink_bottom();
         regen2_frame.data[0] = lRegenTorqueLimitNm;
         can_obj->tryToSend(regen2_frame);
         delay(300);
