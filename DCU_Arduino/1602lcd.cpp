@@ -101,7 +101,7 @@ void LCD__default() {
 void LCD__menu() {
   state = 2;
   LCD__clear();
-  LCD__write("Stgs.", 0, 0);
+  LCD__write("Rgn3", 0, 0);
   LCD__write("Rgn1" , ROWS - 4, 0);
   LCD__write("Back", 0, 1);
   LCD__write("Rgn2" , ROWS - 4, 1);
@@ -116,12 +116,14 @@ void LCD__back() {
   }
 }
 
-void LCD__settings() {
+void LCD__regen3(uint8_t raz) {
   state = 3;
   LCD__clear();
-  LCD__write("Settings");
+  LCD__write(raz, ROWS-3, 0);
+  LCD__write("RgnAtZero", 0, 0);
   LCD__write("Back", 0, 1);
-  delay(750);
+  LCD__write("Send", ROWS-4, 1);
+  delay(300);
 }
 
 void LCD__regen1(uint8_t rm) {
@@ -134,10 +136,12 @@ void LCD__regen1(uint8_t rm) {
   delay(300);
 }
 
-void LCD__regen2(uint8_t rtl) {
+void LCD__regen2(uint8_t rtl, uint8_t rzp) {
   state = 5;
   LCD__clear();
   LCD__write(rtl, ROWS-3, 0);
+  LCD__write(">=", 6, 1);
+  LCD__write(rzp, 8, 1);
   LCD__write("RgnTrqLim", 0, 0);
   LCD__write("Back", 0, 1);
   LCD__write("Send", ROWS-4, 1);

@@ -10,11 +10,13 @@ uint8_t regen_flag = 0;  // 0 = off; 1 = on
 CANMessage timestamp_frame;
 CANMessage regen1_frame;
 CANMessage regen2_frame;
-
-uint8_t RegenMode = 0, RegenTorqueLimitNm = 0;
+CANMessage regen3_frame;
 
 uint8_t regenCanReceived = 0;
-uint8_t lRegenMode = 0, lRegenTorqueLimitNm = 0;
+
+uint8_t RegenMode = 0, RegenTorqueLimitNm = 0, RegenAtZeroPedal = 0;
+
+uint8_t lRegenMode = 0, lRegenTorqueLimitNm = 0, lRegenAtZeroPedal = 0;
 
 // Initialize the buttons, run in the setup function
 void buttons__init() {
@@ -31,6 +33,8 @@ void buttons__init() {
   regen1_frame.len = 8;
   regen2_frame.id = REGEN2_ADDR;
   regen2_frame.len = 8;
+  regen3_frame.id = REGEN3_ADDR;
+  regen3_frame.len = 8;
 }
 
 // Poll the buttons and update the respective button flags
@@ -88,8 +92,10 @@ void buttons__update_LCD(ACAN2515 *can_obj) {
       break;
       
     case MENU_SCREEN: //state = 2
-      if (button_flag[0])
-        LCD__settings();
+      if (button_flag[0]) {
+        lRegenAtZeroPedal = RegenAtZeroPedal;
+        LCD__regen3(lRegenAtZeroPedal);
+      }
       else if (button_flag[1]) {
         lRegenMode = RegenMode;
         LCD__regen1(lRegenMode);
@@ -98,14 +104,34 @@ void buttons__update_LCD(ACAN2515 *can_obj) {
         LCD__back();
       else if (button_flag[3]) {
         lRegenTorqueLimitNm = RegenTorqueLimitNm;
-        LCD__regen2(lRegenTorqueLimitNm);
+        LCD__regen2(lRegenTorqueLimitNm, RegenAtZeroPedal);
       }
       buttons__flag_reset();
       break;
     
-    case SETTINGS_SCREEN: //state = 3
-      if (button_flag[2])
+    case REGEN3_SCREEN: //state = 3
+      if (button_flag[0]) { //Decrease
+        if (lRegenAtZeroPedal != 0) { //min 0
+          LCD__write("  ", ROWS-2, 0);
+          LCD__write(--lRegenAtZeroPedal, ROWS-3, 0);
+        }
+        delay(50);
+      }
+      if (button_flag[1]) { //Increase
+        if (lRegenAtZeroPedal != 255) { //max 255
+          LCD__write(++lRegenAtZeroPedal, ROWS-3, 0);
+        }
+        delay(50);
+      }
+      if (button_flag[2]) {
         LCD__back();
+      }
+      if (button_flag[3]) { //Send
+        indicator__blink_bottom();
+        regen3_frame.data[0] = lRegenAtZeroPedal;
+        can_obj->tryToSend(regen3_frame);
+        delay(300);
+      }
       buttons__flag_reset();
       break;
     
@@ -136,14 +162,14 @@ void buttons__update_LCD(ACAN2515 *can_obj) {
     
     case REGEN2_SCREEN: //state = 5
       if (button_flag[0]) { //Decrease
-        if (lRegenTorqueLimitNm != 0) { //min 0
-          LCD__write("  ", ROWS-1, 0);
+        if (lRegenTorqueLimitNm != 0 && lRegenTorqueLimitNm > lRegenAtZeroPedal) { //min 0 or regenZeroPedal, wtv comes first
+          LCD__write("  ", ROWS-2, 0);
           LCD__write(--lRegenTorqueLimitNm, ROWS-3, 0);
         }
         delay(50);
       }
       if (button_flag[1]) { //Increase
-        if (lRegenTorqueLimitNm != 180) { //max 80
+        if (lRegenTorqueLimitNm != 255) { //max 255
           LCD__write(++lRegenTorqueLimitNm, ROWS-3, 0);
         }
         delay(50);

@@ -60,6 +60,7 @@
 #define TS_ADDR 0x701       // Timestamp Address (-> DAQ)
 #define REGEN1_ADDR 0x702       // (-> VCU)
 #define REGEN2_ADDR 0x703       // (-> VCU)
+#define REGEN3_ADDR 0x704
 
 /*---------------------------------------------------------------------------/
 / I/O PORTS
@@ -84,7 +85,7 @@ const int SPI_CS_PIN = 9;
 
 #define DEFAULT_SCREEN 1
 #define MENU_SCREEN 2
-#define SETTINGS_SCREEN 3
+#define REGEN3_SCREEN 3
 #define REGEN1_SCREEN 4
 #define REGEN2_SCREEN 5
 

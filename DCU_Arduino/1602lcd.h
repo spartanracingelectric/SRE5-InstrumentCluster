@@ -22,7 +22,8 @@ void LCD__menu();
 void LCD__back();
 void LCD__settings();
 void LCD__regen1(uint8_t rm);
-void LCD__regen2(uint8_t rtl);
+void LCD__regen2(uint8_t rtl, uint8_t rzp);
+void LCD__regen3(uint8_t raz);
 void LCD__update(float SpeedMPH, float TEMP, float LV, float HV);
 
 #endif /* LCD1602_H_ */

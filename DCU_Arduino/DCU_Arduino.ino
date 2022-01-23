@@ -53,6 +53,7 @@ static void wss_rx (const CANMessage & inMessage) {
 static void regen_rx (const CANMessage & inMessage) {
   RegenMode = inMessage.data[0];
   RegenTorqueLimitNm = inMessage.data[3];
+  RegenAtZeroPedal = inMessage.data[4];
   Serial.println ("Receive 5") ;
 }
 
